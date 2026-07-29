@@ -1,0 +1,204 @@
+{
+  "plugin": "atshift-user-profile-fields",
+  "format_version": 1,
+  "plugin_version": "0.1.100",
+  "exported_at": "2026-07-29T05:21:03Z",
+  "distribution_set": {
+    "name": "WordPress Default Profile (Add and Edit Users)"
+  },
+  "fields": [
+    {
+      "id": "section_personal_settings",
+      "key": "section_personal_settings",
+      "label": "Personal Options",
+      "type": "group",
+      "group_columns": 2
+    },
+    {
+      "id": "field_syntax_highlighting",
+      "key": "syntax_highlighting",
+      "label": "Syntax Highlighting",
+      "type": "core_syntax_highlighting",
+      "parent_id": "section_personal_settings"
+    },
+    {
+      "id": "field_admin_color",
+      "key": "admin_color",
+      "label": "Admin Color Scheme",
+      "type": "core_admin_color",
+      "parent_id": "section_personal_settings"
+    },
+    {
+      "id": "field_keyboard_shortcuts",
+      "key": "comment_shortcuts",
+      "label": "Keyboard Shortcuts",
+      "type": "core_keyboard_shortcuts",
+      "parent_id": "section_personal_settings"
+    },
+    {
+      "id": "field_toolbar",
+      "key": "show_admin_bar_front",
+      "label": "Toolbar",
+      "type": "core_toolbar",
+      "parent_id": "section_personal_settings"
+    },
+    {
+      "id": "field_language",
+      "key": "locale",
+      "label": "Language",
+      "type": "core_language",
+      "parent_id": "section_personal_settings"
+    },
+    {
+      "id": "field_username",
+      "key": "user_login",
+      "label": "Username",
+      "type": "core_username",
+      "description": "Enter the username required for login using letters, numbers, and the supported symbols (_ . - @). Spaces are not allowed. The username cannot be changed later."
+    },
+    {
+      "id": "section_name",
+      "key": "section_name",
+      "label": "Name",
+      "type": "group",
+      "group_columns": 2
+    },
+    {
+      "id": "field_first_name",
+      "key": "first_name",
+      "label": "First Name",
+      "type": "core_first_name",
+      "parent_id": "section_name",
+      "required": true
+    },
+    {
+      "id": "field_last_name",
+      "key": "last_name",
+      "label": "Last Name",
+      "type": "core_last_name",
+      "parent_id": "section_name",
+      "required": true
+    },
+    {
+      "id": "field_nickname",
+      "key": "nickname",
+      "label": "Nickname",
+      "type": "core_nickname",
+      "parent_id": "section_name"
+    },
+    {
+      "id": "field_display_name",
+      "key": "display_name",
+      "label": "Name Shown on the Site",
+      "type": "core_display_name",
+      "parent_id": "section_name"
+    },
+    {
+      "id": "section_contact",
+      "key": "section_contact",
+      "label": "Contact Info",
+      "type": "group",
+      "group_columns": 2
+    },
+    {
+      "id": "field_email",
+      "key": "user_email",
+      "label": "Email",
+      "type": "core_email",
+      "description": "Used for password resets and account notifications. It can be changed later and can also be used instead of the username when logging in.",
+      "parent_id": "section_contact"
+    },
+    {
+      "id": "field_website",
+      "key": "user_url",
+      "label": "Website",
+      "type": "core_website",
+      "parent_id": "section_contact"
+    },
+    {
+      "id": "section_about",
+      "key": "section_about",
+      "label": "About Yourself",
+      "type": "group",
+      "group_columns": 2
+    },
+    {
+      "id": "field_bio",
+      "key": "description",
+      "label": "Biographical Info",
+      "type": "core_bio",
+      "parent_id": "section_about"
+    },
+    {
+      "id": "field_profile_picture",
+      "key": "profile_picture",
+      "label": "Profile Picture",
+      "type": "core_profile_picture",
+      "parent_id": "section_about"
+    },
+    {
+      "id": "section_account_management",
+      "key": "section_account_management",
+      "label": "Security",
+      "type": "group",
+      "group_columns": 2
+    },
+    {
+      "id": "field_password",
+      "key": "password",
+      "label": "Password",
+      "type": "core_password",
+      "description": "Use a hard-to-guess password of at least 8 characters that combines letters, numbers, and symbols.",
+      "parent_id": "section_account_management"
+    },
+    {
+      "id": "field_sessions",
+      "key": "sessions",
+      "label": "Sessions",
+      "type": "core_sessions",
+      "parent_id": "section_account_management"
+    },
+    {
+      "id": "field_application_passwords",
+      "key": "application_passwords",
+      "label": "Application Passwords",
+      "type": "core_application_passwords",
+      "parent_id": "section_account_management"
+    },
+    {
+      "id": "section_permissions",
+      "key": "section_permissions",
+      "label": "Permissions and Notifications",
+      "type": "group",
+      "group_columns": 2
+    },
+    {
+      "id": "field_role",
+      "key": "role",
+      "label": "Role",
+      "type": "core_role",
+      "parent_id": "section_permissions"
+    },
+    {
+      "id": "field_notification",
+      "key": "send_user_notification",
+      "label": "User Notification",
+      "type": "core_notification",
+      "parent_id": "section_permissions"
+    },
+    {
+      "id": "field_submit_button",
+      "key": "submit_button",
+      "label": "Add User / Save",
+      "type": "core_submit_button",
+      "description": "Used to add users and save profiles."
+    }
+  ],
+  "settings": {
+    "hidden_core_fields": [],
+    "apply_to_own_profile": true,
+    "editor_layout": "two",
+    "show_extras": true,
+    "field_group_enabled": true
+  }
+}

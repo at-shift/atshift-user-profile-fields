@@ -1,0 +1,234 @@
+.atshift-upf-tools {
+	--atshift-upf-accent: var(--wp-admin-theme-color, #2271b1);
+	--atshift-upf-accent-alt: var(--wp-admin-theme-color-darker-10, #135e96);
+	--atshift-upf-accent-dark: var(--wp-admin-theme-color-darker-20, #0a4b78);
+	--atshift-upf-chrome: #1d2327;
+	--atshift-upf-chrome-alt: #2c3338;
+	max-width: 980px;
+}
+
+.atshift-upf-tools-page-head {
+	margin: 22px 0 20px;
+}
+
+.atshift-upf-tools-page-head h1 {
+	font-size: 32px;
+	font-weight: 600;
+	line-height: 1.25;
+	margin: 0;
+}
+
+.atshift-upf-tools .nav-tab-wrapper {
+	border-bottom: 0;
+	margin-top: 18px;
+	padding: 0;
+}
+
+.atshift-upf-tools .nav-tab {
+	background: #f6f7f7;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px 4px 0 0;
+	color: #50575e;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 600;
+	margin: 0 6px 0 0;
+	padding: 9px 18px;
+}
+
+.atshift-upf-tools .nav-tab.nav-tab-active {
+	background: #fff;
+	border-bottom-color: #fff;
+	color: var(--atshift-upf-chrome);
+}
+
+.atshift-upf-tools-content {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 0 4px 4px 4px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
+	margin-top: -1px;
+	padding: 24px;
+}
+
+.atshift-upf-tools-tab-content {
+	display: none;
+}
+
+.atshift-upf-tools-tab-content.is-active {
+	display: block;
+}
+
+.atshift-upf-tools-description {
+	color: #50575e;
+	font-size: 14px;
+	line-height: 1.7;
+	margin: 0 0 18px;
+	max-width: 760px;
+}
+
+.atshift-upf-tools-summary,
+.atshift-upf-tools-warning {
+	align-items: flex-start;
+	background: #f6f7f7;
+	border-left: 4px solid var(--atshift-upf-accent-dark);
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	line-height: 1.6;
+	margin: 0 0 18px;
+	max-width: 760px;
+	padding: 12px 14px;
+}
+
+.atshift-upf-tools-field {
+	margin-top: 20px;
+	max-width: 760px;
+}
+
+.atshift-upf-tools-field label {
+	color: var(--atshift-upf-chrome);
+	display: block;
+	font-weight: 600;
+	margin: 0 0 7px;
+}
+
+.atshift-upf-tools-field textarea {
+	border-radius: 4px;
+	box-sizing: border-box;
+	font-family: Menlo, Consolas, Monaco, monospace;
+	min-height: 220px;
+	width: 100%;
+}
+
+.atshift-upf-tools-name-field {
+	margin-top: 0;
+}
+
+.atshift-upf-tools-name-field input[type="text"] {
+	box-sizing: border-box;
+	max-width: 420px;
+	width: 100%;
+}
+
+.atshift-upf-tools-field input[type="file"] {
+	box-sizing: border-box;
+	max-width: 100%;
+}
+
+.atshift-upf-tools-code-details {
+	border-top: 1px solid #dcdcde;
+	margin-top: 22px;
+	max-width: 760px;
+	padding-top: 14px;
+}
+
+.atshift-upf-tools-code-details summary {
+	color: var(--atshift-upf-chrome);
+	cursor: pointer;
+	font-weight: 600;
+}
+
+.atshift-upf-tools-code-details[open] summary {
+	margin-bottom: 4px;
+}
+
+.atshift-upf-tools-actions {
+	align-items: center;
+	display: flex;
+	gap: 8px;
+	margin-top: 12px;
+}
+
+.atshift-upf-tools-message {
+	border-left: 4px solid transparent;
+	box-sizing: border-box;
+	line-height: 1.6;
+	margin-top: 16px;
+	max-width: 760px;
+	padding: 0;
+}
+
+.atshift-upf-tools-message.is-success,
+.atshift-upf-tools-message.is-error {
+	padding: 10px 12px;
+}
+
+.atshift-upf-tools-message.is-success {
+	background: #edfaef;
+	border-left-color: #00a32a;
+}
+
+.atshift-upf-tools-message.is-error {
+	background: #fcf0f1;
+	border-left-color: #d63638;
+}
+
+.atshift-upf-tools-delete {
+	max-width: 760px;
+}
+
+.atshift-upf-tools-delete h2 {
+	margin-top: 0;
+}
+
+.atshift-upf-tools-danger {
+	background: #fcf0f1;
+	border-left: 4px solid #d63638;
+	color: var(--atshift-upf-chrome);
+	line-height: 1.7;
+	margin: 0 0 18px;
+	padding: 12px 14px;
+}
+
+.atshift-upf-tools-check {
+	align-items: flex-start;
+	display: flex;
+	gap: 9px;
+	margin: 14px 0;
+}
+
+.atshift-upf-tools-check input {
+	margin-top: 2px;
+}
+
+.atshift-upf-tools-check span {
+	display: grid;
+	gap: 3px;
+}
+
+.atshift-upf-tools-check small {
+	color: #50575e;
+	line-height: 1.5;
+}
+
+.atshift-upf-tools-confirm {
+	border-top: 1px solid #dcdcde;
+	font-weight: 600;
+	padding-top: 14px;
+}
+
+.atshift-upf-tools-danger-button {
+	border-color: #d63638 !important;
+	color: #b32d2e !important;
+}
+
+.atshift-upf-tools-danger-button:disabled {
+	border-color: #dcdcde !important;
+	color: #a7aaad !important;
+}
+
+@media screen and (max-width: 782px) {
+	.atshift-upf-tools-page-head h1 {
+		font-size: 26px;
+	}
+
+	.atshift-upf-tools .nav-tab {
+		margin-right: 3px;
+		padding: 9px 12px;
+	}
+
+	.atshift-upf-tools-content {
+		padding: 18px;
+	}
+}

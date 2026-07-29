@@ -1,0 +1,204 @@
+{
+  "plugin": "atshift-user-profile-fields",
+  "format_version": 1,
+  "plugin_version": "0.1.100",
+  "exported_at": "2026-07-29T05:21:03Z",
+  "distribution_set": {
+    "name": "WordPress標準プロフィール（ユーザー追加・編集）"
+  },
+  "fields": [
+    {
+      "id": "section_personal_settings",
+      "key": "section_personal_settings",
+      "label": "個人設定",
+      "type": "group",
+      "group_columns": 2
+    },
+    {
+      "id": "field_syntax_highlighting",
+      "key": "syntax_highlighting",
+      "label": "シンタックスハイライト",
+      "type": "core_syntax_highlighting",
+      "parent_id": "section_personal_settings"
+    },
+    {
+      "id": "field_admin_color",
+      "key": "admin_color",
+      "label": "管理画面の配色",
+      "type": "core_admin_color",
+      "parent_id": "section_personal_settings"
+    },
+    {
+      "id": "field_keyboard_shortcuts",
+      "key": "comment_shortcuts",
+      "label": "キーボードショートカット",
+      "type": "core_keyboard_shortcuts",
+      "parent_id": "section_personal_settings"
+    },
+    {
+      "id": "field_toolbar",
+      "key": "show_admin_bar_front",
+      "label": "ツールバー",
+      "type": "core_toolbar",
+      "parent_id": "section_personal_settings"
+    },
+    {
+      "id": "field_language",
+      "key": "locale",
+      "label": "言語",
+      "type": "core_language",
+      "parent_id": "section_personal_settings"
+    },
+    {
+      "id": "field_username",
+      "key": "user_login",
+      "label": "ユーザー名",
+      "type": "core_username",
+      "description": "ログインに必要なユーザー名を、半角英数字と使用可能な記号（_ . - @）で入力してください。スペースは使用できません。後から変更することはできません。"
+    },
+    {
+      "id": "section_name",
+      "key": "section_name",
+      "label": "名前",
+      "type": "group",
+      "group_columns": 2
+    },
+    {
+      "id": "field_first_name",
+      "key": "first_name",
+      "label": "名",
+      "type": "core_first_name",
+      "parent_id": "section_name",
+      "required": true
+    },
+    {
+      "id": "field_last_name",
+      "key": "last_name",
+      "label": "姓",
+      "type": "core_last_name",
+      "parent_id": "section_name",
+      "required": true
+    },
+    {
+      "id": "field_nickname",
+      "key": "nickname",
+      "label": "ニックネーム",
+      "type": "core_nickname",
+      "parent_id": "section_name"
+    },
+    {
+      "id": "field_display_name",
+      "key": "display_name",
+      "label": "サイトに表示する名前",
+      "type": "core_display_name",
+      "parent_id": "section_name"
+    },
+    {
+      "id": "section_contact",
+      "key": "section_contact",
+      "label": "連絡先情報",
+      "type": "group",
+      "group_columns": 2
+    },
+    {
+      "id": "field_email",
+      "key": "user_email",
+      "label": "メールアドレス",
+      "type": "core_email",
+      "description": "パスワードの再設定やアカウント通知に使用します。後から変更でき、ログイン時にユーザー名の代わりとしても使用できます。",
+      "parent_id": "section_contact"
+    },
+    {
+      "id": "field_website",
+      "key": "user_url",
+      "label": "サイト",
+      "type": "core_website",
+      "parent_id": "section_contact"
+    },
+    {
+      "id": "section_about",
+      "key": "section_about",
+      "label": "あなたについて",
+      "type": "group",
+      "group_columns": 2
+    },
+    {
+      "id": "field_bio",
+      "key": "description",
+      "label": "プロフィール情報",
+      "type": "core_bio",
+      "parent_id": "section_about"
+    },
+    {
+      "id": "field_profile_picture",
+      "key": "profile_picture",
+      "label": "プロフィール写真",
+      "type": "core_profile_picture",
+      "parent_id": "section_about"
+    },
+    {
+      "id": "section_account_management",
+      "key": "section_account_management",
+      "label": "セキュリティ",
+      "type": "group",
+      "group_columns": 2
+    },
+    {
+      "id": "field_password",
+      "key": "password",
+      "label": "パスワード",
+      "type": "core_password",
+      "description": "推測されにくい、英字・数字・記号を組み合わせた8文字以上のパスワードを使用してください。",
+      "parent_id": "section_account_management"
+    },
+    {
+      "id": "field_sessions",
+      "key": "sessions",
+      "label": "セッション",
+      "type": "core_sessions",
+      "parent_id": "section_account_management"
+    },
+    {
+      "id": "field_application_passwords",
+      "key": "application_passwords",
+      "label": "アプリケーションパスワード",
+      "type": "core_application_passwords",
+      "parent_id": "section_account_management"
+    },
+    {
+      "id": "section_permissions",
+      "key": "section_permissions",
+      "label": "権限・通知",
+      "type": "group",
+      "group_columns": 2
+    },
+    {
+      "id": "field_role",
+      "key": "role",
+      "label": "権限グループ",
+      "type": "core_role",
+      "parent_id": "section_permissions"
+    },
+    {
+      "id": "field_notification",
+      "key": "send_user_notification",
+      "label": "メール通知",
+      "type": "core_notification",
+      "parent_id": "section_permissions"
+    },
+    {
+      "id": "field_submit_button",
+      "key": "submit_button",
+      "label": "ユーザーを追加／保存",
+      "type": "core_submit_button",
+      "description": "ユーザーの追加とプロフィールの保存に使用します。"
+    }
+  ],
+  "settings": {
+    "hidden_core_fields": [],
+    "apply_to_own_profile": true,
+    "editor_layout": "two",
+    "show_extras": true,
+    "field_group_enabled": true
+  }
+}
