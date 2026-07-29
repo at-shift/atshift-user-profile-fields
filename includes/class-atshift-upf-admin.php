@@ -197,14 +197,20 @@ class Atshift_UPF_Admin {
 						'addFieldBelow'           => __( 'Add new field below', 'atshift-user-profile-fields' ),
 						'addFieldInsideGroup'     => __( 'Add field inside group', 'atshift-user-profile-fields' ),
 						'standardFieldAlreadyAdded' => __( 'Already added', 'atshift-user-profile-fields' ),
+						/* translators: %s: Conditional choice label. */
 						'conditionalBranchDropLabel' => __( 'Condition "%s"', 'atshift-user-profile-fields' ),
+						/* translators: %s: Field label. */
 						'fieldDisplayLabel'       => __( 'Field "%s"', 'atshift-user-profile-fields' ),
 						'listSeparator'           => __( ', ', 'atshift-user-profile-fields' ),
+						/* translators: 1: Hidden condition labels, 2: Shown condition labels. */
 						'conditionalNewPartial'   => __( 'On the Add New User screen, %1$s are unavailable, so only %2$s are shown.', 'atshift-user-profile-fields' ),
+						/* translators: 1: Hidden condition labels, 2: Shown condition labels. */
 						'conditionalEditPartial'  => __( 'When editing an existing user, %1$s are unavailable, so only %2$s are shown.', 'atshift-user-profile-fields' ),
 						'conditionalNewHidden'    => __( 'This Conditional Group is not shown on the Add New User screen because none of its conditions contain fields available there.', 'atshift-user-profile-fields' ),
 						'conditionalEditHidden'   => __( 'This Conditional Group is not shown when editing an existing user because none of its conditions contain fields available there.', 'atshift-user-profile-fields' ),
+						/* translators: %s: Omitted field labels. */
 						'accordionNewPartial'     => __( 'On the Add New User screen, edit-only fields in this Accordion are omitted: %s.', 'atshift-user-profile-fields' ),
+						/* translators: %s: Omitted field labels. */
 						'accordionEditPartial'    => __( 'When editing an existing user, registration-only fields in this Accordion are omitted: %s.', 'atshift-user-profile-fields' ),
 						'accordionNewHidden'      => __( 'This Accordion is not shown on the Add New User screen because it contains no fields available there.', 'atshift-user-profile-fields' ),
 						'accordionEditHidden'     => __( 'This Accordion is not shown when editing an existing user because it contains no fields available there.', 'atshift-user-profile-fields' ),

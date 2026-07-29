@@ -86,7 +86,8 @@ class Atshift_UPF_Tools {
 					'copyFailed'    => __( 'The export code could not be copied.', 'atshift-user-profile-fields' ),
 					'downloadFailed' => __( 'The distribution set could not be downloaded.', 'atshift-user-profile-fields' ),
 					'fileReadFailed' => __( 'The selected distribution set could not be read.', 'atshift-user-profile-fields' ),
-					'fileSelected'   => __( 'Selected file: %s', 'atshift-user-profile-fields' ),
+						/* translators: %s: Selected field set file name. */
+						'fileSelected'   => __( 'Selected file: %s', 'atshift-user-profile-fields' ),
 				),
 			)
 		);
@@ -399,6 +400,10 @@ class Atshift_UPF_Tools {
 	 * @return void
 	 */
 	private function delete_plugin_data() {
+		if ( empty( $_POST['delete_confirm'] ) ) {
+			wp_send_json_error( array( 'message' => __( 'Confirm that deleted data cannot be restored before continuing.', 'atshift-user-profile-fields' ) ), 400 );
+		}
+
 		$delete_values = ! empty( $_POST['delete_values'] );
 		$meta_keys     = $delete_values ? $this->get_plugin_user_meta_keys() : array();
 
@@ -624,7 +629,7 @@ class Atshift_UPF_Tools {
 
 		$like = $wpdb->esc_like( '_atshift_upf_' ) . '%';
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is provided by WordPress.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Lists plugin-owned usermeta keys for the destructive cleanup tool; table name is provided by WordPress.
 		$keys = $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT meta_key FROM {$wpdb->usermeta} WHERE meta_key LIKE %s", $like ) );
 
 		return array_values(

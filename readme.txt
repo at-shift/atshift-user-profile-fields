@@ -2,9 +2,9 @@
 Contributors: atshift
 Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
-Tested up to: 6.6
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 0.1.100
+Stable tag: 0.1.104
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,35 @@ The basic version includes:
 * Protected deletion of plugin settings and optional custom profile values
 * A designed admin interface for everyday profile management
 
+== Displaying Custom Field Values ==
+
+Custom fields are saved as user meta. Use the field key shown in the field editor.
+
+The recommended helper returns the raw saved value, so escape it for the output context:
+
+`
+$value = atshift_upf_get_user_field( 'your_field_key', $user_id );
+echo esc_html( $value );
+`
+
+You can also read the user meta directly. The meta key is `_atshift_upf_` followed by the saved field key:
+
+`
+$value = get_user_meta( $user_id, '_atshift_upf_your_field_key', true );
+echo esc_html( $value );
+`
+
+Text, textarea, email, URL, number, select, and radio fields save a single sanitized value. Image fields save the selected image URL, so escape them as URLs:
+
+`
+$image_url = atshift_upf_get_user_field( 'profile_image', $user_id );
+if ( $image_url ) {
+	echo '<img src="' . esc_url( $image_url ) . '" alt="">';
+}
+`
+
+Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress profile fields, such as email, first name, and website, use the normal WordPress user APIs instead of the `_atshift_upf_` custom meta key.
+
 == Installation ==
 
 1. Upload the plugin folder to `/wp-content/plugins/`.
@@ -32,6 +61,15 @@ The basic version includes:
 3. Open Settings > atshift User Profile Fields.
 
 == Changelog ==
+
+= 0.1.104 =
+* Add a helper and documentation for displaying saved custom profile field values.
+
+= 0.1.103 =
+* Preview bundled default profile field labels and notes immediately when the profile language selector changes.
+* Keep bundled default profile labels and notes aligned with the current site or user display language.
+* Refine Japanese bundled profile text to match the atshift Fields writing style.
+* Require server-side confirmation before the tools screen deletes plugin data.
 
 = 0.1.100 =
 * Use a plain-language label for the bundled public display-name field.

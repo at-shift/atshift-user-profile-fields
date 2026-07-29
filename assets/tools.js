@@ -216,7 +216,10 @@
 		deleteButton.disabled = true;
 		showMessage('delete', settings.strings.working || 'Processing...', false);
 
-		request('delete', {delete_values: deleteValues.checked ? '1' : ''}).then(function (data) {
+		request('delete', {
+			delete_confirm: deleteConfirm.checked ? '1' : '',
+			delete_values: deleteValues.checked ? '1' : ''
+		}).then(function (data) {
 			showMessage('delete', data.message || '', false);
 			deleteConfirm.checked = false;
 			deleteValues.checked = false;

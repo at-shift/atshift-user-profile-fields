@@ -1,7 +1,7 @@
 {
   "plugin": "atshift-user-profile-fields",
   "format_version": 1,
-  "plugin_version": "0.1.100",
+  "plugin_version": "0.1.104",
   "exported_at": "2026-07-29T05:21:03Z",
   "distribution_set": {
     "name": "WordPress Default Profile (Add and Edit Users)"

@@ -11,6 +11,7 @@
 	var currentUserId = Number(window.atshiftUPFProfile.currentUserId || 0);
 	var profileUserId = Number(window.atshiftUPFProfile.profileUserId || 0);
 	var strings = window.atshiftUPFProfile.strings || {};
+	var languagePreview = window.atshiftUPFProfile.languagePreview || {};
 	var selectors = {
 		username: ['.user-user-login-wrap', '.form-field.form-required:has(#user_login)'],
 		email: ['.user-email-wrap', '.form-field.form-required:has(#email)'],
@@ -234,6 +235,87 @@
 	}
 
 	initAdminColorSelects();
+
+	function initLanguagePreview() {
+		var select = document.querySelector('#atshift_upf_locale')
+			|| document.querySelector('.atshift-upf-profile-card select[name="locale"]')
+			|| document.querySelector('select[name="locale"]');
+		var previewTranslations = languagePreview.translations || {};
+
+		if (!select || !Object.keys(previewTranslations).length) {
+			return;
+		}
+
+		function previewLanguage(value) {
+			var locale = value || '';
+			var language;
+
+			if (locale === 'site-default') {
+				language = languagePreview.siteLanguage || languagePreview.currentLanguage || 'en';
+			} else if (locale === '') {
+				language = 'en';
+			} else {
+				language = locale.toLowerCase().replace('_', '-').split('-')[0];
+			}
+
+			return previewTranslations[language] ? language : (languagePreview.currentLanguage || 'en');
+		}
+
+		function replaceMappedTextNode(node, map) {
+			var value = node.nodeValue || '';
+			var trimmed = value.trim();
+			var replacement;
+
+			if (!trimmed || !map[trimmed]) {
+				return;
+			}
+
+			replacement = map[trimmed];
+			node.nodeValue = value.replace(trimmed, replacement);
+		}
+
+		function replaceElementText(element, map) {
+			Array.prototype.slice.call(element.childNodes).forEach(function (node) {
+				if (node.nodeType === window.Node.TEXT_NODE) {
+					replaceMappedTextNode(node, map);
+				}
+			});
+		}
+
+		function updatePreview() {
+			var language = previewLanguage(select.value);
+			var translations = previewTranslations[language] || {};
+			var labelMap = translations.label || {};
+			var descriptionMap = translations.description || {};
+			var requiredText = translations.required || strings.required || 'Required';
+
+			document.querySelectorAll('.atshift-upf-profile-card label, .atshift-upf-profile-card h3, .atshift-upf-profile-accordion-title').forEach(function (element) {
+				replaceElementText(element, labelMap);
+			});
+
+			document.querySelectorAll('.atshift-upf-profile-card p.description').forEach(function (element) {
+				if (descriptionMap[element.textContent.trim()]) {
+					element.textContent = descriptionMap[element.textContent.trim()];
+				}
+			});
+
+			document.querySelectorAll('.atshift-upf-required-badge').forEach(function (badge) {
+				badge.textContent = requiredText;
+			});
+
+			document.querySelectorAll('.atshift-upf-readonly-value[aria-label]').forEach(function (element) {
+				var label = element.getAttribute('aria-label') || '';
+				if (labelMap[label]) {
+					element.setAttribute('aria-label', labelMap[label]);
+				}
+			});
+		}
+
+		select.addEventListener('change', updatePreview);
+		select.addEventListener('input', updatePreview);
+	}
+
+	initLanguagePreview();
 
 	function generatedPassword() {
 		var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!#$%&()*+,-./:;<=>?@[]^_{|}~';

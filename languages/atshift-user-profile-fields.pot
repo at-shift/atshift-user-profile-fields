@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: atshift User Profile Fields 0.1.100\n"
+"Project-Id-Version: atshift User Profile Fields 0.1.104\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-29 12:59+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -78,6 +78,10 @@ msgstr ""
 
 #: includes/class-atshift-upf-admin.php:42
 msgid "Accordion Group"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:2036
+msgid "Personal Options"
 msgstr ""
 
 #: includes/class-atshift-upf-admin.php:43
@@ -178,6 +182,38 @@ msgstr ""
 #: includes/class-atshift-upf-admin.php:62
 #: includes/class-atshift-upf-profile.php:114
 msgid "Add / Save User button"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:2048
+msgid "Name Display Format"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:2049
+msgid "Name Shown on the Site"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:2050
+msgid "Contact Info"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:2054
+msgid "About Yourself"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:2057
+msgid "Security"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:2062
+msgid "Permissions and Notifications"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:2064
+msgid "User Notification"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:2065
+msgid "Add User / Save"
 msgstr ""
 
 #: includes/class-atshift-upf-admin.php:81
@@ -610,6 +646,10 @@ msgid ""
 "symbols, and is at least 8 characters long."
 msgstr ""
 
+#: includes/class-atshift-upf-profile.php:2080
+msgid "Used to add users and save profiles."
+msgstr ""
+
 #: includes/class-atshift-upf-admin.php:1108
 msgid ""
 "Place the user creation and profile save button inside this field group."
@@ -851,6 +891,38 @@ msgstr ""
 
 #: includes/class-atshift-upf-profile.php:1085
 msgid "Session controls are managed by WordPress after the user is saved."
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:1337
+#, php-format
+msgid "<a href=\"%s\">You can change your profile picture on Gravatar</a>."
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:1339
+msgid "https://gravatar.com/"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:1369
+msgid "Log Out Everywhere Else"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:1373
+msgid "You are only logged in at this location."
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:1375
+msgid ""
+"Did you lose your phone or leave your account logged in at a public computer? "
+"You can log out everywhere else, and stay logged in here."
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:1378
+msgid "Log Out Everywhere"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php:1384
+#, php-format
+msgid "Log %s out of all locations."
 msgstr ""
 
 #: includes/class-atshift-upf-profile.php:1245
@@ -1123,6 +1195,10 @@ msgstr ""
 
 #: includes/class-atshift-upf-tools.php:192
 msgid "Delete Selected Data"
+msgstr ""
+
+#: includes/class-atshift-upf-tools.php:403
+msgid "Confirm that deleted data cannot be restored before continuing."
 msgstr ""
 
 #: includes/class-atshift-upf-tools.php:227
