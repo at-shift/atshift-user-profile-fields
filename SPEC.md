@@ -11,6 +11,27 @@ The basic version focuses on two jobs:
 
 The first release should feel complete for ordinary administrator-managed profile workflows while leaving advanced segmentation, frontend editing, and integrations available for future paid extensions.
 
+## Add-On Extension Layer
+
+The basic plugin remains the free core. Paid or site-specific add-ons should add
+advanced behavior through WordPress actions and filters instead of duplicating
+the field editor, profile renderer, validation, or tools workflow.
+
+The base plugin provides extension points for:
+
+- Detecting that the base plugin is loaded.
+- Adding field types and field editor setting rows.
+- Saving add-on field metadata during normal field editor saves.
+- Filtering fields available for profile screen rendering, validation, and save
+  contexts.
+- Adding custom validation and save side effects.
+- Extending field-set export/import payloads.
+- Cleaning add-on data when the plugin data deletion tool runs.
+
+The free version should not expose locked Pro controls as part of the ordinary
+field editing experience. Pro-specific UI should be injected only when a Pro
+add-on is active.
+
 ## Basic Version Scope
 
 ### Custom Profile Fields
@@ -93,12 +114,17 @@ Supported display options:
 - 2-column field editor layout with a save box
 - Extras panel visibility
 
-The basic version hides fields visually in the admin profile screen. It does not delete existing user data and does not remove WordPress core capabilities.
+Checkbox-driven standard fields expose an Initial State toggle in their field settings. The toggle is applied when a new account is created; existing users continue to use their saved preference. Supported fields are the visual editor, syntax highlighting, keyboard shortcuts, Toolbar visibility, and new-user account email notification. Edit-only preferences are saved immediately after account creation, while the email notification toggle controls the default state shown on the Add New User screen.
+
+By default, Extras only hides fields visually in the admin profile screen. For checkbox-driven profile features, administrators can also choose to turn the feature off while it is hidden. Existing user data is not deleted, and user roles or capabilities are not changed.
+
+Feature-off settings are applied when the affected profile is next saved. The new-user email notification setting is applied when a new user is added. A standard field managed in the Fields editor takes precedence over its Extras setting.
 
 Field-level display conditions are not shown in the basic field settings. They can be reconsidered when conditional groups or parent structures are added.
 
 The Extras panel sits below the field settings and contains default profile field visibility settings:
 
+- Visual editor
 - Admin color scheme
 - Syntax highlighting
 - Keyboard shortcuts

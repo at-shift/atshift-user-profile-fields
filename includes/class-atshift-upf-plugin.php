@@ -40,6 +40,7 @@ final class Atshift_UPF_Plugin {
 		new Atshift_UPF_GitHub_Updater();
 
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
+		add_action( 'plugins_loaded', array( $this, 'announce_loaded' ), 20 );
 		add_action( 'init', array( $this, 'boot' ) );
 	}
 
@@ -54,6 +55,21 @@ final class Atshift_UPF_Plugin {
 			false,
 			dirname( plugin_basename( ATSHIFT_UPF_FILE ) ) . '/languages'
 		);
+	}
+
+	/**
+	 * Announce that the base plugin is available for add-ons.
+	 *
+	 * @return void
+	 */
+	public function announce_loaded() {
+		/**
+		 * Fires after WordPress has loaded all active plugins and the base plugin
+		 * is ready for add-ons to register their integrations.
+		 *
+		 * @param Atshift_UPF_Plugin $plugin Base plugin instance.
+		 */
+		do_action( 'atshift_upf_loaded', $this );
 	}
 
 	/**
@@ -90,20 +106,30 @@ final class Atshift_UPF_Plugin {
 		$fields = get_option( 'atshift_upf_fields', array() );
 
 		if ( ! is_array( $fields ) ) {
-			return array();
+			$fields = array();
 		}
 
-		usort(
-			$fields,
-			static function ( $a, $b ) {
-				$a_order = isset( $a['sort_order'] ) ? (int) $a['sort_order'] : 0;
-				$b_order = isset( $b['sort_order'] ) ? (int) $b['sort_order'] : 0;
+		if ( ! empty( $fields ) ) {
+			usort(
+				$fields,
+				static function ( $a, $b ) {
+					$a_order = isset( $a['sort_order'] ) ? (int) $a['sort_order'] : 0;
+					$b_order = isset( $b['sort_order'] ) ? (int) $b['sort_order'] : 0;
 
-				return $a_order <=> $b_order;
-			}
-		);
+					return $a_order <=> $b_order;
+				}
+			);
+		}
 
-		return $fields;
+		/**
+		 * Filters field definitions returned by the base plugin.
+		 *
+		 * Add-ons can use this to attach runtime-only metadata. Persistent field
+		 * settings should be saved through the admin/import field filters.
+		 *
+		 * @param array<int, array<string, mixed>> $fields Field definitions.
+		 */
+		return apply_filters( 'atshift_upf_get_fields', $fields );
 	}
 
 	/**
@@ -112,7 +138,12 @@ final class Atshift_UPF_Plugin {
 	 * @return array<int, array<string, mixed>>
 	 */
 	public static function get_enabled_fields() {
-		return self::get_fields();
+		/**
+		 * Filters enabled field definitions returned for profile handling.
+		 *
+		 * @param array<int, array<string, mixed>> $fields Field definitions.
+		 */
+		return apply_filters( 'atshift_upf_get_enabled_fields', self::get_fields() );
 	}
 
 	/**
@@ -122,20 +153,82 @@ final class Atshift_UPF_Plugin {
 	 */
 	public static function get_settings() {
 		$defaults = array(
-			'hidden_core_fields'   => array(),
-			'apply_to_own_profile' => true,
-			'editor_layout'        => 'two',
-			'show_extras'          => true,
-			'field_group_enabled'  => true,
+			'hidden_core_fields'          => array(),
+			'disabled_hidden_core_fields' => array(),
+			'apply_to_own_profile'        => true,
+			'editor_layout'               => 'two',
+			'show_extras'                 => true,
+			'field_group_enabled'         => true,
 		);
 
 		$settings = get_option( 'atshift_upf_settings', array() );
 
 		if ( ! is_array( $settings ) ) {
-			return $defaults;
+			$settings = array();
 		}
 
-		return wp_parse_args( $settings, $defaults );
+		$settings = wp_parse_args( $settings, $defaults );
+
+		/**
+		 * Filters plugin settings returned by the base plugin.
+		 *
+		 * @param array<string, mixed> $settings Plugin settings.
+		 * @param array<string, mixed> $defaults Default settings.
+		 */
+		return apply_filters( 'atshift_upf_get_settings', $settings, $defaults );
+	}
+
+	/**
+	 * Return default states for checkbox-driven WordPress profile fields.
+	 *
+	 * @return array<string, bool>
+	 */
+	public static function get_initial_state_defaults() {
+		$defaults = array(
+			'core_visual_editor'       => true,
+			'core_syntax_highlighting' => true,
+			'core_keyboard_shortcuts'  => false,
+			'core_toolbar'             => true,
+			'core_notification'        => true,
+		);
+
+		/**
+		 * Filters initial states used on the Add New User screen.
+		 *
+		 * @param array<string, bool> $defaults Initial state keyed by field type.
+		 */
+		return (array) apply_filters( 'atshift_upf_initial_state_defaults', $defaults );
+	}
+
+	/**
+	 * Check whether a field type supports a configurable initial state.
+	 *
+	 * @param string $type Field type.
+	 * @return bool
+	 */
+	public static function supports_initial_state( $type ) {
+		return array_key_exists( sanitize_key( $type ), self::get_initial_state_defaults() );
+	}
+
+	/**
+	 * Return a field's configured initial state with a compatible fallback.
+	 *
+	 * @param array<string, mixed> $field Field definition.
+	 * @return bool
+	 */
+	public static function get_field_initial_enabled( $field ) {
+		$type     = sanitize_key( $field['type'] ?? '' );
+		$defaults = self::get_initial_state_defaults();
+
+		if ( ! array_key_exists( $type, $defaults ) ) {
+			return false;
+		}
+
+		if ( array_key_exists( 'initial_enabled', $field ) && null !== $field['initial_enabled'] ) {
+			return ! empty( $field['initial_enabled'] );
+		}
+
+		return ! empty( $defaults[ $type ] );
 	}
 
 	/**

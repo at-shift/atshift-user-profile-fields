@@ -234,7 +234,7 @@
 			return 'registration';
 		}
 
-		if (['core_admin_color', 'core_syntax_highlighting', 'core_keyboard_shortcuts', 'core_toolbar', 'core_nickname', 'core_display_name', 'core_bio', 'core_profile_picture', 'core_sessions', 'core_application_passwords'].indexOf(type) !== -1) {
+		if (['core_visual_editor', 'core_admin_color', 'core_syntax_highlighting', 'core_keyboard_shortcuts', 'core_toolbar', 'core_nickname', 'core_display_name', 'core_bio', 'core_profile_picture', 'core_sessions', 'core_application_passwords'].indexOf(type) !== -1) {
 			return 'edit';
 		}
 
@@ -1005,6 +1005,15 @@
 			var descriptionInput = form.querySelector('textarea[name$="[description]"]');
 			var labelInput = form.querySelector('input[name$="[label]"]');
 			var choicesInput = form.querySelector('textarea[name$="[choices]"]');
+			var initialStateInput = form.querySelector('input[name$="[initial_enabled]"]');
+			var initialStateSubject = form.querySelector('.atshift-upf-initial-state-subject');
+			var initialStateDefaults = {
+				core_visual_editor: true,
+				core_syntax_highlighting: true,
+				core_keyboard_shortcuts: false,
+				core_toolbar: true,
+				core_notification: true
+			};
 
 			if (form.dataset.atshiftUpfTypeReady === '1') {
 				return;
@@ -1132,7 +1141,23 @@
 				}
 			}
 
-			function updateRows() {
+			function updateInitialState(type, useTypeDefault) {
+				if (!initialStateInput || !Object.prototype.hasOwnProperty.call(initialStateDefaults, type)) {
+					return;
+				}
+
+				if (useTypeDefault) {
+					initialStateInput.checked = initialStateDefaults[type];
+				}
+
+				if (initialStateSubject) {
+					initialStateSubject.textContent = type === 'core_notification'
+						? (strings.initialStateAccountEmail || 'Send account email')
+						: (strings.initialStateEnabled || 'Enabled');
+				}
+			}
+
+			function updateRows(useTypeDefault) {
 				var type = typeSelect.value;
 				var field = form.closest('.field');
 				var fieldItem = field ? field.closest('li[data-field-id]') : null;
@@ -1148,6 +1173,7 @@
 				updateGeneratedKey();
 				updateDefaultDescription();
 				updateConditionalChoices();
+				updateInitialState(type, !!useTypeDefault);
 
 				if (fieldItem) {
 					fieldItem.setAttribute('data-field-type', type);
@@ -1171,7 +1197,9 @@
 				}, 0);
 			}
 
-			typeSelect.addEventListener('change', updateRows);
+			typeSelect.addEventListener('change', function () {
+				updateRows(true);
+			});
 			if (labelInput) {
 				labelInput.addEventListener('input', updateHeaderLabel);
 			}
@@ -1198,7 +1226,7 @@
 					conditionalValueSelect.setAttribute('data-current-value', conditionalValueSelect.value || '');
 				});
 			}
-			updateRows();
+			updateRows(false);
 			updateHeaderLabel();
 			initRoleControlSelect2();
 			updateStandardFieldAvailability();
@@ -1851,6 +1879,28 @@
 	}
 
 	initFieldRows();
+
+	function initExtrasBehaviorOptions() {
+		document.querySelectorAll('.atshift-upf-extras-option[data-atshift-upf-extra-key]').forEach(function (option) {
+			var hideInput = option.querySelector('[data-atshift-upf-extra-hide]');
+			var disableInput = option.querySelector('[data-atshift-upf-disable-hidden-feature]');
+			var disableOption = option.querySelector('.atshift-upf-extras-off-option');
+
+			if (!hideInput || !disableInput || !disableOption) {
+				return;
+			}
+
+			function syncState() {
+				disableInput.disabled = !hideInput.checked;
+				disableOption.classList.toggle('is-disabled', !hideInput.checked);
+			}
+
+			hideInput.addEventListener('change', syncState);
+			syncState();
+		});
+	}
+
+	initExtrasBehaviorOptions();
 
 	function initDisplayOptions() {
 		var optionInputs = document.querySelectorAll('[data-atshift-upf-screen-option]');

@@ -269,6 +269,14 @@ class Atshift_UPF_Tools {
 			'fields'         => Atshift_UPF_Plugin::get_fields(),
 			'settings'       => Atshift_UPF_Plugin::get_settings(),
 		);
+		/**
+		 * Filters the field-set export payload before it is encoded as JSON.
+		 *
+		 * Add-ons can append their own namespaced data for round-trip imports.
+		 *
+		 * @param array<string, mixed> $payload Export payload.
+		 */
+		$payload = apply_filters( 'atshift_upf_export_payload', $payload );
 		$code    = wp_json_encode( $payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
 		if ( false === $code ) {
@@ -335,6 +343,17 @@ class Atshift_UPF_Tools {
 
 		update_option( 'atshift_upf_fields', $fields, false );
 		update_option( 'atshift_upf_settings', $settings, false );
+
+		/**
+		 * Fires after a field-set import replaces the base plugin configuration.
+		 *
+		 * Add-ons can restore their own namespaced data from the original payload.
+		 *
+		 * @param array<string, mixed>              $payload Original decoded import payload.
+		 * @param array<int, array<string, mixed>> $fields Imported field definitions.
+		 * @param array<string, mixed>              $settings Imported plugin settings.
+		 */
+		do_action( 'atshift_upf_imported_payload', $payload, $fields, $settings );
 
 		wp_send_json_success(
 			array(
@@ -413,6 +432,13 @@ class Atshift_UPF_Tools {
 		foreach ( $meta_keys as $meta_key ) {
 			delete_metadata( 'user', 0, $meta_key, '', true );
 		}
+
+		/**
+		 * Fires after the base plugin deletes its settings and, optionally, values.
+		 *
+		 * @param bool $delete_values Whether plugin-owned user meta was deleted.
+		 */
+		do_action( 'atshift_upf_deleted_plugin_data', $delete_values );
 
 		$message = $delete_values
 			? __( 'Plugin settings and custom profile values were deleted. WordPress standard profile data was preserved.', 'atshift-user-profile-fields' )
@@ -497,7 +523,7 @@ class Atshift_UPF_Tools {
 
 			$role_control = $this->sanitize_role_control( $raw_field, $type );
 
-			$fields[] = array(
+			$field = array(
 				'id'                  => $id,
 				'key'                 => $key,
 				'label'               => sanitize_text_field( $this->scalar_string( $raw_field['label'] ?? '' ) ),
@@ -514,8 +540,18 @@ class Atshift_UPF_Tools {
 				'role_control_roles'  => $role_control['roles'],
 				'required'            => ! in_array( $type, array( 'core_username', 'core_email', 'core_password', 'core_language', 'core_notification', 'core_role' ), true ) && $this->import_bool( $raw_field['required'] ?? false ),
 				'validation_enabled'  => in_array( $type, array( 'email', 'url', 'phone' ), true ) && $this->import_bool( $raw_field['validation_enabled'] ?? false ),
+				'initial_enabled'     => Atshift_UPF_Plugin::supports_initial_state( $type )
+					? ( array_key_exists( 'initial_enabled', $raw_field ) ? $this->import_bool( $raw_field['initial_enabled'] ) : Atshift_UPF_Plugin::get_field_initial_enabled( array( 'type' => $type ) ) )
+					: false,
 				'sort_order'          => ( count( $fields ) + 1 ) * 10,
 			);
+			/**
+			 * Filters one imported field definition after base sanitization.
+			 *
+			 * @param array<string, mixed> $field Sanitized field definition.
+			 * @param array<string, mixed> $raw_field Raw imported field definition.
+			 */
+			$fields[] = apply_filters( 'atshift_upf_sanitize_import_field', $field, $raw_field );
 			$seen_ids[ $id ]  = true;
 			$seen_keys[ $key ] = true;
 			$type_by_id[ $id ] = $type;
@@ -555,17 +591,30 @@ class Atshift_UPF_Tools {
 			return new WP_Error( 'invalid_settings', __( 'The import code does not contain valid display settings.', 'atshift-user-profile-fields' ) );
 		}
 
-		$allowed_hidden = array_keys( Atshift_UPF_Profile::get_core_field_options() );
+		$core_options   = Atshift_UPF_Profile::get_core_field_options();
+		$allowed_hidden = array_keys( $core_options );
+		$allowed_disabled = array();
+
+		foreach ( $core_options as $key => $option ) {
+			if ( ! empty( $option['off_label'] ) ) {
+				$allowed_disabled[] = $key;
+			}
+		}
+
 		$hidden         = isset( $raw_settings['hidden_core_fields'] ) && is_array( $raw_settings['hidden_core_fields'] )
 			? array_values( array_intersect( $this->sanitize_key_list( $raw_settings['hidden_core_fields'] ), $allowed_hidden ) )
 			: array();
+		$disabled       = isset( $raw_settings['disabled_hidden_core_fields'] ) && is_array( $raw_settings['disabled_hidden_core_fields'] )
+			? array_values( array_intersect( $this->sanitize_key_list( $raw_settings['disabled_hidden_core_fields'] ), $allowed_disabled, $hidden ) )
+			: array();
 
 		return array(
-			'hidden_core_fields'   => $hidden,
-			'apply_to_own_profile' => $this->import_bool( $raw_settings['apply_to_own_profile'] ?? false ),
-			'editor_layout'        => isset( $raw_settings['editor_layout'] ) && 'one' === $raw_settings['editor_layout'] ? 'one' : 'two',
-			'show_extras'          => $this->import_bool( $raw_settings['show_extras'] ?? false ),
-			'field_group_enabled'  => $this->import_bool( $raw_settings['field_group_enabled'] ?? false ),
+			'hidden_core_fields'          => $hidden,
+			'disabled_hidden_core_fields' => $disabled,
+			'apply_to_own_profile'        => $this->import_bool( $raw_settings['apply_to_own_profile'] ?? false ),
+			'editor_layout'               => isset( $raw_settings['editor_layout'] ) && 'one' === $raw_settings['editor_layout'] ? 'one' : 'two',
+			'show_extras'                 => $this->import_bool( $raw_settings['show_extras'] ?? false ),
+			'field_group_enabled'         => $this->import_bool( $raw_settings['field_group_enabled'] ?? false ),
 		);
 	}
 
@@ -600,6 +649,7 @@ class Atshift_UPF_Tools {
 			'core_submit_button'         => 'submit_button',
 		);
 		$hidden   = array_fill_keys( (array) $settings['hidden_core_fields'], true );
+		$disabled = array_fill_keys( (array) $settings['disabled_hidden_core_fields'], true );
 
 		foreach ( $fields as $field ) {
 			$type = $field['type'] ?? '';
@@ -612,9 +662,12 @@ class Atshift_UPF_Tools {
 			} else {
 				unset( $hidden[ $type_map[ $type ] ] );
 			}
+
+			unset( $disabled[ $type_map[ $type ] ] );
 		}
 
 		$settings['hidden_core_fields'] = array_keys( $hidden );
+		$settings['disabled_hidden_core_fields'] = array_values( array_intersect( array_keys( $disabled ), array_keys( $hidden ) ) );
 
 		return $settings;
 	}
@@ -785,7 +838,7 @@ class Atshift_UPF_Tools {
 	 * @return array<int, string>
 	 */
 	private function get_allowed_field_types() {
-		return array(
+		$types = array(
 			'text',
 			'textarea',
 			'email',
@@ -822,6 +875,16 @@ class Atshift_UPF_Tools {
 			'core_role',
 			'core_submit_button',
 		);
+
+		/**
+		 * Filters field types accepted by field-set imports.
+		 *
+		 * Add-ons that register field types in the editor should add matching
+		 * import support here.
+		 *
+		 * @param array<int, string> $types Field type keys.
+		 */
+		return array_values( array_unique( array_map( 'sanitize_key', (array) apply_filters( 'atshift_upf_import_allowed_field_types', $types ) ) ) );
 	}
 
 	/**

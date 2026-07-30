@@ -15,10 +15,19 @@
       "group_columns": 2
     },
     {
+      "id": "field_visual_editor",
+      "key": "rich_editing",
+      "label": "ビジュアルエディター",
+      "type": "core_visual_editor",
+      "initial_enabled": true,
+      "parent_id": "section_personal_settings"
+    },
+    {
       "id": "field_syntax_highlighting",
       "key": "syntax_highlighting",
       "label": "シンタックスハイライト",
       "type": "core_syntax_highlighting",
+      "initial_enabled": true,
       "parent_id": "section_personal_settings"
     },
     {
@@ -33,6 +42,7 @@
       "key": "comment_shortcuts",
       "label": "キーボードショートカット",
       "type": "core_keyboard_shortcuts",
+      "initial_enabled": false,
       "parent_id": "section_personal_settings"
     },
     {
@@ -40,6 +50,7 @@
       "key": "show_admin_bar_front",
       "label": "ツールバー",
       "type": "core_toolbar",
+      "initial_enabled": true,
       "parent_id": "section_personal_settings"
     },
     {
@@ -184,6 +195,7 @@
       "key": "send_user_notification",
       "label": "メール通知",
       "type": "core_notification",
+      "initial_enabled": true,
       "parent_id": "section_permissions"
     },
     {

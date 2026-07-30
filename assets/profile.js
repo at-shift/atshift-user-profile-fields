@@ -6,6 +6,7 @@
 	}
 
 	var hiddenFields = Array.isArray(window.atshiftUPFProfile.hiddenFields) ? window.atshiftUPFProfile.hiddenFields : [];
+	var disabledHiddenFields = Array.isArray(window.atshiftUPFProfile.disabledHiddenFields) ? window.atshiftUPFProfile.disabledHiddenFields : [];
 	var replacementFields = Array.isArray(window.atshiftUPFProfile.replacementFields) ? window.atshiftUPFProfile.replacementFields : [];
 	var roleRestrictedFields = Array.isArray(window.atshiftUPFProfile.roleRestrictedFields) ? window.atshiftUPFProfile.roleRestrictedFields : [];
 	var adminColorSchemes = window.atshiftUPFProfile.adminColorSchemes || {};
@@ -16,6 +17,7 @@
 	var selectors = {
 		username: ['.user-user-login-wrap', '.form-field.form-required:has(#user_login)'],
 		email: ['.user-email-wrap', '.form-field.form-required:has(#email)'],
+		visual_editor: ['.user-rich-editing-wrap'],
 		syntax_highlighting: ['.user-syntax-highlighting-wrap'],
 		admin_color: ['.user-admin-color-wrap'],
 		keyboard_shortcuts: ['.user-comment-shortcuts-wrap'],
@@ -38,6 +40,7 @@
 	var inputIds = {
 		username: ['user_login'],
 		email: ['email'],
+		visual_editor: ['rich_editing'],
 		admin_color: ['admin_color_fresh'],
 		syntax_highlighting: ['syntax_highlighting'],
 		keyboard_shortcuts: ['comment_shortcuts'],
@@ -67,6 +70,28 @@
 
 		wrapper = element.closest('tr') || element.closest('.form-field') || element;
 		wrapper.classList.add('atshift-upf-hidden-core-field');
+	}
+
+	function turnOffHiddenFeature(field) {
+		var checkedState = {
+			visual_editor: true,
+			syntax_highlighting: true,
+			keyboard_shortcuts: false,
+			toolbar: false,
+			notification: false
+		};
+
+		if (!Object.prototype.hasOwnProperty.call(checkedState, field)) {
+			return;
+		}
+
+		(inputIds[field] || []).forEach(function (id) {
+			var input = document.getElementById(id);
+
+			if (input && (input.type === 'checkbox' || input.type === 'radio')) {
+				input.checked = checkedState[field];
+			}
+		});
 	}
 
 	function embedNativeApplicationPasswords() {
@@ -121,6 +146,13 @@
 			&& !document.querySelector('[data-atshift-upf-core-replacement="' + field + '"]')
 		) {
 			return;
+		}
+
+		if (
+			disabledHiddenFields.indexOf(field) !== -1
+			&& !document.querySelector('[data-atshift-upf-core-replacement="' + field + '"]')
+		) {
+			turnOffHiddenFeature(field);
 		}
 
 		(selectors[field] || []).forEach(function (selector) {

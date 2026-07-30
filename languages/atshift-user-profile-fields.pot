@@ -1305,3 +1305,71 @@ msgstr ""
 #: includes/class-atshift-upf-tools.php:482
 msgid "The import code does not contain valid display settings."
 msgstr ""
+
+#: includes/class-atshift-upf-profile.php
+msgid "Visual editor"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php
+msgid "Rich text editor preference."
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php
+msgid "Disable the visual editor"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php
+msgid "Enable the visual editor when writing."
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php
+msgid "Disable syntax highlighting"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php
+msgid "Disable keyboard shortcuts"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php
+msgid "Do not show the Toolbar while viewing the site"
+msgstr ""
+
+#: includes/class-atshift-upf-profile.php
+msgid "Do not send an account email to the new user"
+msgstr ""
+
+#. translators: %s: WordPress profile item label.
+#: includes/class-atshift-upf-admin.php
+#, php-format
+msgid "Hide %s"
+msgstr ""
+
+#: includes/class-atshift-upf-admin.php
+msgid "Applied when a new user is added."
+msgstr ""
+
+#: includes/class-atshift-upf-admin.php
+msgid "Applied when the profile is next saved."
+msgstr ""
+
+#: includes/class-atshift-upf-admin.php
+msgid ""
+"Hiding an item does not change its current setting. For supported checkbox "
+"features, use the additional option to turn the feature off."
+msgstr ""
+
+#: includes/class-atshift-upf-admin.php
+msgid ""
+"Items with locked checkboxes are managed in Fields. Remove the field before "
+"configuring the item here."
+msgstr ""
+
+#: includes/class-atshift-upf-admin.php
+msgid "Send account email"
+msgstr ""
+
+#: includes/class-atshift-upf-admin.php
+msgid ""
+"Applied only when creating a new user. Existing users keep their saved "
+"setting."
+msgstr ""

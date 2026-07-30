@@ -967,7 +967,11 @@
 	color: #646970;
 	font-size: 15px;
 	line-height: 1.5;
-	margin: 0 0 20px;
+	margin: 0 0 6px;
+}
+
+.atshift-upf-extras-form > .description:last-of-type {
+	margin-bottom: 20px;
 }
 
 .atshift-upf-extras-groups {
@@ -987,10 +991,18 @@
 	color: #2c3338;
 	font-size: 17px;
 	line-height: 1.4;
-	margin: 0 0 16px;
+	margin: 0 0 4px;
 }
 
-.atshift-upf-extras-option label {
+.atshift-upf-extras-group-description {
+	color: #646970;
+	font-size: 13px;
+	line-height: 1.45;
+	margin: 0 0 18px;
+}
+
+.atshift-upf-extras-main,
+.atshift-upf-extras-off-option label {
 	align-items: flex-start;
 	display: flex;
 	gap: 6px;
@@ -1007,15 +1019,37 @@
 	opacity: .72;
 }
 
-.atshift-upf-extras-option label > span {
+.atshift-upf-extras-main > span,
+.atshift-upf-extras-off-option label > span {
 	min-width: 0;
 	padding-top: 0;
+}
+
+.atshift-upf-extras-main strong,
+.atshift-upf-extras-off-option strong {
+	display: block;
+	font-weight: 600;
 }
 
 .atshift-upf-extras-option small {
 	color: #646970;
 	display: block;
 	margin-top: 2px;
+}
+
+.atshift-upf-extras-off-option {
+	border-top: 1px solid #f0f0f1;
+	margin: 8px 0 0 26px;
+	padding-top: 8px;
+	transition: opacity .15s ease;
+}
+
+.atshift-upf-extras-off-option.is-disabled {
+	opacity: .5;
+}
+
+.atshift-upf-extras-off-option label {
+	min-height: 0;
 }
 
 .atshift-upf-cfs-checks {
@@ -1025,6 +1059,85 @@
 
 .atshift-upf-cfs-checks label {
 	font-weight: 600;
+}
+
+.atshift-upf-initial-state-control {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.atshift-upf-initial-state-subject {
+	font-weight: 600;
+	min-width: 150px;
+}
+
+.atshift-upf-switch-control {
+	align-items: center;
+	cursor: pointer;
+	display: inline-flex;
+	gap: 8px;
+	position: relative;
+}
+
+.atshift-upf-switch-control input {
+	height: 1px;
+	opacity: 0;
+	position: absolute;
+	width: 1px;
+}
+
+.atshift-upf-switch-track {
+	background: #8c8f94;
+	border-radius: 999px;
+	box-sizing: border-box;
+	display: inline-block;
+	height: 24px;
+	position: relative;
+	transition: background-color .15s ease;
+	width: 44px;
+}
+
+.atshift-upf-switch-track::after {
+	background: #fff;
+	border-radius: 50%;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .24);
+	content: "";
+	height: 18px;
+	left: 3px;
+	position: absolute;
+	top: 3px;
+	transition: transform .15s ease;
+	width: 18px;
+}
+
+.atshift-upf-switch-control input:checked + .atshift-upf-switch-track {
+	background: var(--atshift-upf-accent);
+}
+
+.atshift-upf-switch-control input:checked + .atshift-upf-switch-track::after {
+	transform: translateX(20px);
+}
+
+.atshift-upf-switch-control input:focus-visible + .atshift-upf-switch-track {
+	box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--atshift-upf-accent);
+}
+
+.atshift-upf-switch-state {
+	color: #50575e;
+	font-weight: 700;
+	min-width: 28px;
+}
+
+.atshift-upf-switch-state .is-on,
+.atshift-upf-switch-control input:checked ~ .atshift-upf-switch-state .is-off {
+	display: none;
+}
+
+.atshift-upf-switch-control input:checked ~ .atshift-upf-switch-state .is-on {
+	color: var(--atshift-upf-accent-dark);
+	display: inline;
 }
 
 .atshift-upf-type-option-hidden {

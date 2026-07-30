@@ -36,9 +36,15 @@ class Atshift_UPF_Profile {
 	 */
 	public static function get_core_field_options() {
 		return array(
+			'visual_editor'          => array(
+				'label'       => __( 'Visual editor', 'atshift-user-profile-fields' ),
+				'description' => __( 'Rich text editor preference.', 'atshift-user-profile-fields' ),
+				'off_label'   => __( 'Disable the visual editor', 'atshift-user-profile-fields' ),
+			),
 			'syntax_highlighting'    => array(
 				'label'       => __( 'Syntax highlighting', 'atshift-user-profile-fields' ),
 				'description' => __( 'Code editor syntax highlighting preference.', 'atshift-user-profile-fields' ),
+				'off_label'   => __( 'Disable syntax highlighting', 'atshift-user-profile-fields' ),
 			),
 			'admin_color'           => array(
 				'label'       => __( 'Admin color scheme', 'atshift-user-profile-fields' ),
@@ -47,10 +53,12 @@ class Atshift_UPF_Profile {
 			'keyboard_shortcuts'    => array(
 				'label'       => __( 'Keyboard shortcuts', 'atshift-user-profile-fields' ),
 				'description' => __( 'Comment moderation shortcut preference.', 'atshift-user-profile-fields' ),
+				'off_label'   => __( 'Disable keyboard shortcuts', 'atshift-user-profile-fields' ),
 			),
 			'toolbar'               => array(
 				'label'       => __( 'Toolbar', 'atshift-user-profile-fields' ),
 				'description' => __( 'Frontend toolbar preference.', 'atshift-user-profile-fields' ),
+				'off_label'   => __( 'Do not show the Toolbar while viewing the site', 'atshift-user-profile-fields' ),
 			),
 			'language'              => array(
 				'label'       => __( 'Language', 'atshift-user-profile-fields' ),
@@ -99,6 +107,7 @@ class Atshift_UPF_Profile {
 			'notification'          => array(
 				'label'       => __( 'Email Notification', 'atshift-user-profile-fields' ),
 				'description' => __( 'New user notification checkbox.', 'atshift-user-profile-fields' ),
+				'off_label'   => __( 'Do not send an account email to the new user', 'atshift-user-profile-fields' ),
 			),
 			'role'                  => array(
 				'label'       => __( 'Role', 'atshift-user-profile-fields' ),
@@ -216,6 +225,7 @@ class Atshift_UPF_Profile {
 			'atshiftUPFProfile',
 			array(
 				'hiddenFields'         => $this->get_hidden_core_fields( $settings, $screen ),
+				'disabledHiddenFields' => $this->get_disabled_hidden_core_fields( $settings, $screen ),
 				'replacementFields'    => $this->get_managed_core_replacement_keys( $screen ),
 				'roleRestrictedFields' => $this->get_role_restricted_core_replacement_keys( $screen ),
 				'adminColorSchemes'    => $this->get_admin_color_schemes_for_script(),
@@ -310,6 +320,8 @@ class Atshift_UPF_Profile {
 	private function get_language_preview_label_pairs() {
 		return array(
 			'Personal Options'              => '個人設定',
+			'Visual Editor'                 => 'ビジュアルエディター',
+			'Visual editor'                 => 'ビジュアルエディター',
 			'Syntax Highlighting'           => 'シンタックスハイライト',
 			'Syntax highlighting'           => 'シンタックスハイライト',
 			'Admin Color Scheme'            => '管理画面の配色',
@@ -462,7 +474,7 @@ class Atshift_UPF_Profile {
 	 *
 	 * @param WP_Error $errors Error object.
 	 * @param bool     $update Whether this is an update.
-	 * @param WP_User  $user User being saved.
+	 * @param WP_User|stdClass $user User being saved.
 	 * @return void
 	 */
 	public function validate_fields( $errors, $update, $user ) {
@@ -470,16 +482,19 @@ class Atshift_UPF_Profile {
 			return;
 		}
 
+		$this->apply_disabled_hidden_core_fields( $update ? 'edit' : 'new', $user );
+
 		$values = isset( $_POST['atshift_upf_fields'] ) ? (array) wp_unslash( $_POST['atshift_upf_fields'] ) : array();
 
 		$fields = $this->filter_fields_for_screen( Atshift_UPF_Plugin::get_enabled_fields(), $update ? 'edit' : 'new' );
+		$screen = $update ? 'edit' : 'new';
 
 		foreach ( $fields as $field ) {
 			if ( $this->is_horizontal_group( $field ) || $this->is_box_group( $field ) || $this->is_accordion_group( $field ) ) {
 				continue;
 			}
 
-			if ( ! $this->field_matches_role_control( $field ) ) {
+			if ( ! $this->field_matches_profile_context( $field, 'admin_profile_validate', $screen, $user ) ) {
 				continue;
 			}
 
@@ -532,6 +547,19 @@ class Atshift_UPF_Profile {
 			if ( '' !== $trimmed_value && $this->should_validate_format( $field ) && ! $this->is_valid_format( $value, $field ) ) {
 				$this->add_field_error( $errors, $field, $this->get_format_error_message( $field ), 'format' );
 			}
+
+			/**
+			 * Fires after the base plugin validates one submitted profile field.
+			 *
+			 * Add-ons can add errors to the provided WP_Error object.
+			 *
+			 * @param WP_Error             $errors Error object.
+			 * @param array<string, mixed> $field Field definition.
+			 * @param mixed                $value Submitted value.
+			 * @param bool                 $update Whether this is an existing user update.
+			 * @param WP_User              $user User being saved.
+			 */
+			do_action( 'atshift_upf_validate_profile_field', $errors, $field, $value, $update, $user );
 		}
 	}
 
@@ -575,15 +603,21 @@ class Atshift_UPF_Profile {
 			'ID' => $user_id,
 		);
 
-		$screen = 'user_register' === current_filter() ? 'new' : 'edit';
-		$fields = $this->filter_fields_for_screen( Atshift_UPF_Plugin::get_enabled_fields(), $screen );
+		$screen     = 'user_register' === current_filter() ? 'new' : 'edit';
+		$all_fields = Atshift_UPF_Plugin::get_enabled_fields();
+
+		if ( 'new' === $screen ) {
+			$this->apply_initial_states_to_new_user( $user_id, $all_fields );
+		}
+
+		$fields = $this->filter_fields_for_screen( $all_fields, $screen );
 
 		foreach ( $fields as $field ) {
 			if ( $this->is_horizontal_group( $field ) || $this->is_box_group( $field ) || $this->is_accordion_group( $field ) ) {
 				continue;
 			}
 
-			if ( ! $this->field_matches_role_control( $field ) ) {
+			if ( ! $this->field_matches_profile_context( $field, 'admin_profile_save', $screen, $user_id ) ) {
 				continue;
 			}
 
@@ -596,6 +630,15 @@ class Atshift_UPF_Profile {
 
 			if ( $this->is_core_field( $field ) ) {
 				$this->queue_core_field_update( $core_updates, $field, $value );
+				/**
+				 * Fires after the base plugin prepares one WordPress core profile field update.
+				 *
+				 * @param int                  $user_id User ID.
+				 * @param array<string, mixed> $field Field definition.
+				 * @param mixed                $value Sanitized submitted value.
+				 * @param string               $screen Screen context: new or edit.
+				 */
+				do_action( 'atshift_upf_save_profile_field', $user_id, $field, $value, $screen );
 				continue;
 			}
 
@@ -604,10 +647,44 @@ class Atshift_UPF_Profile {
 			if ( 'additional_name' === ( $field['type'] ?? '' ) ) {
 				update_user_meta( $user_id, $this->meta_key( $field['key'] . '_type' ), $this->get_submitted_additional_name_type( $field ) );
 			}
+
+			/**
+			 * Fires after the base plugin saves one custom profile field.
+			 *
+			 * @param int                  $user_id User ID.
+			 * @param array<string, mixed> $field Field definition.
+			 * @param mixed                $value Sanitized saved value.
+			 * @param string               $screen Screen context: new or edit.
+			 */
+			do_action( 'atshift_upf_save_profile_field', $user_id, $field, $value, $screen );
 		}
 
 		if ( count( $core_updates ) > 1 ) {
 			wp_update_user( $core_updates );
+		}
+	}
+
+	/**
+	 * Apply configured initial preferences after a new account is created.
+	 *
+	 * @param int                               $user_id New user ID.
+	 * @param array<int, array<string, mixed>> $fields Field definitions.
+	 * @return void
+	 */
+	private function apply_initial_states_to_new_user( $user_id, $fields ) {
+		$updates = array(
+			'ID' => $user_id,
+		);
+
+		foreach ( $fields as $field ) {
+			$type = isset( $field['type'] ) ? sanitize_key( $field['type'] ) : '';
+
+			if ( ! Atshift_UPF_Plugin::supports_initial_state( $type ) || 'core_notification' === $type ) {
+				continue;
+			}
+
+			$value = Atshift_UPF_Plugin::get_field_initial_enabled( $field ) ? '1' : '0';
+			$this->queue_core_field_update( $updates, $field, $value );
 		}
 	}
 
@@ -621,7 +698,9 @@ class Atshift_UPF_Profile {
 	 * @return void
 	 */
 	private function render_field_node( $field, $tree, $user, $values ) {
-		if ( ! $this->field_matches_role_control( $field ) ) {
+		$screen = $user instanceof WP_User ? 'edit' : 'new';
+
+		if ( ! $this->field_matches_profile_context( $field, 'admin_profile_render', $screen, $user ) ) {
 			return;
 		}
 
@@ -670,7 +749,8 @@ class Atshift_UPF_Profile {
 
 		foreach ( $fields as $field ) {
 			if ( $this->is_profile_feature_field( $field ) ) {
-				if ( $this->field_matches_role_control( $field ) ) {
+				$screen = $user instanceof WP_User ? 'edit' : 'new';
+				if ( $this->field_matches_profile_context( $field, 'admin_profile_render', $screen, $user ) ) {
 					$feature_fields[] = $field;
 				}
 				continue;
@@ -830,7 +910,9 @@ class Atshift_UPF_Profile {
 	 * @return void
 	 */
 	private function render_field_block_node( $field, $tree, $user, $values ) {
-		if ( ! $this->field_matches_role_control( $field ) ) {
+		$screen = $user instanceof WP_User ? 'edit' : 'new';
+
+		if ( ! $this->field_matches_profile_context( $field, 'admin_profile_render', $screen, $user ) ) {
 			return;
 		}
 
@@ -1295,6 +1377,12 @@ class Atshift_UPF_Profile {
 				return;
 			}
 
+			if ( 'core_visual_editor' === $type ) {
+				echo '<input type="hidden" name="' . esc_attr( $name ) . '" value="false">';
+				echo '<label><input type="checkbox" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" value="1" ' . checked( $value, '1', false ) . '> ' . esc_html__( 'Enable the visual editor when writing.', 'atshift-user-profile-fields' ) . '</label>';
+				return;
+			}
+
 			if ( 'core_admin_color' === $type ) {
 				global $_wp_admin_css_colors;
 				$schemes = is_array( $_wp_admin_css_colors ) ? $_wp_admin_css_colors : array();
@@ -1308,12 +1396,13 @@ class Atshift_UPF_Profile {
 			}
 
 			if ( 'core_syntax_highlighting' === $type ) {
+				echo '<input type="hidden" name="' . esc_attr( $name ) . '" value="false">';
 				echo '<label><input type="checkbox" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" value="1" ' . checked( $value, '1', false ) . '> ' . esc_html__( 'Enable syntax highlighting when editing code.', 'atshift-user-profile-fields' ) . '</label>';
 				return;
 			}
 
 			if ( 'core_keyboard_shortcuts' === $type ) {
-				echo '<label><input type="checkbox" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" value="1" ' . checked( $value, '1', false ) . '> ' . esc_html__( 'Enable keyboard shortcuts for comment moderation.', 'atshift-user-profile-fields' ) . '</label>';
+				echo '<label><input type="checkbox" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" value="true" ' . checked( $value, '1', false ) . '> ' . esc_html__( 'Enable keyboard shortcuts for comment moderation.', 'atshift-user-profile-fields' ) . '</label>';
 				return;
 			}
 
@@ -1372,7 +1461,7 @@ class Atshift_UPF_Profile {
 			}
 
 			if ( 'core_notification' === $type ) {
-				echo '<label><input type="checkbox" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" value="1" ' . checked( '' === $value ? '1' : $value, '1', false ) . '> ' . esc_html__( 'Send the new user an email about their account.', 'atshift-user-profile-fields' ) . '</label>';
+				echo '<label><input type="checkbox" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" value="1" ' . checked( $value, '1', false ) . '> ' . esc_html__( 'Send the new user an email about their account.', 'atshift-user-profile-fields' ) . '</label>';
 				return;
 			}
 
@@ -1659,7 +1748,7 @@ class Atshift_UPF_Profile {
 			return isset( $_wp_admin_css_colors[ $scheme ] ) ? $scheme : 'fresh';
 		}
 
-		if ( in_array( $type, array( 'core_syntax_highlighting', 'core_keyboard_shortcuts', 'core_toolbar' ), true ) ) {
+		if ( in_array( $type, array( 'core_visual_editor', 'core_syntax_highlighting', 'core_keyboard_shortcuts', 'core_toolbar' ), true ) ) {
 			return empty( $value ) ? '0' : '1';
 		}
 
@@ -1755,6 +1844,7 @@ class Atshift_UPF_Profile {
 		$map = array(
 			'core_username'     => 'user_login',
 			'core_email'        => 'email',
+			'core_visual_editor' => 'rich_editing',
 			'core_admin_color'  => 'admin_color',
 			'core_syntax_highlighting' => 'syntax_highlighting',
 			'core_keyboard_shortcuts' => 'comment_shortcuts',
@@ -1794,11 +1884,42 @@ class Atshift_UPF_Profile {
 			return isset( $values[ $key ] ) ? $values[ $key ] : '';
 		}
 
-		if ( in_array( $field['type'] ?? '', array( 'core_syntax_highlighting', 'core_keyboard_shortcuts', 'core_toolbar', 'core_notification' ), true ) ) {
-			return empty( $_POST[ $name ] ) ? '0' : '1';
+		if ( in_array( $field['type'] ?? '', array( 'core_visual_editor', 'core_syntax_highlighting', 'core_keyboard_shortcuts', 'core_toolbar', 'core_notification' ), true ) ) {
+			$has_value = isset( $_POST[ $name ] );
+			$value     = $has_value ? sanitize_text_field( wp_unslash( $_POST[ $name ] ) ) : '';
+
+			return $this->normalize_core_checkbox_value( $field['type'], $value, $has_value );
 		}
 
 		return isset( $_POST[ $name ] ) ? wp_unslash( $_POST[ $name ] ) : '';
+	}
+
+	/**
+	 * Normalize WordPress checkbox conventions to the plugin's enabled state.
+	 *
+	 * @param string $type Field type.
+	 * @param string $value Submitted value.
+	 * @param bool   $has_value Whether the input was submitted.
+	 * @return string
+	 */
+	private function normalize_core_checkbox_value( $type, $value, $has_value ) {
+		if ( ! $has_value ) {
+			return '0';
+		}
+
+		if ( 'core_syntax_highlighting' === $type ) {
+			return 'false' === (string) $value ? '0' : '1';
+		}
+
+		if ( 'core_visual_editor' === $type ) {
+			return 'false' === (string) $value ? '0' : '1';
+		}
+
+		if ( 'core_keyboard_shortcuts' === $type ) {
+			return 'true' === (string) $value ? '1' : '0';
+		}
+
+		return empty( $value ) ? '0' : '1';
 	}
 
 	/**
@@ -1874,6 +1995,7 @@ class Atshift_UPF_Profile {
 			$post_map = array(
 			'core_username'     => 'user_login',
 			'core_email'        => 'email',
+			'core_visual_editor' => 'rich_editing',
 			'core_admin_color'  => 'admin_color',
 			'core_syntax_highlighting' => 'syntax_highlighting',
 			'core_keyboard_shortcuts' => 'comment_shortcuts',
@@ -1890,15 +2012,29 @@ class Atshift_UPF_Profile {
 			);
 
 			if ( isset( $post_map[ $type ], $_POST[ $post_map[ $type ] ] ) ) {
-				return sanitize_text_field( wp_unslash( $_POST[ $post_map[ $type ] ] ) );
+				$posted_value = sanitize_text_field( wp_unslash( $_POST[ $post_map[ $type ] ] ) );
+
+				if ( Atshift_UPF_Plugin::supports_initial_state( $type ) ) {
+					return $this->normalize_core_checkbox_value( $type, $posted_value, true );
+				}
+
+				return $posted_value;
+			}
+
+			if (
+				Atshift_UPF_Plugin::supports_initial_state( $type )
+				&& isset( $_SERVER['REQUEST_METHOD'] )
+				&& 'POST' === strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) )
+			) {
+				return '0';
+			}
+
+			if ( Atshift_UPF_Plugin::supports_initial_state( $type ) ) {
+				return Atshift_UPF_Plugin::get_field_initial_enabled( $field ) ? '1' : '0';
 			}
 
 			if ( 'core_role' === $type ) {
 				return get_option( 'default_role', 'subscriber' );
-			}
-
-			if ( 'core_notification' === $type ) {
-				return '1';
 			}
 
 			return '';
@@ -1909,6 +2045,8 @@ class Atshift_UPF_Profile {
 				return $user->user_login;
 			case 'core_email':
 				return $user->user_email;
+			case 'core_visual_editor':
+				return 'false' === (string) get_user_option( 'rich_editing', $user->ID ) ? '0' : '1';
 			case 'core_admin_color':
 				return get_user_option( 'admin_color', $user->ID );
 			case 'core_syntax_highlighting':
@@ -1953,6 +2091,9 @@ class Atshift_UPF_Profile {
 	 */
 	private function queue_core_field_update( &$updates, $field, $value ) {
 		switch ( $field['type'] ?? '' ) {
+			case 'core_visual_editor':
+				update_user_option( $updates['ID'], 'rich_editing', '1' === $value ? 'true' : 'false', true );
+				break;
 			case 'core_admin_color':
 				update_user_option( $updates['ID'], 'admin_color', $value, true );
 				break;
@@ -2135,6 +2276,15 @@ class Atshift_UPF_Profile {
 				}
 			)
 		);
+
+		/**
+		 * Filters fields available for a WordPress profile screen before empty
+		 * structure groups and conditional branches are pruned.
+		 *
+		 * @param array<int, array<string, mixed>> $filtered Field definitions.
+		 * @param string                          $screen Screen context: new or edit.
+		 */
+		$filtered = apply_filters( 'atshift_upf_profile_fields_for_screen', $filtered, $screen );
 
 		do {
 			$child_counts = array();
@@ -2411,6 +2561,7 @@ class Atshift_UPF_Profile {
 	 */
 	private function edit_only_core_field_types() {
 		return array(
+			'core_visual_editor',
 			'core_admin_color',
 			'core_syntax_highlighting',
 			'core_keyboard_shortcuts',
@@ -2466,6 +2617,7 @@ class Atshift_UPF_Profile {
 		return in_array(
 			$field['type'] ?? '',
 			array(
+				'core_visual_editor',
 				'core_admin_color',
 				'core_syntax_highlighting',
 				'core_keyboard_shortcuts',
@@ -2542,6 +2694,76 @@ class Atshift_UPF_Profile {
 	}
 
 	/**
+	 * Return hidden checkbox-driven features that should also be turned off.
+	 *
+	 * @param array<string, mixed> $settings Plugin settings.
+	 * @param string               $screen Screen context: new or edit.
+	 * @return array<int, string>
+	 */
+	private function get_disabled_hidden_core_fields( $settings, $screen ) {
+		if ( empty( $settings['field_group_enabled'] ) ) {
+			return array();
+		}
+
+		$disabled = isset( $settings['disabled_hidden_core_fields'] ) ? (array) $settings['disabled_hidden_core_fields'] : array();
+		$hidden   = $this->get_hidden_core_fields( $settings, $screen );
+		$managed  = $this->get_managed_core_replacement_keys( $screen );
+
+		return array_values(
+			array_diff(
+				array_intersect(
+					array_map( 'sanitize_key', $disabled ),
+					$hidden
+				),
+				$managed
+			)
+		);
+	}
+
+	/**
+	 * Turn off selected WordPress profile features when their rows are hidden.
+	 *
+	 * @param string           $screen Screen context: new or edit.
+	 * @param WP_User|stdClass $user User data being saved.
+	 * @return void
+	 */
+	private function apply_disabled_hidden_core_fields( $screen, $user ) {
+		global $pagenow;
+
+		$settings = Atshift_UPF_Plugin::get_settings();
+
+		if ( 'profile.php' === $pagenow && empty( $settings['apply_to_own_profile'] ) ) {
+			return;
+		}
+
+		$disabled = $this->get_disabled_hidden_core_fields( $settings, $screen );
+
+		if ( in_array( 'notification', $disabled, true ) ) {
+			unset( $_POST['send_user_notification'] );
+		}
+
+		if ( ! is_object( $user ) ) {
+			return;
+		}
+
+		if ( in_array( 'visual_editor', $disabled, true ) ) {
+			$user->rich_editing = 'false';
+		}
+
+		if ( in_array( 'syntax_highlighting', $disabled, true ) ) {
+			$user->syntax_highlighting = 'false';
+		}
+
+		if ( in_array( 'keyboard_shortcuts', $disabled, true ) ) {
+			$user->comment_shortcuts = '';
+		}
+
+		if ( in_array( 'toolbar', $disabled, true ) ) {
+			$user->show_admin_bar_front = 'false';
+		}
+	}
+
+	/**
 	 * Return the default profile option keys with a compatible managed replacement.
 	 *
 	 * @param string $screen Screen context: new or edit.
@@ -2598,6 +2820,7 @@ class Atshift_UPF_Profile {
 		return array(
 			'core_username'     => 'username',
 			'core_email'        => 'email',
+			'core_visual_editor' => 'visual_editor',
 			'core_admin_color'  => 'admin_color',
 			'core_syntax_highlighting' => 'syntax_highlighting',
 			'core_keyboard_shortcuts' => 'keyboard_shortcuts',
@@ -2719,6 +2942,33 @@ class Atshift_UPF_Profile {
 		}
 
 		return (bool) array_intersect( $allowed_roles, $user_roles );
+	}
+
+	/**
+	 * Check whether a field can participate in a profile context.
+	 *
+	 * @param array<string, mixed> $field Field definition.
+	 * @param string               $context Profile context.
+	 * @param string               $screen Screen context: new or edit.
+	 * @param WP_User|int|null     $user User object, user ID, or null.
+	 * @return bool
+	 */
+	private function field_matches_profile_context( $field, $context, $screen, $user ) {
+		$allowed = $this->field_matches_role_control( $field );
+
+		/**
+		 * Filters whether a field is available in a profile rendering, validation,
+		 * or save context.
+		 *
+		 * Returning false prevents the field from participating in that context.
+		 *
+		 * @param bool                 $allowed Whether the field is available.
+		 * @param array<string, mixed> $field Field definition.
+		 * @param string               $context Profile context.
+		 * @param string               $screen Screen context: new or edit.
+		 * @param WP_User|int|null     $user User object, user ID, or null.
+		 */
+		return (bool) apply_filters( 'atshift_upf_field_matches_profile_context', $allowed, $field, $context, $screen, $user );
 	}
 
 	/**

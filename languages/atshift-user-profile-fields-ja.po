@@ -1368,6 +1368,80 @@ msgstr "インポートに循環するフィールドの親子関係が含まれ
 msgid "The import code does not contain valid display settings."
 msgstr "インポートコードに有効な表示設定が含まれていません。"
 
+#: includes/class-atshift-upf-profile.php
+msgid "Visual editor"
+msgstr "ビジュアルエディター"
+
+#: includes/class-atshift-upf-profile.php
+msgid "Rich text editor preference."
+msgstr "リッチテキストエディターの設定です。"
+
+#: includes/class-atshift-upf-profile.php
+msgid "Disable the visual editor"
+msgstr "ビジュアルエディターを無効にする"
+
+#: includes/class-atshift-upf-profile.php
+msgid "Enable the visual editor when writing."
+msgstr "投稿作成時にビジュアルエディターを有効にする"
+
+#: includes/class-atshift-upf-profile.php
+msgid "Disable syntax highlighting"
+msgstr "シンタックスハイライトを無効にする"
+
+#: includes/class-atshift-upf-profile.php
+msgid "Disable keyboard shortcuts"
+msgstr "キーボードショートカットを無効にする"
+
+#: includes/class-atshift-upf-profile.php
+msgid "Do not show the Toolbar while viewing the site"
+msgstr "サイト表示時にツールバーを表示しない"
+
+#: includes/class-atshift-upf-profile.php
+msgid "Do not send an account email to the new user"
+msgstr "新規ユーザーにアカウントメールを送信しない"
+
+#. translators: %s: WordPress profile item label.
+#: includes/class-atshift-upf-admin.php
+#, php-format
+msgid "Hide %s"
+msgstr "%sを非表示にする"
+
+#: includes/class-atshift-upf-admin.php
+msgid "Applied when a new user is added."
+msgstr "新規ユーザーの追加時に適用されます。"
+
+#: includes/class-atshift-upf-admin.php
+msgid "Applied when the profile is next saved."
+msgstr "次回プロフィールを保存したときに適用されます。"
+
+#: includes/class-atshift-upf-admin.php
+msgid ""
+"Hiding an item does not change its current setting. For supported checkbox "
+"features, use the additional option to turn the feature off."
+msgstr ""
+"項目を非表示にするだけでは、現在の設定値は変わりません。対応するチェックボッ"
+"クス機能を停止するときは、追加の項目を選択してください。"
+
+#: includes/class-atshift-upf-admin.php
+msgid ""
+"Items with locked checkboxes are managed in Fields. Remove the field before "
+"configuring the item here."
+msgstr ""
+"チェックが固定されている項目は「フィールド」で使用中です。ここで設定するに"
+"は、先に該当するフィールドを削除してください。"
+
+#: includes/class-atshift-upf-admin.php
+msgid "Send account email"
+msgstr "アカウントメールを送信"
+
+#: includes/class-atshift-upf-admin.php
+msgid ""
+"Applied only when creating a new user. Existing users keep their saved "
+"setting."
+msgstr ""
+"新規ユーザーの作成時にのみ適用されます。既存ユーザーの保存済み設定は変更され"
+"ません。"
+
 #~ msgid "Configuration exported."
 #~ msgstr "構成をエクスポートしました。"
 

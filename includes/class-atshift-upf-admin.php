@@ -42,6 +42,7 @@ class Atshift_UPF_Admin {
 			'accordion' => __( 'Accordion Group', 'atshift-user-profile-fields' ),
 			'core_username'     => __( 'Username', 'atshift-user-profile-fields' ),
 			'core_email'        => __( 'Email', 'atshift-user-profile-fields' ),
+			'core_visual_editor' => __( 'Visual editor', 'atshift-user-profile-fields' ),
 			'core_admin_color'  => __( 'Admin color scheme', 'atshift-user-profile-fields' ),
 			'core_syntax_highlighting' => __( 'Syntax highlighting', 'atshift-user-profile-fields' ),
 			'core_keyboard_shortcuts' => __( 'Keyboard shortcuts', 'atshift-user-profile-fields' ),
@@ -61,6 +62,14 @@ class Atshift_UPF_Admin {
 			'core_role'         => __( 'Role', 'atshift-user-profile-fields' ),
 			'core_submit_button' => __( 'Add / Save User button', 'atshift-user-profile-fields' ),
 		);
+		/**
+		 * Filters field types available in the field editor.
+		 *
+		 * Add-ons should return an associative array of field type keys to labels.
+		 *
+		 * @param array<string, string> $field_types Field type labels.
+		 */
+		$this->field_types = apply_filters( 'atshift_upf_admin_field_types', $this->field_types );
 
 		add_action( 'admin_menu', array( $this, 'add_menu' ) );
 		add_action( 'load-settings_page_atshift-user-profile-fields', array( $this, 'register_screen_options' ) );
@@ -197,6 +206,8 @@ class Atshift_UPF_Admin {
 						'addFieldBelow'           => __( 'Add new field below', 'atshift-user-profile-fields' ),
 						'addFieldInsideGroup'     => __( 'Add field inside group', 'atshift-user-profile-fields' ),
 						'standardFieldAlreadyAdded' => __( 'Already added', 'atshift-user-profile-fields' ),
+						'initialStateEnabled'     => __( 'Enabled', 'atshift-user-profile-fields' ),
+						'initialStateAccountEmail' => __( 'Send account email', 'atshift-user-profile-fields' ),
 						/* translators: %s: Conditional choice label. */
 						'conditionalBranchDropLabel' => __( 'Condition "%s"', 'atshift-user-profile-fields' ),
 						/* translators: %s: Field label. */
@@ -657,6 +668,7 @@ class Atshift_UPF_Admin {
 			'role_control_roles' => array(),
 			'required'    => false,
 			'validation_enabled' => null,
+			'initial_enabled' => null,
 			'sort_order'  => 10,
 		);
 		$field    = wp_parse_args( $field ? $field : array(), $defaults );
@@ -665,6 +677,7 @@ class Atshift_UPF_Admin {
 		$field_key          = $field['key'];
 		$selected_parent    = isset( $field['parent_id'] ) ? (string) $field['parent_id'] : '';
 		$validation_enabled = in_array( $current_type, array( 'email', 'url', 'phone' ), true ) && ( null === $field['validation_enabled'] || ! empty( $field['validation_enabled'] ) );
+		$initial_enabled    = Atshift_UPF_Plugin::get_field_initial_enabled( $field );
 		$field['description'] = $this->normalize_default_field_description( $current_type, (string) $field['description'] );
 		?>
 			<div class="atshift-upf-cfs-form field_form" <?php echo $is_hidden ? 'style="display:none;"' : ''; ?>>
@@ -753,6 +766,29 @@ class Atshift_UPF_Admin {
 									<label><input type="checkbox" name="<?php echo esc_attr( $name_prefix . '[accordion_open]' ); ?>" value="1" <?php checked( ! empty( $field['accordion_open'] ) ); ?>> <?php esc_html_e( 'Open by default', 'atshift-user-profile-fields' ); ?></label>
 								</td>
 							</tr>
+							<tr class="<?php echo Atshift_UPF_Plugin::supports_initial_state( $current_type ) ? '' : 'atshift-upf-type-option-hidden'; ?>" data-atshift-upf-types="<?php echo esc_attr( implode( ' ', array_keys( Atshift_UPF_Plugin::get_initial_state_defaults() ) ) ); ?>">
+								<td class="label">
+									<label>
+										<?php esc_html_e( 'Initial State', 'atshift-user-profile-fields' ); ?>
+										<span class="cfs_tooltip">?<span class="tooltip_inner"><?php esc_html_e( 'Applied only when creating a new user. Existing users keep their saved setting.', 'atshift-user-profile-fields' ); ?></span></span>
+									</label>
+								</td>
+								<td>
+									<div class="atshift-upf-initial-state-control">
+										<strong class="atshift-upf-initial-state-subject">
+											<?php echo esc_html( 'core_notification' === $current_type ? __( 'Send account email', 'atshift-user-profile-fields' ) : __( 'Enabled', 'atshift-user-profile-fields' ) ); ?>
+										</strong>
+										<label class="atshift-upf-switch-control">
+											<input type="checkbox" name="<?php echo esc_attr( $name_prefix . '[initial_enabled]' ); ?>" value="1" <?php checked( $initial_enabled ); ?> aria-label="<?php esc_attr_e( 'Initial State', 'atshift-user-profile-fields' ); ?>">
+											<span class="atshift-upf-switch-track" aria-hidden="true"></span>
+											<span class="atshift-upf-switch-state" aria-hidden="true">
+												<span class="is-on">ON</span>
+												<span class="is-off">OFF</span>
+											</span>
+										</label>
+									</div>
+								</td>
+							</tr>
 							<tr class="<?php echo in_array( $current_type, array( 'text', 'textarea', 'email', 'url', 'phone', 'number', 'additional_name' ), true ) ? '' : 'atshift-upf-type-option-hidden'; ?>" data-atshift-upf-types="text textarea email url phone number additional_name">
 								<td class="label">
 									<label><?php esc_html_e( 'Placeholder', 'atshift-user-profile-fields' ); ?></label>
@@ -803,6 +839,19 @@ class Atshift_UPF_Admin {
 									</select>
 								</td>
 							</tr>
+							<?php
+							/**
+							 * Fires inside a field settings table before the action row.
+							 *
+							 * Add-ons can print additional <tr> settings using the provided
+							 * field input name prefix.
+							 *
+							 * @param array<string, mixed> $field Current field definition with defaults.
+							 * @param string               $name_prefix Input name prefix, such as fields[0].
+							 * @param string               $current_type Current field type.
+							 */
+							do_action( 'atshift_upf_render_field_settings', $field, $name_prefix, $current_type );
+							?>
 							<tr class="field_actions">
 								<td class="label"></td>
 								<td>
@@ -859,6 +908,7 @@ class Atshift_UPF_Admin {
 			__( 'Default Profile Fields', 'atshift-user-profile-fields' ) => array(
 				'core_username',
 				'core_email',
+				'core_visual_editor',
 				'core_admin_color',
 				'core_syntax_highlighting',
 				'core_keyboard_shortcuts',
@@ -879,11 +929,20 @@ class Atshift_UPF_Admin {
 				'core_submit_button',
 			),
 		);
+		/**
+		 * Filters field type groups shown in the editor select menu.
+		 *
+		 * @param array<string, array<int, string>> $groups Field type groups.
+		 */
+		$groups = apply_filters( 'atshift_upf_admin_field_type_groups', $groups );
 		?>
 		<select name="<?php echo esc_attr( $name ); ?>" class="atshift-upf-field-type-select">
 			<?php foreach ( $groups as $group_label => $types ) : ?>
 				<optgroup label="<?php echo esc_attr( $group_label ); ?>">
 					<?php foreach ( $types as $type ) : ?>
+						<?php if ( ! isset( $this->field_types[ $type ] ) ) : ?>
+							<?php continue; ?>
+						<?php endif; ?>
 						<option value="<?php echo esc_attr( $type ); ?>" <?php selected( $current_type, $type ); ?>><?php echo esc_html( $this->field_types[ $type ] ); ?></option>
 					<?php endforeach; ?>
 				</optgroup>
@@ -958,6 +1017,7 @@ class Atshift_UPF_Admin {
 				array_merge(
 					$this->system_validated_field_types(),
 					array(
+						'core_visual_editor',
 						'core_admin_color',
 						'core_syntax_highlighting',
 						'core_keyboard_shortcuts',
@@ -1001,6 +1061,7 @@ class Atshift_UPF_Admin {
 	 */
 	private function role_controlled_field_types() {
 		return array(
+			'core_visual_editor',
 			'core_admin_color',
 			'core_syntax_highlighting',
 			'core_keyboard_shortcuts',
@@ -1044,7 +1105,7 @@ class Atshift_UPF_Admin {
 			return __( 'Registration only', 'atshift-user-profile-fields' );
 		}
 
-		if ( in_array( $type, array( 'core_admin_color', 'core_syntax_highlighting', 'core_keyboard_shortcuts', 'core_toolbar', 'core_nickname', 'core_display_name', 'core_bio', 'core_profile_picture', 'core_sessions', 'core_application_passwords' ), true ) ) {
+		if ( in_array( $type, array( 'core_visual_editor', 'core_admin_color', 'core_syntax_highlighting', 'core_keyboard_shortcuts', 'core_toolbar', 'core_nickname', 'core_display_name', 'core_bio', 'core_profile_picture', 'core_sessions', 'core_application_passwords' ), true ) ) {
 			return __( 'Edit only', 'atshift-user-profile-fields' );
 		}
 
@@ -1247,6 +1308,7 @@ class Atshift_UPF_Admin {
 		$core_map = array(
 			'core_username'     => 'user_login',
 			'core_email'        => 'user_email',
+			'core_visual_editor' => 'rich_editing',
 			'core_admin_color'  => 'admin_color',
 			'core_syntax_highlighting' => 'syntax_highlighting',
 			'core_keyboard_shortcuts' => 'comment_shortcuts',
@@ -1351,6 +1413,7 @@ class Atshift_UPF_Admin {
 		$settings     = Atshift_UPF_Plugin::get_settings();
 		$show_extras  = ! empty( $settings['show_extras'] );
 		$hidden       = (array) $settings['hidden_core_fields'];
+		$disabled     = (array) $settings['disabled_hidden_core_fields'];
 		$core_options = Atshift_UPF_Profile::get_core_field_options();
 		$groups       = $this->get_extra_field_groups();
 		$locked       = $this->get_used_core_extra_fields();
@@ -1361,30 +1424,64 @@ class Atshift_UPF_Admin {
 			</div>
 			<div class="atshift-upf-extras-form">
 				<p class="description"><?php esc_html_e( 'Hide WordPress and supported plugin profile items that are not needed for this site.', 'atshift-user-profile-fields' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Hiding an item does not change its current setting. For supported checkbox features, use the additional option to turn the feature off.', 'atshift-user-profile-fields' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Items with locked checkboxes are managed in Fields. Remove the field before configuring the item here.', 'atshift-user-profile-fields' ); ?></p>
 				<div class="atshift-upf-extras-groups">
 					<?php foreach ( $groups as $group ) : ?>
 						<div class="atshift-upf-extras-group">
 							<h3><?php echo esc_html( $group['label'] ); ?></h3>
+							<?php if ( ! empty( $group['description'] ) ) : ?>
+								<p class="atshift-upf-extras-group-description"><?php echo esc_html( $group['description'] ); ?></p>
+							<?php endif; ?>
 							<div class="atshift-upf-extras-options">
 								<?php foreach ( $group['fields'] as $key ) : ?>
 									<?php if ( empty( $core_options[ $key ] ) ) : ?>
 										<?php continue; ?>
 									<?php endif; ?>
 									<?php
-									$is_locked  = in_array( $key, $locked, true );
-									$is_checked = $is_locked || in_array( $key, $hidden, true );
+									$is_locked          = in_array( $key, $locked, true );
+									$is_checked         = $is_locked || in_array( $key, $hidden, true );
+									$can_disable        = ! empty( $core_options[ $key ]['off_label'] );
+									$is_disabled_hidden = ! $is_locked && in_array( $key, $disabled, true );
 									?>
-									<div class="atshift-upf-extras-option">
-										<label>
+									<div class="atshift-upf-extras-option" data-atshift-upf-extra-key="<?php echo esc_attr( $key ); ?>">
+										<label class="atshift-upf-extras-main">
 											<?php if ( $is_locked ) : ?>
 												<input type="hidden" name="hidden_core_fields[]" value="<?php echo esc_attr( $key ); ?>">
 											<?php endif; ?>
-											<input type="checkbox" name="hidden_core_fields[]" value="<?php echo esc_attr( $key ); ?>" <?php checked( $is_checked ); ?> <?php disabled( $is_locked ); ?>>
+											<input type="checkbox" name="hidden_core_fields[]" value="<?php echo esc_attr( $key ); ?>" data-atshift-upf-extra-hide <?php checked( $is_checked ); ?> <?php disabled( $is_locked ); ?>>
 											<span>
-												<?php echo esc_html( $core_options[ $key ]['label'] ); ?>
+												<strong>
+													<?php
+													printf(
+														/* translators: %s: WordPress profile item label. */
+														esc_html__( 'Hide %s', 'atshift-user-profile-fields' ),
+														esc_html( $core_options[ $key ]['label'] )
+													);
+													?>
+												</strong>
 												<small><?php echo esc_html( $core_options[ $key ]['description'] ); ?></small>
 											</span>
 										</label>
+										<?php if ( $can_disable && ! $is_locked ) : ?>
+											<div class="atshift-upf-extras-off-option <?php echo $is_checked ? '' : 'is-disabled'; ?>">
+												<label>
+													<input type="checkbox" name="disabled_hidden_core_fields[]" value="<?php echo esc_attr( $key ); ?>" data-atshift-upf-disable-hidden-feature <?php checked( $is_disabled_hidden ); ?> <?php disabled( ! $is_checked ); ?>>
+													<span>
+														<strong><?php echo esc_html( $core_options[ $key ]['off_label'] ); ?></strong>
+														<small>
+															<?php
+															echo esc_html(
+																'notification' === $key
+																	? __( 'Applied when a new user is added.', 'atshift-user-profile-fields' )
+																	: __( 'Applied when the profile is next saved.', 'atshift-user-profile-fields' )
+															);
+															?>
+														</small>
+													</span>
+												</label>
+											</div>
+										<?php endif; ?>
 									</div>
 								<?php endforeach; ?>
 							</div>
@@ -1443,6 +1540,7 @@ class Atshift_UPF_Admin {
 				'label'       => __( 'Feature items after account creation', 'atshift-user-profile-fields' ),
 				'description' => __( 'Profile screen features and account management items used after the account exists.', 'atshift-user-profile-fields' ),
 				'fields'      => array(
+					'visual_editor',
 					'admin_color',
 					'syntax_highlighting',
 					'keyboard_shortcuts',
@@ -1500,6 +1598,7 @@ class Atshift_UPF_Admin {
 		return array(
 			'core_username'     => 'username',
 			'core_email'        => 'email',
+			'core_visual_editor' => 'visual_editor',
 			'core_admin_color'  => 'admin_color',
 			'core_syntax_highlighting' => 'syntax_highlighting',
 			'core_keyboard_shortcuts' => 'keyboard_shortcuts',
@@ -1642,7 +1741,7 @@ class Atshift_UPF_Admin {
 			}
 			$role_control = $this->sanitize_role_control_settings( $raw_field, $type );
 
-			$fields[] = array(
+			$field = array(
 				'id'          => $field_id,
 				'key'         => $key,
 				'label'       => $label,
@@ -1659,8 +1758,17 @@ class Atshift_UPF_Admin {
 				'role_control_roles' => $role_control['roles'],
 				'required'    => ! in_array( $type, array( 'core_username', 'core_email', 'core_password', 'core_language', 'core_notification', 'core_role' ), true ) && ! empty( $raw_field['required'] ),
 				'validation_enabled' => in_array( $type, array( 'email', 'url', 'phone' ), true ) && ! empty( $raw_field['validation_enabled'] ),
+				'initial_enabled' => Atshift_UPF_Plugin::supports_initial_state( $type ) && ! empty( $raw_field['initial_enabled'] ),
 				'sort_order'  => $prepared_field['position'] * 10,
 			);
+			/**
+			 * Filters one field definition before it is saved from the editor.
+			 *
+			 * @param array<string, mixed> $field Field definition sanitized by the base plugin.
+			 * @param array<string, mixed> $raw_field Raw submitted field data.
+			 * @param string               $type Field type.
+			 */
+			$fields[] = apply_filters( 'atshift_upf_admin_sanitize_field', $field, $raw_field, $type );
 			}
 
 			update_option( 'atshift_upf_fields', $fields, false );
@@ -1779,8 +1887,17 @@ class Atshift_UPF_Admin {
 			'role_control_roles' => $role_control['roles'],
 			'required'    => ! in_array( $type, array( 'core_username', 'core_email', 'core_password', 'core_language', 'core_notification', 'core_role' ), true ) && ! empty( $_POST['required'] ),
 			'validation_enabled' => in_array( $type, array( 'email', 'url', 'phone' ), true ) && ! empty( $_POST['validation_enabled'] ),
+			'initial_enabled' => Atshift_UPF_Plugin::supports_initial_state( $type ) && ! empty( $_POST['initial_enabled'] ),
 			'sort_order'  => $sort_order,
 		);
+		/**
+		 * Filters one field definition before it is saved from the single-field route.
+		 *
+		 * @param array<string, mixed> $new_field Field definition sanitized by the base plugin.
+		 * @param array<string, mixed> $raw_field Raw submitted field data.
+		 * @param string               $type Field type.
+		 */
+		$new_field = apply_filters( 'atshift_upf_admin_sanitize_field', $new_field, wp_unslash( $_POST ), $type );
 
 		$updated = false;
 		foreach ( $fields as $index => $field ) {
@@ -1860,17 +1977,18 @@ class Atshift_UPF_Admin {
 	 *
 	 * @return void
 	 */
-		private function save_display_options() {
-			check_admin_referer( 'atshift_upf_save_display_options' );
+	private function save_display_options() {
+		check_admin_referer( 'atshift_upf_save_display_options' );
 
 		$current       = Atshift_UPF_Plugin::get_settings();
 		$context       = isset( $_POST['atshift_upf_options_context'] ) ? sanitize_key( wp_unslash( $_POST['atshift_upf_options_context'] ) ) : 'extras';
 		$allowed       = array_keys( Atshift_UPF_Profile::get_core_field_options() );
-			$hidden        = (array) $current['hidden_core_fields'];
-			$apply_to_own  = ! empty( $current['apply_to_own_profile'] );
-			$editor_layout = isset( $current['editor_layout'] ) && 'one' === $current['editor_layout'] ? 'one' : 'two';
-			$show_extras   = ! empty( $current['show_extras'] );
-			$field_group_enabled = ! empty( $current['field_group_enabled'] );
+		$hidden        = (array) $current['hidden_core_fields'];
+		$disabled      = (array) $current['disabled_hidden_core_fields'];
+		$apply_to_own  = ! empty( $current['apply_to_own_profile'] );
+		$editor_layout = isset( $current['editor_layout'] ) && 'one' === $current['editor_layout'] ? 'one' : 'two';
+		$show_extras   = ! empty( $current['show_extras'] );
+		$field_group_enabled = ! empty( $current['field_group_enabled'] );
 
 		if ( isset( $_POST['editor_layout'] ) ) {
 			$editor_layout = 'one' === sanitize_key( wp_unslash( $_POST['editor_layout'] ) ) ? 'one' : 'two';
@@ -1881,6 +1999,10 @@ class Atshift_UPF_Admin {
 		} else {
 			$hidden       = isset( $_POST['hidden_core_fields'] ) ? (array) wp_unslash( $_POST['hidden_core_fields'] ) : array();
 			$hidden       = array_values( array_intersect( array_map( 'sanitize_key', $hidden ), $allowed ) );
+			$disabled     = $this->sanitize_disabled_hidden_core_fields(
+				isset( $_POST['disabled_hidden_core_fields'] ) ? (array) wp_unslash( $_POST['disabled_hidden_core_fields'] ) : array(),
+				$hidden
+			);
 			$apply_to_own = ! empty( $_POST['apply_to_own_profile'] );
 			$show_extras  = ! empty( $_POST['show_extras'] );
 		}
@@ -1888,18 +2010,19 @@ class Atshift_UPF_Admin {
 		update_option(
 			'atshift_upf_settings',
 			array(
-					'hidden_core_fields'    => $hidden,
-					'apply_to_own_profile' => $apply_to_own,
-					'editor_layout'        => $editor_layout,
-					'show_extras'          => $show_extras,
-					'field_group_enabled'  => $field_group_enabled,
-				),
-				false
-			);
+				'hidden_core_fields'          => $hidden,
+				'disabled_hidden_core_fields' => $disabled,
+				'apply_to_own_profile'        => $apply_to_own,
+				'editor_layout'               => $editor_layout,
+				'show_extras'                 => $show_extras,
+				'field_group_enabled'         => $field_group_enabled,
+			),
+			false
+		);
 
-			wp_safe_redirect( $this->admin_url( array( 'atshift_upf_updated' => '1' ) ) );
-			exit;
-		}
+		wp_safe_redirect( $this->admin_url( array( 'atshift_upf_updated' => '1' ) ) );
+		exit;
+	}
 
 	/**
 	 * Save Extras settings when the main Fields form is saved.
@@ -1911,24 +2034,55 @@ class Atshift_UPF_Admin {
 		$allowed       = array_keys( Atshift_UPF_Profile::get_core_field_options() );
 		$hidden        = isset( $_POST['hidden_core_fields'] ) ? (array) wp_unslash( $_POST['hidden_core_fields'] ) : array();
 		$hidden        = array_values( array_intersect( array_map( 'sanitize_key', $hidden ), $allowed ) );
+		$disabled      = $this->sanitize_disabled_hidden_core_fields(
+			isset( $_POST['disabled_hidden_core_fields'] ) ? (array) wp_unslash( $_POST['disabled_hidden_core_fields'] ) : array(),
+			$hidden
+		);
 		$editor_layout = isset( $current['editor_layout'] ) && 'one' === $current['editor_layout'] ? 'one' : 'two';
 		$show_extras   = ! empty( $current['show_extras'] );
 		$field_group_enabled = isset( $_POST['field_group_enabled'] ) ? '1' === sanitize_key( wp_unslash( $_POST['field_group_enabled'] ) ) : ! empty( $current['field_group_enabled'] );
 
 		if ( is_array( $fields ) ) {
 			$hidden = $this->remove_inactive_managed_core_fields_from_hidden( $hidden, $fields, $field_group_enabled );
+			$disabled = $this->remove_managed_core_fields_from_disabled( $disabled, $fields, $field_group_enabled );
 		}
 
 		update_option(
 			'atshift_upf_settings',
 			array(
-				'hidden_core_fields'   => $hidden,
-				'apply_to_own_profile' => ! empty( $_POST['apply_to_own_profile'] ),
-				'editor_layout'        => $editor_layout,
-				'show_extras'          => $show_extras,
-				'field_group_enabled'  => $field_group_enabled,
+				'hidden_core_fields'          => $hidden,
+				'disabled_hidden_core_fields' => $disabled,
+				'apply_to_own_profile'        => ! empty( $_POST['apply_to_own_profile'] ),
+				'editor_layout'               => $editor_layout,
+				'show_extras'                 => $show_extras,
+				'field_group_enabled'         => $field_group_enabled,
 			),
 			false
+		);
+	}
+
+	/**
+	 * Sanitize feature options that should be turned off while hidden.
+	 *
+	 * @param array<int, string> $raw Raw disabled option keys.
+	 * @param array<int, string> $hidden Hidden core option keys.
+	 * @return array<int, string>
+	 */
+	private function sanitize_disabled_hidden_core_fields( $raw, $hidden ) {
+		$allowed = array();
+
+		foreach ( Atshift_UPF_Profile::get_core_field_options() as $key => $option ) {
+			if ( ! empty( $option['off_label'] ) ) {
+				$allowed[] = $key;
+			}
+		}
+
+		return array_values(
+			array_intersect(
+				array_map( 'sanitize_key', (array) $raw ),
+				$allowed,
+				array_map( 'sanitize_key', (array) $hidden )
+			)
 		);
 	}
 
@@ -1970,6 +2124,32 @@ class Atshift_UPF_Admin {
 	}
 
 	/**
+	 * Remove feature-off flags for active standard fields managed by this plugin.
+	 *
+	 * @param array<int, string>              $disabled Disabled hidden option keys.
+	 * @param array<int, array<string,mixed>> $fields Saved field definitions.
+	 * @param bool                            $field_group_enabled Whether the profile field group is enabled.
+	 * @return array<int, string>
+	 */
+	private function remove_managed_core_fields_from_disabled( $disabled, $fields, $field_group_enabled ) {
+		if ( ! $field_group_enabled ) {
+			return $disabled;
+		}
+
+		$map     = $this->get_core_extra_field_type_map();
+		$managed = array();
+
+		foreach ( $fields as $field ) {
+			$type = isset( $field['type'] ) ? (string) $field['type'] : '';
+			if ( isset( $map[ $type ] ) ) {
+				$managed[] = $map[ $type ];
+			}
+		}
+
+		return array_values( array_diff( $disabled, array_unique( $managed ) ) );
+	}
+
+	/**
 	 * Save screen display options without requiring an Apply button.
 	 *
 	 * @return void
@@ -1986,11 +2166,12 @@ class Atshift_UPF_Admin {
 		$show_extras   = ! empty( $_POST['show_extras'] );
 
 		$settings = array(
-			'hidden_core_fields'    => (array) $current['hidden_core_fields'],
-			'apply_to_own_profile' => ! empty( $current['apply_to_own_profile'] ),
-			'editor_layout'        => $editor_layout,
-			'show_extras'          => $show_extras,
-			'field_group_enabled'  => ! empty( $current['field_group_enabled'] ),
+			'hidden_core_fields'          => (array) $current['hidden_core_fields'],
+			'disabled_hidden_core_fields' => (array) $current['disabled_hidden_core_fields'],
+			'apply_to_own_profile'        => ! empty( $current['apply_to_own_profile'] ),
+			'editor_layout'               => $editor_layout,
+			'show_extras'                 => $show_extras,
+			'field_group_enabled'         => ! empty( $current['field_group_enabled'] ),
 		);
 
 		update_option( 'atshift_upf_settings', $settings, false );
