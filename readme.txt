@@ -4,7 +4,7 @@ Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 0.1.108
+Stable tag: 0.1.109
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,10 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 3. Open Settings > atshift User Profile Fields.
 
 == Changelog ==
+
+= 0.1.109 =
+* Apply field role controls to the user editing the profile instead of the user being edited.
+* Keep administrator-only profile controls visible when an administrator edits users with other roles.
 
 = 0.1.108 =
 * Show @shift as the plugin author.

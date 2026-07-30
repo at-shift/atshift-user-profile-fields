@@ -181,7 +181,6 @@ class Atshift_UPF_Profile {
 		$settings = Atshift_UPF_Plugin::get_settings();
 		$screen   = 'user-new.php' === $hook ? 'new' : 'edit';
 		$profile_user_id = $this->get_profile_screen_user_id( $hook );
-		$profile_user    = $profile_user_id ? get_user_by( 'id', $profile_user_id ) : null;
 
 		if ( empty( $settings['field_group_enabled'] ) ) {
 			return;
@@ -218,7 +217,7 @@ class Atshift_UPF_Profile {
 			array(
 				'hiddenFields'         => $this->get_hidden_core_fields( $settings, $screen ),
 				'replacementFields'    => $this->get_managed_core_replacement_keys( $screen ),
-				'roleRestrictedFields' => $this->get_role_restricted_core_replacement_keys( $screen, $profile_user ),
+				'roleRestrictedFields' => $this->get_role_restricted_core_replacement_keys( $screen ),
 				'adminColorSchemes'    => $this->get_admin_color_schemes_for_script(),
 				'currentUserId'        => get_current_user_id(),
 				'profileUserId'        => $profile_user_id,
@@ -480,7 +479,7 @@ class Atshift_UPF_Profile {
 				continue;
 			}
 
-			if ( ! $this->field_matches_role_control( $field, $user ) ) {
+			if ( ! $this->field_matches_role_control( $field ) ) {
 				continue;
 			}
 
@@ -584,7 +583,7 @@ class Atshift_UPF_Profile {
 				continue;
 			}
 
-			if ( ! $this->field_matches_role_control( $field, get_user_by( 'id', $user_id ) ) ) {
+			if ( ! $this->field_matches_role_control( $field ) ) {
 				continue;
 			}
 
@@ -622,7 +621,7 @@ class Atshift_UPF_Profile {
 	 * @return void
 	 */
 	private function render_field_node( $field, $tree, $user, $values ) {
-		if ( ! $this->field_matches_role_control( $field, $user ) ) {
+		if ( ! $this->field_matches_role_control( $field ) ) {
 			return;
 		}
 
@@ -671,7 +670,7 @@ class Atshift_UPF_Profile {
 
 		foreach ( $fields as $field ) {
 			if ( $this->is_profile_feature_field( $field ) ) {
-				if ( $this->field_matches_role_control( $field, $user ) ) {
+				if ( $this->field_matches_role_control( $field ) ) {
 					$feature_fields[] = $field;
 				}
 				continue;
@@ -831,7 +830,7 @@ class Atshift_UPF_Profile {
 	 * @return void
 	 */
 	private function render_field_block_node( $field, $tree, $user, $values ) {
-		if ( ! $this->field_matches_role_control( $field, $user ) ) {
+		if ( ! $this->field_matches_role_control( $field ) ) {
 			return;
 		}
 
@@ -945,7 +944,7 @@ class Atshift_UPF_Profile {
 	 */
 	private function contains_visible_profile_feature_field( $fields, $tree, $user ) {
 		foreach ( $fields as $field ) {
-			if ( ! $this->field_matches_role_control( $field, $user ) ) {
+			if ( ! $this->field_matches_role_control( $field ) ) {
 				continue;
 			}
 
@@ -1004,7 +1003,7 @@ class Atshift_UPF_Profile {
 
 		foreach ( $children as $child ) {
 			if ( $this->is_profile_feature_field( $child ) ) {
-				if ( $this->field_matches_role_control( $child, $user ) ) {
+				if ( $this->field_matches_role_control( $child ) ) {
 					$feature_fields[] = $child;
 				}
 				continue;
@@ -1052,7 +1051,7 @@ class Atshift_UPF_Profile {
 	 * @return void
 	 */
 	private function render_field_block( $field, $user, $values ) {
-		if ( ! $this->field_matches_role_control( $field, $user ) ) {
+		if ( ! $this->field_matches_role_control( $field ) ) {
 			return;
 		}
 
@@ -1096,7 +1095,7 @@ class Atshift_UPF_Profile {
 	 * @return void
 	 */
 	private function render_field_row( $field, $user, $values ) {
-		if ( ! $this->field_matches_role_control( $field, $user ) ) {
+		if ( ! $this->field_matches_role_control( $field ) ) {
 			return;
 		}
 
@@ -2570,24 +2569,19 @@ class Atshift_UPF_Profile {
 	 * Return managed core fields intentionally hidden by role control.
 	 *
 	 * These fields must not fall back to their native WordPress rows when the
-	 * plugin replacement is omitted for the edited user's role.
+	 * plugin replacement is omitted for the current editor's role.
 	 *
-	 * @param string       $screen Screen context: new or edit.
-	 * @param WP_User|null $user User represented by the current profile screen.
+	 * @param string $screen Screen context: new or edit.
 	 * @return array<int, string>
 	 */
-	private function get_role_restricted_core_replacement_keys( $screen, $user ) {
-		if ( ! $user instanceof WP_User ) {
-			return array();
-		}
-
+	private function get_role_restricted_core_replacement_keys( $screen ) {
 		$map        = $this->get_core_field_option_map();
 		$restricted = array();
 
 		foreach ( $this->filter_fields_for_screen( Atshift_UPF_Plugin::get_enabled_fields(), $screen ) as $field ) {
 			$type = isset( $field['type'] ) ? (string) $field['type'] : '';
 
-			if ( isset( $map[ $type ] ) && ! $this->field_matches_role_control( $field, $user ) ) {
+			if ( isset( $map[ $type ] ) && ! $this->field_matches_role_control( $field ) ) {
 				$restricted[] = $map[ $type ];
 			}
 		}
@@ -2706,27 +2700,22 @@ class Atshift_UPF_Profile {
 	}
 
 	/**
-	 * Check whether a field should be active for the edited user's role.
+	 * Check whether the current editor's role can use a field.
 	 *
 	 * @param array<string, mixed> $field Field definition.
-	 * @param WP_User|null         $user User being edited.
 	 * @return bool
 	 */
-	private function field_matches_role_control( $field, $user ) {
+	private function field_matches_role_control( $field ) {
 		$allowed_roles = isset( $field['role_control_roles'] ) && is_array( $field['role_control_roles'] ) ? array_map( 'sanitize_key', $field['role_control_roles'] ) : array();
 		if ( empty( $allowed_roles ) ) {
 			return true;
 		}
 
-		$user_roles = array();
-		if ( $user instanceof WP_User ) {
-			$user_roles = array_map( 'sanitize_key', (array) $user->roles );
-		} elseif ( ! empty( $_POST['role'] ) ) {
-			$user_roles = array( sanitize_key( wp_unslash( $_POST['role'] ) ) );
-		}
+		$current_user = wp_get_current_user();
+		$user_roles   = $current_user instanceof WP_User ? array_map( 'sanitize_key', (array) $current_user->roles ) : array();
 
 		if ( empty( $user_roles ) ) {
-			return true;
+			return false;
 		}
 
 		return (bool) array_intersect( $allowed_roles, $user_roles );
