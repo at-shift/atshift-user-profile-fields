@@ -1325,7 +1325,9 @@ class Atshift_UPF_Profile {
 
 			if ( 'core_language' === $type ) {
 				$locale = is_scalar( $value ) ? (string) $value : '';
-				$locale = 'site-default' === $locale ? '' : $locale;
+				if ( '' === $locale && ! isset( $_POST['locale'] ) ) {
+					$locale = 'site-default';
+				}
 				if ( function_exists( 'wp_dropdown_languages' ) ) {
 					wp_dropdown_languages(
 						array(

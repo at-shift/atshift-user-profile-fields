@@ -4,7 +4,7 @@ Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 0.1.106
+Stable tag: 0.1.108
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,14 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 3. Open Settings > atshift User Profile Fields.
 
 == Changelog ==
+
+= 0.1.108 =
+* Show @shift as the plugin author.
+* Add WordPress update notifications and standard automatic-update support for packaged GitHub releases.
+
+= 0.1.107 =
+* Select the site default language when the Add New User screen first opens.
+* Preserve an explicitly selected language when the form is shown again after validation.
 
 = 0.1.106 =
 * Add an Extras integration for hiding the profile section added by User Role Editor.

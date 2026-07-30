@@ -1,9 +1,12 @@
 <?php
 /**
  * Plugin Name: atshift User Profile Fields
+ * Plugin URI: https://github.com/at-shift/atshift-user-profile-fields
  * Description: Add custom user profile fields and hide unnecessary default WordPress profile fields.
- * Version: 0.1.106
- * Author: atshift
+ * Version: 0.1.108
+ * Author: @shift
+ * Author URI: https://github.com/at-shift
+ * Update URI: https://github.com/at-shift/atshift-user-profile-fields
  * License: GPLv2 or later
  * Text Domain: atshift-user-profile-fields
  * Domain Path: /languages
@@ -15,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ATSHIFT_UPF_VERSION', '0.1.106' );
+define( 'ATSHIFT_UPF_VERSION', '0.1.108' );
 define( 'ATSHIFT_UPF_FILE', __FILE__ );
 define( 'ATSHIFT_UPF_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ATSHIFT_UPF_URL', plugin_dir_url( __FILE__ ) );
@@ -55,6 +58,7 @@ if ( ! function_exists( 'atshift_upf_get_user_field' ) ) {
 }
 
 require_once ATSHIFT_UPF_DIR . 'includes/class-atshift-upf-plugin.php';
+require_once ATSHIFT_UPF_DIR . 'includes/class-atshift-upf-github-updater.php';
 require_once ATSHIFT_UPF_DIR . 'includes/class-atshift-upf-admin.php';
 require_once ATSHIFT_UPF_DIR . 'includes/class-atshift-upf-profile.php';
 require_once ATSHIFT_UPF_DIR . 'includes/class-atshift-upf-tools.php';
