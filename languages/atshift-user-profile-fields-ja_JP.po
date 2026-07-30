@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: atshift User Profile Fields 0.1.104\n"
+"Project-Id-Version: atshift User Profile Fields 0.1.106\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-29 12:59+0900\n"
 "PO-Revision-Date: 2026-07-29 02:45+0900\n"
@@ -711,9 +711,26 @@ msgstr ""
 
 #: includes/class-atshift-upf-admin.php:1340
 msgid ""
-"Hide default WordPress profile fields that are not needed for this site."
+"Hide WordPress and supported plugin profile items that are not needed for "
+"this site."
 msgstr ""
-"このサイトで不要な WordPress 標準プロフィールフィールドを非表示にします。"
+"このサイトで不要な WordPress と対応プラグインのプロフィール項目を非表示にし"
+"ます。"
+
+msgid "Other plugin profile items"
+msgstr "他プラグインのプロフィール項目"
+
+msgid "Profile items added by supported plugins."
+msgstr "対応プラグインが追加するプロフィール項目です。"
+
+msgid "User Role Editor: Additional Capabilities"
+msgstr "User Role Editor: 追加機能"
+
+msgid ""
+"Hides the Other Roles and Capabilities section added by User Role Editor."
+msgstr ""
+"User Role Editor が追加する「その他の権限グループ」と「権限」のセクションを非"
+"表示にします。"
 
 #: includes/class-atshift-upf-admin.php:1373
 msgid "Apply these extras to my own profile screen too."

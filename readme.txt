@@ -4,7 +4,7 @@ Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 0.1.104
+Stable tag: 0.1.106
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,14 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 3. Open Settings > atshift User Profile Fields.
 
 == Changelog ==
+
+= 0.1.106 =
+* Add an Extras integration for hiding the profile section added by User Role Editor.
+* Prevent the native WordPress capabilities section from returning when that integration is hidden.
+
+= 0.1.105 =
+* Keep role-restricted core feature fields hidden instead of restoring their native WordPress rows.
+* Preserve a single feature panel when role control hides an item between visible feature fields.
 
 = 0.1.104 =
 * Add a helper and documentation for displaying saved custom profile field values.

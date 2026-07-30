@@ -25,6 +25,8 @@ class Atshift_UPF_Profile {
 		add_action( 'edit_user_profile_update', array( $this, 'save_fields' ) );
 		add_action( 'user_register', array( $this, 'save_fields' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_profile_assets' ) );
+		add_filter( 'ure_show_additional_capabilities_section', array( $this, 'filter_user_role_editor_profile_section' ) );
+		add_filter( 'additional_capabilities_display', array( $this, 'filter_additional_capabilities_display' ), 99 );
 	}
 
 	/**
@@ -114,7 +116,55 @@ class Atshift_UPF_Profile {
 				'label'       => __( 'Add / Save User button', 'atshift-user-profile-fields' ),
 				'description' => __( 'Default user creation and profile save button.', 'atshift-user-profile-fields' ),
 			),
+			'ure_additional_capabilities' => array(
+				'label'       => __( 'User Role Editor: Additional Capabilities', 'atshift-user-profile-fields' ),
+				'description' => __( 'Hides the Other Roles and Capabilities section added by User Role Editor.', 'atshift-user-profile-fields' ),
+			),
 		);
+	}
+
+	/**
+	 * Hide the profile section added by User Role Editor when selected in Extras.
+	 *
+	 * @param bool $show Whether User Role Editor should render its section.
+	 * @return bool
+	 */
+	public function filter_user_role_editor_profile_section( $show ) {
+		if ( $this->is_extra_profile_item_hidden( 'ure_additional_capabilities' ) ) {
+			return false;
+		}
+
+		return $show;
+	}
+
+	/**
+	 * Keep WordPress from restoring its raw capabilities section in place of URE.
+	 *
+	 * @param bool $display Whether WordPress should display additional capabilities.
+	 * @return bool
+	 */
+	public function filter_additional_capabilities_display( $display ) {
+		if ( $this->is_extra_profile_item_hidden( 'ure_additional_capabilities' ) ) {
+			return false;
+		}
+
+		return $display;
+	}
+
+	/**
+	 * Check whether an Extras profile item is enabled for hiding.
+	 *
+	 * @param string $key Extras option key.
+	 * @return bool
+	 */
+	private function is_extra_profile_item_hidden( $key ) {
+		$settings = Atshift_UPF_Plugin::get_settings();
+
+		if ( empty( $settings['field_group_enabled'] ) ) {
+			return false;
+		}
+
+		return in_array( sanitize_key( $key ), (array) $settings['hidden_core_fields'], true );
 	}
 
 	/**
@@ -130,6 +180,8 @@ class Atshift_UPF_Profile {
 
 		$settings = Atshift_UPF_Plugin::get_settings();
 		$screen   = 'user-new.php' === $hook ? 'new' : 'edit';
+		$profile_user_id = $this->get_profile_screen_user_id( $hook );
+		$profile_user    = $profile_user_id ? get_user_by( 'id', $profile_user_id ) : null;
 
 		if ( empty( $settings['field_group_enabled'] ) ) {
 			return;
@@ -164,13 +216,14 @@ class Atshift_UPF_Profile {
 			'atshift-upf-profile',
 			'atshiftUPFProfile',
 			array(
-				'hiddenFields'      => $this->get_hidden_core_fields( $settings, $screen ),
-				'replacementFields' => $this->get_managed_core_replacement_keys( $screen ),
-				'adminColorSchemes' => $this->get_admin_color_schemes_for_script(),
-				'currentUserId'     => get_current_user_id(),
-				'profileUserId'     => $this->get_profile_screen_user_id( $hook ),
-				'languagePreview'   => $this->get_language_preview_translations(),
-				'strings'           => array(
+				'hiddenFields'         => $this->get_hidden_core_fields( $settings, $screen ),
+				'replacementFields'    => $this->get_managed_core_replacement_keys( $screen ),
+				'roleRestrictedFields' => $this->get_role_restricted_core_replacement_keys( $screen, $profile_user ),
+				'adminColorSchemes'    => $this->get_admin_color_schemes_for_script(),
+				'currentUserId'        => get_current_user_id(),
+				'profileUserId'        => $profile_user_id,
+				'languagePreview'      => $this->get_language_preview_translations(),
+				'strings'              => array(
 					'selectImage'  => __( 'Select Image', 'atshift-user-profile-fields' ),
 					'useThisImage' => __( 'Use this image', 'atshift-user-profile-fields' ),
 					'generatePassword' => __( 'Generate Password', 'atshift-user-profile-fields' ),
@@ -617,8 +670,10 @@ class Atshift_UPF_Profile {
 		$feature_fields = array();
 
 		foreach ( $fields as $field ) {
-			if ( $this->is_profile_feature_field( $field ) && $this->field_matches_role_control( $field, $user ) ) {
-				$feature_fields[] = $field;
+			if ( $this->is_profile_feature_field( $field ) ) {
+				if ( $this->field_matches_role_control( $field, $user ) ) {
+					$feature_fields[] = $field;
+				}
 				continue;
 			}
 
@@ -948,8 +1003,10 @@ class Atshift_UPF_Profile {
 		$feature_fields = array();
 
 		foreach ( $children as $child ) {
-			if ( $this->is_profile_feature_field( $child ) && $this->field_matches_role_control( $child, $user ) ) {
-				$feature_fields[] = $child;
+			if ( $this->is_profile_feature_field( $child ) ) {
+				if ( $this->field_matches_role_control( $child, $user ) ) {
+					$feature_fields[] = $child;
+				}
 				continue;
 			}
 
@@ -2505,6 +2562,35 @@ class Atshift_UPF_Profile {
 		}
 
 		return array_values( array_unique( $used ) );
+	}
+
+	/**
+	 * Return managed core fields intentionally hidden by role control.
+	 *
+	 * These fields must not fall back to their native WordPress rows when the
+	 * plugin replacement is omitted for the edited user's role.
+	 *
+	 * @param string       $screen Screen context: new or edit.
+	 * @param WP_User|null $user User represented by the current profile screen.
+	 * @return array<int, string>
+	 */
+	private function get_role_restricted_core_replacement_keys( $screen, $user ) {
+		if ( ! $user instanceof WP_User ) {
+			return array();
+		}
+
+		$map        = $this->get_core_field_option_map();
+		$restricted = array();
+
+		foreach ( $this->filter_fields_for_screen( Atshift_UPF_Plugin::get_enabled_fields(), $screen ) as $field ) {
+			$type = isset( $field['type'] ) ? (string) $field['type'] : '';
+
+			if ( isset( $map[ $type ] ) && ! $this->field_matches_role_control( $field, $user ) ) {
+				$restricted[] = $map[ $type ];
+			}
+		}
+
+		return array_values( array_unique( $restricted ) );
 	}
 
 	/**

@@ -7,6 +7,7 @@
 
 	var hiddenFields = Array.isArray(window.atshiftUPFProfile.hiddenFields) ? window.atshiftUPFProfile.hiddenFields : [];
 	var replacementFields = Array.isArray(window.atshiftUPFProfile.replacementFields) ? window.atshiftUPFProfile.replacementFields : [];
+	var roleRestrictedFields = Array.isArray(window.atshiftUPFProfile.roleRestrictedFields) ? window.atshiftUPFProfile.roleRestrictedFields : [];
 	var adminColorSchemes = window.atshiftUPFProfile.adminColorSchemes || {};
 	var currentUserId = Number(window.atshiftUPFProfile.currentUserId || 0);
 	var profileUserId = Number(window.atshiftUPFProfile.profileUserId || 0);
@@ -114,7 +115,11 @@
 	embedNativeApplicationPasswords();
 
 	hiddenFields.forEach(function (field) {
-		if (replacementFields.indexOf(field) !== -1 && !document.querySelector('[data-atshift-upf-core-replacement="' + field + '"]')) {
+		if (
+			replacementFields.indexOf(field) !== -1
+			&& roleRestrictedFields.indexOf(field) === -1
+			&& !document.querySelector('[data-atshift-upf-core-replacement="' + field + '"]')
+		) {
 			return;
 		}
 

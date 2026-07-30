@@ -1360,7 +1360,7 @@ class Atshift_UPF_Admin {
 				<h2><?php esc_html_e( 'Extras', 'atshift-user-profile-fields' ); ?></h2>
 			</div>
 			<div class="atshift-upf-extras-form">
-				<p class="description"><?php esc_html_e( 'Hide default WordPress profile fields that are not needed for this site.', 'atshift-user-profile-fields' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Hide WordPress and supported plugin profile items that are not needed for this site.', 'atshift-user-profile-fields' ); ?></p>
 				<div class="atshift-upf-extras-groups">
 					<?php foreach ( $groups as $group ) : ?>
 						<div class="atshift-upf-extras-group">
@@ -1406,7 +1406,7 @@ class Atshift_UPF_Admin {
 	 * @return array<int, array<string, mixed>>
 	 */
 	private function get_extra_field_groups() {
-		return array(
+		$groups = array(
 			array(
 				'label'       => __( 'Required fields during account creation', 'atshift-user-profile-fields' ),
 				'description' => __( 'Fields needed to create a WordPress account.', 'atshift-user-profile-fields' ),
@@ -1452,6 +1452,18 @@ class Atshift_UPF_Admin {
 				),
 			),
 		);
+
+		if ( defined( 'URE_VERSION' ) ) {
+			$groups[] = array(
+				'label'       => __( 'Other plugin profile items', 'atshift-user-profile-fields' ),
+				'description' => __( 'Profile items added by supported plugins.', 'atshift-user-profile-fields' ),
+				'fields'      => array(
+					'ure_additional_capabilities',
+				),
+			);
+		}
+
+		return $groups;
 	}
 
 	/**

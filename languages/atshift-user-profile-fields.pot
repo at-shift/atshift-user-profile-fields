@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: atshift User Profile Fields 0.1.104\n"
+"Project-Id-Version: atshift User Profile Fields 0.1.106\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-29 12:59+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -676,7 +676,21 @@ msgstr ""
 
 #: includes/class-atshift-upf-admin.php:1340
 msgid ""
-"Hide default WordPress profile fields that are not needed for this site."
+"Hide WordPress and supported plugin profile items that are not needed for "
+"this site."
+msgstr ""
+
+msgid "Other plugin profile items"
+msgstr ""
+
+msgid "Profile items added by supported plugins."
+msgstr ""
+
+msgid "User Role Editor: Additional Capabilities"
+msgstr ""
+
+msgid ""
+"Hides the Other Roles and Capabilities section added by User Role Editor."
 msgstr ""
 
 #: includes/class-atshift-upf-admin.php:1373
