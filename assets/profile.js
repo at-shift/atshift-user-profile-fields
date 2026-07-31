@@ -653,7 +653,11 @@
 				var preferred = key ? document.getElementById('atshift_upf_' + key) : null;
 				var controls;
 
-				if (preferred && field.contains(preferred)) {
+				if (
+					preferred
+					&& field.contains(preferred)
+					&& preferred.matches('input, select, textarea')
+				) {
 					return [preferred];
 				}
 
