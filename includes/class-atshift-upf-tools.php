@@ -629,6 +629,7 @@ class Atshift_UPF_Tools {
 		$type_map = array(
 			'core_username'              => 'username',
 			'core_email'                 => 'email',
+			'core_visual_editor'         => 'visual_editor',
 			'core_admin_color'           => 'admin_color',
 			'core_syntax_highlighting'   => 'syntax_highlighting',
 			'core_keyboard_shortcuts'    => 'keyboard_shortcuts',
@@ -733,6 +734,7 @@ class Atshift_UPF_Tools {
 	 */
 	private function sanitize_role_control( $field, $type ) {
 		$controlled = array(
+			'core_visual_editor',
 			'core_admin_color',
 			'core_syntax_highlighting',
 			'core_keyboard_shortcuts',
@@ -856,6 +858,7 @@ class Atshift_UPF_Tools {
 			'accordion',
 			'core_username',
 			'core_email',
+			'core_visual_editor',
 			'core_admin_color',
 			'core_syntax_highlighting',
 			'core_keyboard_shortcuts',
@@ -912,6 +915,7 @@ class Atshift_UPF_Tools {
 		return array(
 			'core_username'              => 'user_login',
 			'core_email'                 => 'user_email',
+			'core_visual_editor'         => 'rich_editing',
 			'core_admin_color'           => 'admin_color',
 			'core_syntax_highlighting'   => 'syntax_highlighting',
 			'core_keyboard_shortcuts'    => 'comment_shortcuts',

@@ -10,7 +10,6 @@
 	var replacementFields = Array.isArray(window.atshiftUPFProfile.replacementFields) ? window.atshiftUPFProfile.replacementFields : [];
 	var roleRestrictedFields = Array.isArray(window.atshiftUPFProfile.roleRestrictedFields) ? window.atshiftUPFProfile.roleRestrictedFields : [];
 	var adminColorSchemes = window.atshiftUPFProfile.adminColorSchemes || {};
-	var currentUserId = Number(window.atshiftUPFProfile.currentUserId || 0);
 	var profileUserId = Number(window.atshiftUPFProfile.profileUserId || 0);
 	var strings = window.atshiftUPFProfile.strings || {};
 	var languagePreview = window.atshiftUPFProfile.languagePreview || {};
@@ -211,7 +210,7 @@
 
 	function initAdminColorSelects() {
 		document.querySelectorAll('[data-atshift-upf-admin-color]').forEach(function (select) {
-			select.addEventListener('change', function () {
+			function previewAdminColor() {
 				var schemeKey = select.value || '';
 				var scheme = adminColorSchemes[schemeKey] || {};
 				var colors = Array.isArray(scheme.colors) ? scheme.colors : [];
@@ -227,10 +226,6 @@
 
 				if (nativeRadio) {
 					nativeRadio.checked = true;
-				}
-
-				if (!currentUserId || !profileUserId || currentUserId !== profileUserId) {
-					return;
 				}
 
 				colorStylesheet = document.getElementById('colors-css');
@@ -267,7 +262,10 @@
 					window.wp.svgPainter.setColors(scheme.iconColors);
 					window.wp.svgPainter.paint();
 				}
-			});
+			}
+
+			select.addEventListener('change', previewAdminColor);
+			previewAdminColor();
 		});
 	}
 

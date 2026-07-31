@@ -4,7 +4,7 @@ Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 0.1.110
+Stable tag: 0.1.111
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,10 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 3. Open Settings > atshift User Profile Fields.
 
 == Changelog ==
+
+= 0.1.111 =
+* Restore the live Admin Color Scheme preview while editing any user and keep the saved scheme visible after reload.
+* Allow the bundled default profile presets to import the Visual Editor field.
 
 = 0.1.110 =
 * Add base-plugin extension points for future Pro add-ons.

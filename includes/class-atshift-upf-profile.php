@@ -229,7 +229,6 @@ class Atshift_UPF_Profile {
 				'replacementFields'    => $this->get_managed_core_replacement_keys( $screen ),
 				'roleRestrictedFields' => $this->get_role_restricted_core_replacement_keys( $screen ),
 				'adminColorSchemes'    => $this->get_admin_color_schemes_for_script(),
-				'currentUserId'        => get_current_user_id(),
 				'profileUserId'        => $profile_user_id,
 				'languagePreview'      => $this->get_language_preview_translations(),
 				'strings'              => array(
