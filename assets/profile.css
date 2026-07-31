@@ -627,6 +627,126 @@
 	box-shadow: inset 4px 0 0 var(--atshift-upf-accent-dark);
 }
 
+.atshift-upf-validation-notice {
+	background: #fff5f5;
+	border: 2px solid #d63638;
+	border-left-width: 8px;
+	border-radius: 6px;
+	box-shadow: 0 2px 8px rgba(214, 54, 56, .12);
+	box-sizing: border-box;
+	color: #681f1f;
+	margin: 18px 28px 24px;
+	padding: 16px 18px;
+	scroll-margin-top: 48px;
+}
+
+.atshift-upf-validation-notice p {
+	font-size: 14px;
+	margin: 0 0 8px;
+}
+
+.atshift-upf-validation-notice ul {
+	list-style: disc;
+	margin: 0 0 0 20px;
+}
+
+.atshift-upf-validation-notice li + li {
+	margin-top: 4px;
+}
+
+.atshift-upf-validation-notice a {
+	color: #8a2424;
+	font-weight: 600;
+}
+
+.atshift-upf-field-error {
+	background: #fff1f1;
+	border: 1px solid #d63638;
+	border-radius: 3px;
+	color: #8a2424;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 1.5;
+	margin: 9px 0 3px;
+	padding: 7px 10px;
+	position: relative;
+}
+
+.atshift-upf-field-error::before,
+.atshift-upf-field-error::after {
+	border-left: 7px solid transparent;
+	border-right: 7px solid transparent;
+	content: "";
+	left: 14px;
+	position: absolute;
+}
+
+.atshift-upf-field-error::before {
+	border-bottom: 7px solid #d63638;
+	top: -8px;
+}
+
+.atshift-upf-field-error::after {
+	border-bottom: 7px solid #fff1f1;
+	top: -6px;
+}
+
+.atshift-upf-profile-fields.form-table > tbody > tr.atshift-upf-field-invalid > th,
+.atshift-upf-profile-fields.form-table > tbody > tr.atshift-upf-field-invalid > td {
+	background: #fff;
+}
+
+.atshift-upf-profile-fields.form-table > tbody > tr.atshift-upf-field-invalid > th:first-child {
+	box-shadow: inset 4px 0 0 #d63638;
+	color: #8a2424;
+}
+
+.atshift-upf-profile-field-block.atshift-upf-field-invalid,
+.atshift-upf-feature-group-item.atshift-upf-field-invalid {
+	background: #fff;
+	box-shadow: inset 4px 0 0 #d63638;
+}
+
+.atshift-upf-profile-field-block.atshift-upf-field-invalid {
+	padding: 12px 14px 14px 18px;
+}
+
+.atshift-upf-profile-field-block.atshift-upf-field-invalid > label,
+.atshift-upf-feature-group-item.atshift-upf-field-invalid > label {
+	color: #8a2424;
+}
+
+.atshift-upf-field-invalid input:not([type="button"]):not([type="submit"]):not([type="reset"]),
+.atshift-upf-field-invalid select,
+.atshift-upf-field-invalid textarea {
+	border-color: #d63638;
+}
+
+.atshift-upf-profile-accordion.atshift-upf-has-error {
+	border-color: #d63638;
+}
+
+.atshift-upf-profile-accordion.atshift-upf-has-error > .atshift-upf-profile-accordion-toggle {
+	box-shadow: inset 4px 0 0 #d63638;
+	color: #8a2424;
+}
+
+.atshift-upf-profile-accordion.atshift-upf-has-error > .atshift-upf-profile-accordion-toggle::after {
+	color: #d63638;
+	content: "!";
+	font-weight: 800;
+	margin-left: 4px;
+}
+
+.atshift-upf-profile-accordion.atshift-upf-has-error > .atshift-upf-profile-accordion-toggle .dashicons {
+	margin-left: auto;
+}
+
+[data-atshift-upf-validation-field] {
+	scroll-margin-top: 72px;
+}
+
 @media (max-width: 782px) {
 	.atshift-upf-profile-card {
 		border-radius: 8px;
@@ -635,6 +755,10 @@
 
 	.atshift-upf-profile-title {
 		padding: 16px 20px;
+	}
+
+	.atshift-upf-validation-notice {
+		margin: 16px 20px 20px;
 	}
 
 	.atshift-upf-profile-fields.form-table {

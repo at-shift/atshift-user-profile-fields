@@ -908,6 +908,12 @@ msgstr "8文字以上で、英字・数字・記号を組み合わせてくだ�
 msgid "This field is required."
 msgstr "この項目は必須です。"
 
+msgid "Please correct the highlighted fields."
+msgstr "入力内容を確認してください。"
+
+msgid "Please enter a valid value."
+msgstr "正しい値を入力してください。"
+
 msgid "This field cannot be left blank."
 msgstr "この項目を空欄にはできません。"
 

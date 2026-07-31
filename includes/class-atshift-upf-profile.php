@@ -240,6 +240,9 @@ class Atshift_UPF_Profile {
 					'passwordStrengthStrong' => __( 'Strong', 'atshift-user-profile-fields' ),
 					'passwordStrengthWeak' => __( 'Weak', 'atshift-user-profile-fields' ),
 					'required' => __( 'Required', 'atshift-user-profile-fields' ),
+					'requiredMessage' => __( 'This field is required.', 'atshift-user-profile-fields' ),
+					'validationNotice' => __( 'Please correct the highlighted fields.', 'atshift-user-profile-fields' ),
+					'invalidValue' => __( 'Please enter a valid value.', 'atshift-user-profile-fields' ),
 					'usernameInvalid' => __( 'Use only letters, numbers, and these symbols: _ . - @', 'atshift-user-profile-fields' ),
 					'passwordWeak' => __( 'Use at least 8 characters and combine letters, numbers, or symbols.', 'atshift-user-profile-fields' ),
 				),
@@ -497,6 +500,10 @@ class Atshift_UPF_Profile {
 				continue;
 			}
 
+			if ( ! $this->field_matches_submitted_conditions( $field, $fields, $values ) ) {
+				continue;
+			}
+
 			if ( empty( $field['key'] ) ) {
 				continue;
 			}
@@ -617,6 +624,10 @@ class Atshift_UPF_Profile {
 			}
 
 			if ( ! $this->field_matches_profile_context( $field, 'admin_profile_save', $screen, $user_id ) ) {
+				continue;
+			}
+
+			if ( ! $this->field_matches_submitted_conditions( $field, $fields, $values ) ) {
 				continue;
 			}
 
@@ -1152,13 +1163,13 @@ class Atshift_UPF_Profile {
 			return;
 		}
 		?>
-			<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php $this->render_core_replacement_attribute( $field ); ?><?php $this->render_condition_attributes( $field ); ?>>
-				<label for="<?php echo esc_attr( 'atshift_upf_' . $key ); ?>">
-					<?php if ( $this->is_required_field( $field ) ) : ?>
-						<?php $this->render_required_badge(); ?>
-					<?php endif; ?>
-					<?php echo esc_html( $field['label'] ); ?>
-				</label>
+		<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" data-atshift-upf-field="<?php echo esc_attr( $key ); ?>"<?php $this->render_validation_attributes( $field, $user ); ?><?php $this->render_core_replacement_attribute( $field ); ?><?php $this->render_condition_attributes( $field ); ?>>
+			<label for="<?php echo esc_attr( 'atshift_upf_' . $key ); ?>">
+				<?php if ( $this->is_required_field_for_screen( $field, $user ) ) : ?>
+					<?php $this->render_required_badge(); ?>
+				<?php endif; ?>
+				<?php echo esc_html( $field['label'] ); ?>
+			</label>
 			<?php $this->render_input( $field, $field_name, $value, $user ); ?>
 			<?php if ( $description ) : ?>
 				<p class="description"><?php echo esc_html( $description ); ?></p>
@@ -1206,12 +1217,13 @@ class Atshift_UPF_Profile {
 		<tr
 			class="<?php echo esc_attr( implode( ' ', $row_classes ) ); ?>"
 			data-atshift-upf-field="<?php echo esc_attr( $key ); ?>"
+			<?php $this->render_validation_attributes( $field, $user ); ?>
 			<?php $this->render_core_replacement_attribute( $field ); ?>
 			<?php $this->render_condition_attributes( $field ); ?>
 		>
 					<th>
 						<label for="<?php echo esc_attr( 'atshift_upf_' . $key ); ?>">
-							<?php if ( $this->is_required_field( $field ) ) : ?>
+							<?php if ( $this->is_required_field_for_screen( $field, $user ) ) : ?>
 								<?php $this->render_required_badge(); ?>
 							<?php endif; ?>
 							<?php echo esc_html( $field['label'] ); ?>
@@ -1305,9 +1317,9 @@ class Atshift_UPF_Profile {
 		$field_name  = $this->get_input_name( $field, $key );
 		$description = isset( $field['description'] ) ? $field['description'] : '';
 		?>
-		<div class="atshift-upf-feature-group-item" data-atshift-upf-field="<?php echo esc_attr( $key ); ?>"<?php $this->render_core_replacement_attribute( $field ); ?><?php $this->render_condition_attributes( $field ); ?>>
+		<div class="atshift-upf-feature-group-item" data-atshift-upf-field="<?php echo esc_attr( $key ); ?>"<?php $this->render_validation_attributes( $field, $user ); ?><?php $this->render_core_replacement_attribute( $field ); ?><?php $this->render_condition_attributes( $field ); ?>>
 			<label for="<?php echo esc_attr( 'atshift_upf_' . $key ); ?>">
-				<?php if ( $this->is_required_field( $field ) ) : ?>
+				<?php if ( $this->is_required_field_for_screen( $field, $user ) ) : ?>
 					<?php $this->render_required_badge(); ?>
 				<?php endif; ?>
 				<?php echo esc_html( $field['label'] ); ?>
@@ -1891,6 +1903,49 @@ class Atshift_UPF_Profile {
 		}
 
 		return isset( $_POST[ $name ] ) ? wp_unslash( $_POST[ $name ] ) : '';
+	}
+
+	/**
+	 * Check whether a field belongs to the submitted branch of every parent condition.
+	 *
+	 * @param array<string, mixed>             $field Field definition.
+	 * @param array<int, array<string, mixed>> $fields Available field definitions.
+	 * @param array<string, mixed>             $values Submitted plugin values.
+	 * @return bool
+	 */
+	private function field_matches_submitted_conditions( $field, $fields, $values ) {
+		$by_id = array();
+
+		foreach ( $fields as $candidate ) {
+			if ( ! empty( $candidate['id'] ) ) {
+				$by_id[ (string) $candidate['id'] ] = $candidate;
+			}
+		}
+
+		$current = $field;
+
+		while ( ! empty( $current['parent_id'] ) ) {
+			$parent_id = (string) $current['parent_id'];
+
+			if ( empty( $by_id[ $parent_id ] ) ) {
+				break;
+			}
+
+			$parent = $by_id[ $parent_id ];
+
+			if ( $this->is_conditional_group( $parent ) ) {
+				$expected = isset( $current['conditional_value'] ) ? (string) $current['conditional_value'] : '';
+				$selected = (string) $this->get_submitted_value( $parent, $values );
+
+				if ( '' !== $expected && $expected !== $selected ) {
+					return false;
+				}
+			}
+
+			$current = $parent;
+		}
+
+		return true;
 	}
 
 	/**
@@ -2640,6 +2695,49 @@ class Atshift_UPF_Profile {
 	 */
 	private function is_required_field( $field ) {
 		return ! empty( $field['required'] ) || in_array( $field['type'] ?? '', array( 'core_username', 'core_email', 'core_password' ), true );
+	}
+
+	/**
+	 * Check whether a field is required on the current profile screen.
+	 *
+	 * @param array<string, mixed> $field Field definition.
+	 * @param WP_User|null         $user User being edited, or null on user creation.
+	 * @return bool
+	 */
+	private function is_required_field_for_screen( $field, $user ) {
+		$type = isset( $field['type'] ) ? (string) $field['type'] : '';
+
+		if ( 'core_password' === $type ) {
+			return ! $user instanceof WP_User;
+		}
+
+		if ( 'core_nickname' === $type && $user instanceof WP_User ) {
+			return true;
+		}
+
+		return $this->is_required_field( $field );
+	}
+
+	/**
+	 * Print data attributes used by profile validation.
+	 *
+	 * @param array<string, mixed> $field Field definition.
+	 * @param WP_User|null         $user User being edited, or null on user creation.
+	 * @return void
+	 */
+	private function render_validation_attributes( $field, $user ) {
+		$key   = isset( $field['key'] ) ? sanitize_key( $field['key'] ) : '';
+		$label = isset( $field['label'] ) ? (string) $field['label'] : $key;
+		$type  = isset( $field['type'] ) ? sanitize_key( (string) $field['type'] ) : 'text';
+
+		if ( '' === $key ) {
+			return;
+		}
+
+		echo ' data-atshift-upf-validation-field="1"';
+		echo ' data-atshift-upf-validation-label="' . esc_attr( $label ) . '"';
+		echo ' data-atshift-upf-validation-type="' . esc_attr( $type ) . '"';
+		echo ' data-atshift-upf-validation-required="' . ( $this->is_required_field_for_screen( $field, $user ) ? '1' : '0' ) . '"';
 	}
 
 	/**

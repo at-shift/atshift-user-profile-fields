@@ -403,15 +403,16 @@
 
 		source.addEventListener('input', updatePasswordState);
 
-		function fillGeneratedPassword() {
-			source.value = generatedPassword();
-			source.type = 'text';
-			if (toggleButton) {
-				toggleButton.textContent = strings.hidePassword || 'Hide';
+			function fillGeneratedPassword() {
+				source.value = generatedPassword();
+				source.type = 'text';
+				if (toggleButton) {
+					toggleButton.textContent = strings.hidePassword || 'Hide';
+				}
+				updatePasswordState();
+				source.dispatchEvent(new window.Event('input', { bubbles: true }));
+				source.focus();
 			}
-			updatePasswordState();
-			source.focus();
-		}
 
 		if (generateButton) {
 			generateButton.addEventListener('click', function () {
@@ -464,8 +465,8 @@
 		var removeButton = field.querySelector('.atshift-upf-remove-image');
 		var frame;
 
-		function renderImage(url) {
-			var image;
+			function renderImage(url) {
+				var image;
 
 			if (!preview || !input) {
 				return;
@@ -479,10 +480,12 @@
 				image.alt = '';
 				preview.appendChild(image);
 			}
-			if (removeButton) {
-				removeButton.hidden = !url;
+				if (removeButton) {
+					removeButton.hidden = !url;
+				}
+
+				input.dispatchEvent(new window.Event('change', { bubbles: true }));
 			}
-		}
 
 		if (selectButton) {
 			selectButton.addEventListener('click', function () {
@@ -613,4 +616,421 @@
 		}
 
 		initAccordionGroups();
+
+		function initProfileValidation() {
+			var cards = Array.prototype.slice.call(document.querySelectorAll('.atshift-upf-profile-card'));
+			var fieldSelector = '[data-atshift-upf-validation-field="1"]';
+			var forms = [];
+
+			if (!cards.length) {
+				return;
+			}
+
+			function fieldKey(field) {
+				return field.getAttribute('data-atshift-upf-field') || '';
+			}
+
+			function fieldLabel(field) {
+				return field.getAttribute('data-atshift-upf-validation-label') || fieldKey(field);
+			}
+
+			function fieldType(field) {
+				return field.getAttribute('data-atshift-upf-validation-type') || 'text';
+			}
+
+			function fieldId(field) {
+				var key = fieldKey(field).replace(/[^A-Za-z0-9_-]/g, '-');
+
+				if (!field.id) {
+					field.id = 'atshift-upf-validation-field-' + (key || Math.random().toString(36).slice(2));
+				}
+
+				return field.id;
+			}
+
+			function controlsForField(field) {
+				var key = fieldKey(field);
+				var preferred = key ? document.getElementById('atshift_upf_' + key) : null;
+				var controls;
+
+				if (preferred && field.contains(preferred)) {
+					return [preferred];
+				}
+
+				if (fieldType(field) === 'radio' || fieldType(field) === 'conditional') {
+					controls = field.querySelectorAll('input[type="radio"]');
+					if (controls.length) {
+						return Array.prototype.slice.call(controls);
+					}
+				}
+
+				controls = field.querySelectorAll('input:not([type="button"]):not([type="submit"]):not([type="reset"]), select, textarea');
+				return Array.prototype.slice.call(controls).filter(function (control) {
+					return !control.disabled;
+				});
+			}
+
+			function primaryControl(field) {
+				var controls = controlsForField(field);
+				var interactive = controls.filter(function (control) {
+					return control.type !== 'hidden';
+				});
+
+				return interactive[0] || controls[0] || null;
+			}
+
+			function isFieldActive(field) {
+				var node = field;
+
+				while (node && !node.classList.contains('atshift-upf-profile-card')) {
+					if (node.classList && node.classList.contains('atshift-upf-conditional-hidden')) {
+						return false;
+					}
+
+					if (node.hidden && !node.classList.contains('atshift-upf-profile-accordion-body')) {
+						return false;
+					}
+
+					node = node.parentElement;
+				}
+
+				return true;
+			}
+
+			function requiredValueMissing(field) {
+				var controls = controlsForField(field);
+				var type = fieldType(field);
+				var control = controls[0];
+
+				if (!controls.length) {
+					return false;
+				}
+
+				if (type === 'radio' || controls.some(function (item) { return item.type === 'radio'; })) {
+					return !controls.some(function (item) { return item.checked; });
+				}
+
+				if (type === 'checkbox' || (control && control.type === 'checkbox')) {
+					return !control.checked;
+				}
+
+				return !control || String(control.value || '').trim() === '';
+			}
+
+			function errorHost(field) {
+				if (field.matches('tr')) {
+					return field.querySelector('td:last-child') || field;
+				}
+
+				return field.querySelector('.atshift-upf-feature-control-main') || field;
+			}
+
+			function removeDescriptionToken(control, token) {
+				var tokens = (control.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+
+				tokens = tokens.filter(function (item) {
+					return item !== token;
+				});
+
+				if (tokens.length) {
+					control.setAttribute('aria-describedby', tokens.join(' '));
+				} else {
+					control.removeAttribute('aria-describedby');
+				}
+			}
+
+			function clearFieldError(field) {
+				var error = field.querySelector(':scope .atshift-upf-field-error');
+				var errorId = error ? error.id : '';
+
+				field.classList.remove('atshift-upf-field-invalid');
+				field.removeAttribute('data-atshift-upf-validation-message');
+
+				if (error) {
+					error.remove();
+				}
+
+				controlsForField(field).forEach(function (control) {
+					control.removeAttribute('aria-invalid');
+					if (errorId) {
+						removeDescriptionToken(control, errorId);
+					}
+				});
+			}
+
+			function setFieldError(field, message) {
+				var host = errorHost(field);
+				var error = field.querySelector(':scope .atshift-upf-field-error');
+				var description = host.querySelector(':scope > p.description');
+				var errorId = fieldId(field) + '-error';
+
+				field.classList.add('atshift-upf-field-invalid');
+				field.setAttribute('data-atshift-upf-validation-message', message);
+
+				if (!error) {
+					error = document.createElement('div');
+					error.className = 'atshift-upf-field-error';
+					error.id = errorId;
+					error.setAttribute('role', 'alert');
+					if (description) {
+						host.insertBefore(error, description);
+					} else {
+						host.appendChild(error);
+					}
+				}
+
+				error.textContent = message;
+				controlsForField(field).forEach(function (control) {
+					var describedBy = (control.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+
+					control.setAttribute('aria-invalid', 'true');
+					if (describedBy.indexOf(errorId) === -1) {
+						describedBy.push(errorId);
+						control.setAttribute('aria-describedby', describedBy.join(' '));
+					}
+				});
+			}
+
+			function validateField(field, showEmptyRequired) {
+				var controls;
+				var control;
+				var value;
+				var message = '';
+
+				if (!isFieldActive(field)) {
+					clearFieldError(field);
+					return '';
+				}
+
+				controls = controlsForField(field);
+				control = primaryControl(field);
+				value = control ? String(control.value || '') : '';
+
+				if (field.getAttribute('data-atshift-upf-validation-required') === '1' && requiredValueMissing(field)) {
+					if (showEmptyRequired) {
+						message = strings.requiredMessage || 'This field is required.';
+					}
+				} else if (fieldType(field) === 'core_password' && value && !passwordIsStrong(value)) {
+					message = strings.passwordWeak || 'Use at least 8 characters and combine letters, numbers, or symbols.';
+				} else if (control && control.validity && !control.validity.valid) {
+					if (control.validity.patternMismatch && fieldType(field) === 'core_username') {
+						message = strings.usernameInvalid || 'Use only letters, numbers, and these symbols: _ . - @';
+					} else if (!control.validity.valueMissing) {
+						message = control.validationMessage || strings.invalidValue || 'Please enter a valid value.';
+					}
+				}
+
+				if (message) {
+					setFieldError(field, message);
+				} else {
+					clearFieldError(field);
+				}
+
+				return message;
+			}
+
+			function refreshContainerErrors(card) {
+				card.querySelectorAll('.atshift-upf-profile-accordion').forEach(function (accordion) {
+					accordion.classList.remove('atshift-upf-has-error');
+				});
+
+				card.querySelectorAll(fieldSelector + '.atshift-upf-field-invalid').forEach(function (field) {
+					var node = field.parentElement;
+
+					while (node && node !== card) {
+						if (node.classList.contains('atshift-upf-profile-accordion')) {
+							node.classList.add('atshift-upf-has-error');
+						}
+						node = node.parentElement;
+					}
+				});
+			}
+
+			function revealField(field, shouldScroll) {
+				var accordions = [];
+				var node = field.parentElement;
+				var control;
+
+				while (node && !node.classList.contains('atshift-upf-profile-card')) {
+					if (node.classList.contains('atshift-upf-profile-accordion')) {
+						accordions.push(node);
+					}
+					node = node.parentElement;
+				}
+
+				accordions.reverse().forEach(function (accordion) {
+					var button = accordion.querySelector(':scope > .atshift-upf-profile-accordion-toggle');
+					var body = accordion.querySelector(':scope > .atshift-upf-profile-accordion-body');
+
+					accordion.classList.add('is-open');
+					if (button) {
+						button.setAttribute('aria-expanded', 'true');
+					}
+					if (body) {
+						body.hidden = false;
+					}
+				});
+
+				if (shouldScroll === false) {
+					return;
+				}
+
+				field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				control = primaryControl(field);
+				if (control && control.type !== 'hidden' && !control.disabled) {
+					control.focus({ preventScroll: true });
+				}
+			}
+
+			function renderValidationNotice(card) {
+				var invalidFields = Array.prototype.slice.call(card.querySelectorAll(fieldSelector + '.atshift-upf-field-invalid')).filter(isFieldActive);
+				var notice = card.querySelector(':scope > .atshift-upf-validation-notice');
+				var list;
+
+				if (!invalidFields.length) {
+					if (notice) {
+						notice.remove();
+					}
+					refreshContainerErrors(card);
+					return null;
+				}
+
+				if (!notice) {
+					notice = document.createElement('div');
+					notice.className = 'atshift-upf-validation-notice';
+					notice.setAttribute('role', 'alert');
+					notice.setAttribute('tabindex', '-1');
+					notice.innerHTML = '<p><strong></strong></p><ul></ul>';
+					card.insertBefore(notice, card.querySelector('.atshift-upf-profile-fields'));
+				}
+
+				notice.querySelector('strong').textContent = strings.validationNotice || 'Please correct the highlighted fields.';
+				list = notice.querySelector('ul');
+				list.innerHTML = '';
+
+				invalidFields.forEach(function (field) {
+					var item = document.createElement('li');
+					var link = document.createElement('a');
+					var message = field.getAttribute('data-atshift-upf-validation-message') || '';
+
+					link.href = '#' + fieldId(field);
+					link.textContent = fieldLabel(field) + ': ' + message;
+					link.addEventListener('click', function (event) {
+						event.preventDefault();
+						revealField(field);
+					});
+					item.appendChild(link);
+					list.appendChild(item);
+				});
+
+				refreshContainerErrors(card);
+				return notice;
+			}
+
+			function clearInactiveErrors(form) {
+				form.querySelectorAll(fieldSelector).forEach(function (field) {
+					if (!isFieldActive(field)) {
+						clearFieldError(field);
+					}
+				});
+			}
+
+			function updateNotices(form) {
+				clearInactiveErrors(form);
+				form.querySelectorAll('.atshift-upf-profile-card').forEach(renderValidationNotice);
+			}
+
+			function validateForm(form) {
+				var invalidFields = [];
+
+				form.querySelectorAll(fieldSelector).forEach(function (field) {
+					if (validateField(field, true)) {
+						invalidFields.push(field);
+					}
+				});
+
+				updateNotices(form);
+				return invalidFields;
+			}
+
+			cards.forEach(function (card) {
+				var form = card.closest('form');
+
+				card.querySelectorAll(fieldSelector).forEach(function (field) {
+					controlsForField(field).forEach(function (control) {
+						if (field.getAttribute('data-atshift-upf-validation-required') === '1') {
+							control.setAttribute('aria-required', 'true');
+						}
+					});
+				});
+
+				if (form && forms.indexOf(form) === -1) {
+					forms.push(form);
+				}
+			});
+
+			forms.forEach(function (form) {
+				if (form.dataset.atshiftUpfValidationReady === '1') {
+					return;
+				}
+
+				form.dataset.atshiftUpfValidationReady = '1';
+				form.noValidate = true;
+
+				form.addEventListener('submit', function (event) {
+					var invalidFields = validateForm(form);
+					var notice;
+
+					if (invalidFields.length) {
+						event.preventDefault();
+						event.stopImmediatePropagation();
+						revealField(invalidFields[0], false);
+						notice = invalidFields[0].closest('.atshift-upf-profile-card').querySelector(':scope > .atshift-upf-validation-notice');
+						if (notice) {
+							notice.scrollIntoView({ behavior: 'smooth', block: 'start' });
+							notice.focus({ preventScroll: true });
+						}
+						return;
+					}
+
+					if (!form.checkValidity()) {
+						event.preventDefault();
+						form.reportValidity();
+					}
+				}, true);
+
+				form.addEventListener('input', function (event) {
+					var field = event.target.closest ? event.target.closest(fieldSelector) : null;
+
+					if (!field) {
+						return;
+					}
+
+					validateField(field, false);
+					updateNotices(form);
+				});
+
+				form.addEventListener('change', function (event) {
+					var field = event.target.closest ? event.target.closest(fieldSelector) : null;
+
+					if (field) {
+						validateField(field, false);
+					}
+					updateNotices(form);
+				});
+
+				form.addEventListener('blur', function (event) {
+					var field = event.target.closest ? event.target.closest(fieldSelector) : null;
+
+					if (!field) {
+						return;
+					}
+
+					validateField(field, true);
+					updateNotices(form);
+				}, true);
+			});
+		}
+
+		initProfileValidation();
 	}());

@@ -869,6 +869,12 @@ msgstr ""
 msgid "This field is required."
 msgstr ""
 
+msgid "Please correct the highlighted fields."
+msgstr ""
+
+msgid "Please enter a valid value."
+msgstr ""
+
 msgid "This field cannot be left blank."
 msgstr ""
 
