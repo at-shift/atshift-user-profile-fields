@@ -390,7 +390,9 @@ class Atshift_UPF_Profile {
 			return get_current_user_id();
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only profile screen selection.
 		if ( 'user-edit.php' === $hook && isset( $_GET['user_id'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only profile screen selection.
 			return absint( $_GET['user_id'] );
 		}
 
@@ -486,6 +488,9 @@ class Atshift_UPF_Profile {
 
 		$this->apply_disabled_hidden_core_fields( $update ? 'edit' : 'new', $user );
 
+		// WordPress verifies the profile form nonce before this validation hook runs.
+		// Values are validated by field type below and are not stored here.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$values = isset( $_POST['atshift_upf_fields'] ) ? (array) wp_unslash( $_POST['atshift_upf_fields'] ) : array();
 
 		$fields = $this->filter_fields_for_screen( Atshift_UPF_Plugin::get_enabled_fields(), $update ? 'edit' : 'new' );
@@ -624,6 +629,9 @@ class Atshift_UPF_Profile {
 			return;
 		}
 
+		// WordPress verifies the profile form nonce before this save hook runs.
+		// Values are sanitized by field type before they are stored.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$values = isset( $_POST['atshift_upf_fields'] ) ? (array) wp_unslash( $_POST['atshift_upf_fields'] ) : array();
 		$core_updates = array(
 			'ID' => $user_id,
@@ -1451,6 +1459,7 @@ class Atshift_UPF_Profile {
 
 			if ( 'core_language' === $type ) {
 				$locale = is_scalar( $value ) ? (string) $value : '';
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Read-only repopulation after core form validation.
 				if ( '' === $locale && ! isset( $_POST['locale'] ) ) {
 					$locale = 'site-default';
 				}
@@ -1938,12 +1947,17 @@ class Atshift_UPF_Profile {
 		}
 
 		if ( in_array( $field['type'] ?? '', array( 'core_visual_editor', 'core_syntax_highlighting', 'core_keyboard_shortcuts', 'core_toolbar', 'core_notification' ), true ) ) {
+			// WordPress verifies the profile form nonce before submitted values reach this helper.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$has_value = isset( $_POST[ $name ] );
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$value     = $has_value ? sanitize_text_field( wp_unslash( $_POST[ $name ] ) ) : '';
 
 			return $this->normalize_core_checkbox_value( $field['type'], $value, $has_value );
 		}
 
+		// The caller sanitizes this value according to its field type before storage.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		return isset( $_POST[ $name ] ) ? wp_unslash( $_POST[ $name ] ) : '';
 	}
 
@@ -2026,6 +2040,8 @@ class Atshift_UPF_Profile {
 	 */
 	private function get_submitted_additional_name_type( $field ) {
 		$key   = isset( $field['key'] ) ? sanitize_key( $field['key'] ) : '';
+		// WordPress verifies the profile form nonce before this helper runs.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Selected value is sanitized below.
 		$types = isset( $_POST['atshift_upf_additional_name_types'] ) ? (array) wp_unslash( $_POST['atshift_upf_additional_name_types'] ) : array();
 
 		return $this->sanitize_additional_name_type( isset( $types[ $key ] ) ? $types[ $key ] : '' );
@@ -2107,7 +2123,10 @@ class Atshift_UPF_Profile {
 				'core_role'         => 'role',
 			);
 
+			// Read-only repopulation after core Add User form validation.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			if ( isset( $post_map[ $type ], $_POST[ $post_map[ $type ] ] ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
 				$posted_value = sanitize_text_field( wp_unslash( $_POST[ $post_map[ $type ] ] ) );
 
 				if ( Atshift_UPF_Plugin::supports_initial_state( $type ) ) {
@@ -2404,6 +2423,10 @@ class Atshift_UPF_Profile {
 			array_filter(
 				$fields,
 				function ( $field ) use ( $availability_callback, $screen ) {
+					if ( ! $this->is_registered_field_type( $field ) ) {
+						return false;
+					}
+
 					if ( ! call_user_func( $availability_callback, $field ) ) {
 						return false;
 					}
@@ -2455,6 +2478,64 @@ class Atshift_UPF_Profile {
 		return $this->localize_default_field_texts(
 			$this->filter_conditional_choices_for_available_children( $filtered )
 		);
+	}
+
+	/**
+	 * Check whether the base plugin or an active add-on registered a field type.
+	 *
+	 * @param array<string, mixed> $field Field definition.
+	 * @return bool
+	 */
+	private function is_registered_field_type( $field ) {
+		$type = isset( $field['type'] ) ? sanitize_key( $field['type'] ) : '';
+		$base_types = array(
+			'text',
+			'textarea',
+			'email',
+			'url',
+			'phone',
+			'number',
+			'image',
+			'checkbox',
+			'radio',
+			'select',
+			'additional_name',
+			'group',
+			'box',
+			'conditional',
+			'accordion',
+			'core_username',
+			'core_email',
+			'core_visual_editor',
+			'core_admin_color',
+			'core_syntax_highlighting',
+			'core_keyboard_shortcuts',
+			'core_toolbar',
+			'core_first_name',
+			'core_last_name',
+			'core_nickname',
+			'core_display_name',
+			'core_language',
+			'core_website',
+			'core_bio',
+			'core_profile_picture',
+			'core_password',
+			'core_sessions',
+			'core_application_passwords',
+			'core_notification',
+			'core_role',
+			'core_submit_button',
+		);
+		$registered = array_fill_keys( $base_types, '' );
+
+		/**
+		 * Reuse the editor registration contract so inactive add-on fields stay dormant.
+		 *
+		 * @param array<string, string> $registered Registered field types.
+		 */
+		$registered = apply_filters( 'atshift_upf_admin_field_types', $registered );
+
+		return '' !== $type && isset( $registered[ $type ] );
 	}
 
 	/**

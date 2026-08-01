@@ -4,7 +4,7 @@ Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 0.9
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,9 +58,13 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 
 1. Upload the plugin folder to `/wp-content/plugins/`.
 2. Activate the plugin from the Plugins screen.
-3. Open Settings > atshift User Profile Fields.
+3. Open atshift User Profile Fields > Field Management in the WordPress admin menu.
 
 == Changelog ==
+
+= 1.0 =
+* Prepare the first stable WordPress.org release.
+* Use the standard WordPress.org plugin update channel.
 
 = 0.9 =
 * Add the base integration layer used by optional add-ons.
@@ -91,7 +95,6 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 
 = 0.1.108 =
 * Show @shift as the plugin author.
-* Add WordPress update notifications and standard automatic-update support for packaged GitHub releases.
 
 = 0.1.107 =
 * Select the site default language when the Add New User screen first opens.

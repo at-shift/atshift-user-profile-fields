@@ -134,6 +134,7 @@ class Atshift_UPF_Admin {
 	public function redirect_legacy_page_url() {
 		global $pagenow;
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only legacy URL routing.
 		if ( ! in_array( $pagenow, array( 'users.php', 'options-general.php' ), true ) || empty( $_GET['page'] ) || self::PAGE_SLUG !== sanitize_key( wp_unslash( $_GET['page'] ) ) ) {
 			return;
 		}
@@ -146,7 +147,9 @@ class Atshift_UPF_Admin {
 			'page' => self::PAGE_SLUG,
 		);
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only legacy URL routing.
 		if ( ! empty( $_GET['tab'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only legacy URL routing.
 			$tab = sanitize_key( wp_unslash( $_GET['tab'] ) );
 			if ( 'extras' === $tab ) {
 				$args['page'] = self::EXTRAS_PAGE_SLUG;
@@ -155,7 +158,9 @@ class Atshift_UPF_Admin {
 			}
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only legacy URL routing.
 		if ( ! empty( $_GET['edit'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only legacy URL routing.
 			$args['edit'] = sanitize_key( wp_unslash( $_GET['edit'] ) );
 		}
 
@@ -170,6 +175,7 @@ class Atshift_UPF_Admin {
 	 * @return void
 	 */
 	public function enqueue_assets( $hook ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only screen selection.
 		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
 
 		if ( ! in_array( $hook, array( 'toplevel_page_atshift-user-profile-fields', 'atshift-user-profile-fields_page_atshift-user-profile-fields-extras' ), true ) && ! in_array( $page, array( self::PAGE_SLUG, self::EXTRAS_PAGE_SLUG ), true ) ) {
@@ -270,6 +276,7 @@ class Atshift_UPF_Admin {
 	 * @return void
 	 */
 	public function render_notices() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only notice routing.
 		if ( empty( $_GET['page'] ) || 'atshift-user-profile-fields' !== sanitize_key( wp_unslash( $_GET['page'] ) ) ) {
 			return;
 		}
@@ -278,23 +285,29 @@ class Atshift_UPF_Admin {
 			echo '<div class="notice notice-warning"><p>' . esc_html__( 'Emergency safe mode is active. WordPress native profile fields are being used and this plugin is not changing profile screens.', 'atshift-user-profile-fields' ) . '</p></div>';
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Status is set by a nonce-protected redirect.
 		if ( ! empty( $_GET['atshift_upf_updated'] ) ) {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Settings saved.', 'atshift-user-profile-fields' ) . '</p></div>';
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Status is set by a nonce-protected redirect.
 		if ( ! empty( $_GET['atshift_upf_reset'] ) ) {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'The field set is ready to be created again from the beginning.', 'atshift-user-profile-fields' ) . '</p></div>';
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Status is set by a nonce-protected redirect.
 		if ( ! empty( $_GET['atshift_upf_imported'] ) ) {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Field set loaded.', 'atshift-user-profile-fields' ) . '</p></div>';
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Status is set by a nonce-protected redirect.
 		if ( ! empty( $_GET['deleted'] ) ) {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Field deleted.', 'atshift-user-profile-fields' ) . '</p></div>';
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only notice selection.
 		if ( ! empty( $_GET['error'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only notice selection.
 			$error = sanitize_key( wp_unslash( $_GET['error'] ) );
 			$text  = __( 'The field could not be saved.', 'atshift-user-profile-fields' );
 
@@ -316,10 +329,13 @@ class Atshift_UPF_Admin {
 	 * @return void
 	 */
 	public function handle_posts() {
+		// Each dispatched handler verifies its action-specific nonce before changing data.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( empty( $_POST['atshift_upf_action'] ) || ! current_user_can( $this->get_capability() ) ) {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$action = sanitize_key( wp_unslash( $_POST['atshift_upf_action'] ) );
 
 		if ( 'save_field' === $action ) {
@@ -1006,6 +1022,9 @@ class Atshift_UPF_Admin {
 		$groups = apply_filters( 'atshift_upf_admin_field_type_groups', $groups );
 		?>
 		<select name="<?php echo esc_attr( $name ); ?>" class="atshift-upf-field-type-select">
+			<?php if ( ! isset( $this->field_types[ $current_type ] ) ) : ?>
+				<option value="<?php echo esc_attr( $current_type ); ?>" selected><?php echo esc_html( $current_type ); ?></option>
+			<?php endif; ?>
 			<?php foreach ( $groups as $group_label => $types ) : ?>
 				<optgroup label="<?php echo esc_attr( $group_label ); ?>">
 					<?php foreach ( $types as $type ) : ?>
@@ -1713,12 +1732,22 @@ class Atshift_UPF_Admin {
 	private function save_fields() {
 		check_admin_referer( 'atshift_upf_save_fields' );
 
+		// Values are sanitized by field type below before they are stored.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$raw_fields = isset( $_POST['fields'] ) ? (array) wp_unslash( $_POST['fields'] ) : array();
 		$prepared   = array();
 		$id_map     = array();
 		$type_by_id = array();
 		$seen_keys  = array();
 		$used_ids   = array();
+		$stored_by_id = array();
+
+		foreach ( Atshift_UPF_Plugin::get_fields() as $stored_field ) {
+			$stored_id = isset( $stored_field['id'] ) ? sanitize_key( $stored_field['id'] ) : '';
+			if ( '' !== $stored_id ) {
+				$stored_by_id[ $stored_id ] = $stored_field;
+			}
+		}
 
 		foreach ( $raw_fields as $index => $raw_field ) {
 			if ( ! is_array( $raw_field ) ) {
@@ -1729,8 +1758,9 @@ class Atshift_UPF_Admin {
 			$client_id          = isset( $raw_field['client_id'] ) ? sanitize_key( $raw_field['client_id'] ) : '';
 			$field_id           = $submitted_field_id;
 			$type               = isset( $raw_field['type'] ) ? sanitize_key( $raw_field['type'] ) : 'text';
+			$stored_type        = isset( $stored_by_id[ $submitted_field_id ]['type'] ) ? sanitize_key( $stored_by_id[ $submitted_field_id ]['type'] ) : '';
 
-			if ( ! isset( $this->field_types[ $type ] ) ) {
+			if ( ! isset( $this->field_types[ $type ] ) && $stored_type !== $type ) {
 				$type = 'text';
 			}
 
@@ -1831,6 +1861,11 @@ class Atshift_UPF_Admin {
 				'initial_enabled' => Atshift_UPF_Plugin::supports_initial_state( $type ) && ! empty( $raw_field['initial_enabled'] ),
 				'sort_order'  => $prepared_field['position'] * 10,
 			);
+
+			if ( isset( $stored_by_id[ $field_id ] ) ) {
+				$extension_data = array_diff_key( $stored_by_id[ $field_id ], array_fill_keys( array_keys( $field ), true ) );
+				$field          = array_merge( $extension_data, $field );
+			}
 			/**
 			 * Filters one field definition before it is saved from the editor.
 			 *
@@ -2067,9 +2102,11 @@ class Atshift_UPF_Admin {
 		if ( 'screen' === $context ) {
 			$show_extras = isset( $_POST['show_extras'] ) ? ! empty( $_POST['show_extras'] ) : $show_extras;
 		} else {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized with sanitize_key immediately below.
 			$hidden       = isset( $_POST['hidden_core_fields'] ) ? (array) wp_unslash( $_POST['hidden_core_fields'] ) : array();
 			$hidden       = array_values( array_intersect( array_map( 'sanitize_key', $hidden ), $allowed ) );
 			$disabled     = $this->sanitize_disabled_hidden_core_fields(
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized by sanitize_disabled_hidden_core_fields().
 				isset( $_POST['disabled_hidden_core_fields'] ) ? (array) wp_unslash( $_POST['disabled_hidden_core_fields'] ) : array(),
 				$hidden
 			);
@@ -2107,15 +2144,21 @@ class Atshift_UPF_Admin {
 		$apply_to_own  = ! empty( $current['apply_to_own_profile'] );
 		$editor_layout = isset( $current['editor_layout'] ) && 'one' === $current['editor_layout'] ? 'one' : 'two';
 		$show_extras   = ! empty( $current['show_extras'] );
+		// The caller verifies the field-editor nonce before reaching this helper.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$field_group_enabled = isset( $_POST['field_group_enabled'] ) ? '1' === sanitize_key( wp_unslash( $_POST['field_group_enabled'] ) ) : ! empty( $current['field_group_enabled'] );
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( isset( $_POST['hidden_core_fields'] ) || isset( $_POST['disabled_hidden_core_fields'] ) || isset( $_POST['apply_to_own_profile'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized with sanitize_key immediately below.
 			$hidden       = isset( $_POST['hidden_core_fields'] ) ? (array) wp_unslash( $_POST['hidden_core_fields'] ) : array();
 			$hidden       = array_values( array_intersect( array_map( 'sanitize_key', $hidden ), $allowed ) );
 			$disabled     = $this->sanitize_disabled_hidden_core_fields(
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized by sanitize_disabled_hidden_core_fields().
 				isset( $_POST['disabled_hidden_core_fields'] ) ? (array) wp_unslash( $_POST['disabled_hidden_core_fields'] ) : array(),
 				$hidden
 			);
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$apply_to_own = ! empty( $_POST['apply_to_own_profile'] );
 		}
 
@@ -2289,10 +2332,12 @@ class Atshift_UPF_Admin {
 	 * @return array<string, mixed>|null
 	 */
 	private function get_edit_field( $fields ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only editor selection.
 		if ( empty( $_GET['edit'] ) ) {
 			return null;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only editor selection.
 		$edit = sanitize_key( wp_unslash( $_GET['edit'] ) );
 
 		foreach ( $fields as $field ) {

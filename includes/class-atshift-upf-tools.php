@@ -272,6 +272,8 @@ class Atshift_UPF_Tools {
 	 * @return void
 	 */
 	private function export_configuration() {
+		// The AJAX dispatcher verifies the tools nonce before calling this helper.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$package_name  = isset( $_POST['package_name'] ) ? sanitize_text_field( wp_unslash( $_POST['package_name'] ) ) : '';
 		$package_name  = '' !== $package_name ? wp_html_excerpt( $package_name, 80, '' ) : __( 'Profile Fields Set', 'atshift-user-profile-fields' );
 		$filename_slug = sanitize_title( $package_name );
@@ -322,6 +324,8 @@ class Atshift_UPF_Tools {
 	 */
 	private function import_configuration( $code = null ) {
 		if ( null === $code ) {
+			// The AJAX dispatcher verifies the tools nonce before calling this helper.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON is decoded and validated before storage.
 			$code = isset( $_POST['import_code'] ) ? trim( wp_unslash( $_POST['import_code'] ) ) : '';
 		} else {
 			$code = trim( (string) $code );
@@ -441,10 +445,13 @@ class Atshift_UPF_Tools {
 	 * @return void
 	 */
 	private function delete_plugin_data() {
+		// The AJAX dispatcher verifies the tools nonce before calling this helper.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( empty( $_POST['delete_confirm'] ) ) {
 			wp_send_json_error( array( 'message' => __( 'Confirm that deleted data cannot be restored before continuing.', 'atshift-user-profile-fields' ) ), 400 );
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$delete_values = ! empty( $_POST['delete_values'] );
 		$meta_keys     = $delete_values ? $this->get_plugin_user_meta_keys() : array();
 
