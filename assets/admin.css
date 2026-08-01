@@ -1176,7 +1176,7 @@
 	top: 22px;
 	transform: translateX(-50%);
 	width: 240px;
-	z-index: 20;
+	z-index: 100000;
 }
 
 .cfs_tooltip:hover .tooltip_inner,

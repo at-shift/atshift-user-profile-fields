@@ -364,9 +364,28 @@ msgstr "そのフィールド名はすでに別のフィールドで使用され
 msgid "Profile Field Settings"
 msgstr "プロフィールフィールドの設定"
 
+#: includes/class-atshift-upf-admin.php:103
+#: includes/class-atshift-upf-admin.php:357
+msgid "Field Management"
+msgstr "フィールド管理"
+
+#: includes/class-atshift-upf-admin.php:112
+#: includes/class-atshift-upf-admin.php:378
+#: includes/class-atshift-upf-admin.php:1476
+msgid "Display Settings"
+msgstr "表示設定"
+
+#: includes/class-atshift-upf-admin.php:387
+msgid "Save Display Settings"
+msgstr "表示設定を保存"
+
 #: includes/class-atshift-upf-admin.php:330
 msgid "Screen elements"
 msgstr "画面上の要素"
+
+#: includes/class-atshift-upf-admin.php:416
+msgid "Choose how the field editor is arranged on this screen."
+msgstr "この画面でのフィールドエディターの配置を選択します。"
 
 #: includes/class-atshift-upf-admin.php:331
 msgid ""
@@ -387,6 +406,10 @@ msgstr "フィールド"
 #: includes/class-atshift-upf-admin.php:1337
 msgid "Extras"
 msgstr "エクストラ"
+
+#: includes/class-atshift-upf-admin.php:384
+msgid "Save Extras"
+msgstr "エクストラを保存"
 
 #: includes/class-atshift-upf-admin.php:337
 msgid "Layout"
@@ -733,8 +756,8 @@ msgstr ""
 "表示にします。"
 
 #: includes/class-atshift-upf-admin.php:1373
-msgid "Apply these extras to my own profile screen too."
-msgstr "自分のプロフィール画面にもこのエクストラ設定を適用する"
+msgid "Apply these display settings to my own profile screen too."
+msgstr "自分のプロフィール画面にもこの表示設定を適用する"
 
 #: includes/class-atshift-upf-admin.php:1388
 msgid "Required fields during account creation"

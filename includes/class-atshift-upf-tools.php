@@ -104,6 +104,7 @@ class Atshift_UPF_Tools {
 		}
 
 		$field_count = count( Atshift_UPF_Plugin::get_fields() );
+		$active_tab  = sanitize_key( apply_filters( 'atshift_upf_tools_active_tab', 'export' ) );
 		?>
 		<div class="wrap atshift-upf-tools">
 			<div class="atshift-upf-tools-page-head">
@@ -111,13 +112,24 @@ class Atshift_UPF_Tools {
 			</div>
 
 			<nav class="nav-tab-wrapper" role="tablist" aria-label="<?php esc_attr_e( 'Tools', 'atshift-user-profile-fields' ); ?>">
-				<a href="#export" class="nav-tab nav-tab-active" role="tab" aria-selected="true" aria-controls="atshift-upf-tools-export" data-atshift-upf-tools-tab="export"><?php esc_html_e( 'Export', 'atshift-user-profile-fields' ); ?></a>
-				<a href="#import" class="nav-tab" role="tab" aria-selected="false" aria-controls="atshift-upf-tools-import" data-atshift-upf-tools-tab="import"><?php esc_html_e( 'Import', 'atshift-user-profile-fields' ); ?></a>
-				<a href="#delete" class="nav-tab" role="tab" aria-selected="false" aria-controls="atshift-upf-tools-delete" data-atshift-upf-tools-tab="delete"><?php esc_html_e( 'Delete', 'atshift-user-profile-fields' ); ?></a>
+				<a href="#export" class="nav-tab <?php echo 'export' === $active_tab ? 'nav-tab-active' : ''; ?>" role="tab" aria-selected="<?php echo 'export' === $active_tab ? 'true' : 'false'; ?>" aria-controls="atshift-upf-tools-export" data-atshift-upf-tools-tab="export"><?php esc_html_e( 'Export', 'atshift-user-profile-fields' ); ?></a>
+				<a href="#import" class="nav-tab <?php echo 'import' === $active_tab ? 'nav-tab-active' : ''; ?>" role="tab" aria-selected="<?php echo 'import' === $active_tab ? 'true' : 'false'; ?>" aria-controls="atshift-upf-tools-import" data-atshift-upf-tools-tab="import"><?php esc_html_e( 'Import', 'atshift-user-profile-fields' ); ?></a>
+				<?php
+				/**
+				 * Fires after the built-in Tools tabs are rendered.
+				 *
+				 * Add-ons can append their own tabs. Use the same tab key in
+				 * atshift_upf_tools_tab_panels.
+				 *
+				 * @param string $active_tab Active tab key.
+				 */
+				do_action( 'atshift_upf_tools_nav_tabs', $active_tab );
+				?>
+				<a href="#delete" class="nav-tab <?php echo 'delete' === $active_tab ? 'nav-tab-active' : ''; ?>" role="tab" aria-selected="<?php echo 'delete' === $active_tab ? 'true' : 'false'; ?>" aria-controls="atshift-upf-tools-delete" data-atshift-upf-tools-tab="delete"><?php esc_html_e( 'Delete', 'atshift-user-profile-fields' ); ?></a>
 			</nav>
 
 			<div class="atshift-upf-tools-content">
-				<section id="atshift-upf-tools-export" class="atshift-upf-tools-tab-content is-active" role="tabpanel" data-atshift-upf-tools-panel="export">
+				<section id="atshift-upf-tools-export" class="atshift-upf-tools-tab-content <?php echo 'export' === $active_tab ? 'is-active' : ''; ?>" role="tabpanel" data-atshift-upf-tools-panel="export" <?php echo 'export' === $active_tab ? '' : 'hidden'; ?>>
 					<p class="atshift-upf-tools-description"><?php esc_html_e( 'Create an importable file containing the complete field configuration and display settings. Profile values saved by individual users are not included.', 'atshift-user-profile-fields' ); ?></p>
 					<div class="atshift-upf-tools-summary">
 						<strong><?php esc_html_e( 'Current configuration', 'atshift-user-profile-fields' ); ?></strong>
@@ -151,7 +163,7 @@ class Atshift_UPF_Tools {
 					<div class="atshift-upf-tools-message" role="status" aria-live="polite" data-atshift-upf-tools-message="export"></div>
 				</section>
 
-				<section id="atshift-upf-tools-import" class="atshift-upf-tools-tab-content" role="tabpanel" data-atshift-upf-tools-panel="import" hidden>
+				<section id="atshift-upf-tools-import" class="atshift-upf-tools-tab-content <?php echo 'import' === $active_tab ? 'is-active' : ''; ?>" role="tabpanel" data-atshift-upf-tools-panel="import" <?php echo 'import' === $active_tab ? '' : 'hidden'; ?>>
 					<p class="atshift-upf-tools-description"><?php esc_html_e( 'Select a field set created by this plugin. Importing replaces the current field configuration and display settings.', 'atshift-user-profile-fields' ); ?></p>
 					<div class="atshift-upf-tools-warning">
 						<strong><?php esc_html_e( 'Before importing', 'atshift-user-profile-fields' ); ?></strong>
@@ -175,7 +187,7 @@ class Atshift_UPF_Tools {
 					<div class="atshift-upf-tools-message" role="status" aria-live="polite" data-atshift-upf-tools-message="import"></div>
 				</section>
 
-				<section id="atshift-upf-tools-delete" class="atshift-upf-tools-tab-content atshift-upf-tools-delete" role="tabpanel" data-atshift-upf-tools-panel="delete" hidden>
+				<section id="atshift-upf-tools-delete" class="atshift-upf-tools-tab-content atshift-upf-tools-delete <?php echo 'delete' === $active_tab ? 'is-active' : ''; ?>" role="tabpanel" data-atshift-upf-tools-panel="delete" <?php echo 'delete' === $active_tab ? '' : 'hidden'; ?>>
 					<h2><?php esc_html_e( 'Delete plugin data', 'atshift-user-profile-fields' ); ?></h2>
 					<p class="atshift-upf-tools-danger"><?php esc_html_e( 'Field configuration and display settings will be deleted. WordPress standard profile data is never deleted.', 'atshift-user-profile-fields' ); ?></p>
 					<label class="atshift-upf-tools-check">
@@ -194,6 +206,16 @@ class Atshift_UPF_Tools {
 					</div>
 					<div class="atshift-upf-tools-message" role="status" aria-live="polite" data-atshift-upf-tools-message="delete"></div>
 				</section>
+				<?php
+				/**
+				 * Fires after the built-in Tools panels are rendered.
+				 *
+				 * Add-ons can append matching panels for custom tabs.
+				 *
+				 * @param string $active_tab Active tab key.
+				 */
+				do_action( 'atshift_upf_tools_tab_panels', $active_tab );
+				?>
 			</div>
 		</div>
 		<?php

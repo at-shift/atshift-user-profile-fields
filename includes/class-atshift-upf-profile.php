@@ -205,7 +205,7 @@ class Atshift_UPF_Profile {
 			'atshift-upf-profile',
 			ATSHIFT_UPF_URL . 'assets/profile.css',
 			array(),
-			ATSHIFT_UPF_VERSION
+			$this->asset_version( 'assets/profile.css' )
 		);
 		wp_add_inline_style(
 			'atshift-upf-profile',
@@ -216,7 +216,7 @@ class Atshift_UPF_Profile {
 			'atshift-upf-profile',
 			ATSHIFT_UPF_URL . 'assets/profile.js',
 			array(),
-			ATSHIFT_UPF_VERSION,
+			$this->asset_version( 'assets/profile.js' ),
 			true
 		);
 
@@ -509,7 +509,7 @@ class Atshift_UPF_Profile {
 			}
 
 				$value = $this->get_submitted_value( $field, $values );
-				$trimmed_value = trim( (string) $value );
+				$trimmed_value = is_array( $value ) ? '' : trim( (string) $value );
 
 				if ( 'core_nickname' === ( $field['type'] ?? '' ) && $update && '' === $trimmed_value ) {
 					$errors->remove( 'nickname' );
@@ -545,7 +545,7 @@ class Atshift_UPF_Profile {
 				continue;
 			}
 
-			if ( $this->is_required_field( $field ) && '' === $trimmed_value ) {
+			if ( $this->is_required_field( $field ) && $this->is_empty_required_value( $value ) ) {
 				$this->add_field_error( $errors, $field, __( 'This field is required.', 'atshift-user-profile-fields' ), 'required' );
 				continue;
 			}
@@ -587,6 +587,26 @@ class Atshift_UPF_Profile {
 			/* translators: 1: Field label, 2: Validation error message. */
 			sprintf( __( '%1$s: %2$s', 'atshift-user-profile-fields' ), $label, $message )
 		);
+	}
+
+	/**
+	 * Check whether a submitted required value is empty.
+	 *
+	 * @param mixed $value Submitted value.
+	 * @return bool
+	 */
+	private function is_empty_required_value( $value ) {
+		if ( is_array( $value ) ) {
+			foreach ( $value as $item ) {
+				if ( '' !== trim( (string) $item ) ) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return '' === trim( (string) $value );
 	}
 
 	/**
@@ -1165,10 +1185,7 @@ class Atshift_UPF_Profile {
 		?>
 		<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" data-atshift-upf-field="<?php echo esc_attr( $key ); ?>"<?php $this->render_validation_attributes( $field, $user ); ?><?php $this->render_core_replacement_attribute( $field ); ?><?php $this->render_condition_attributes( $field ); ?>>
 			<label for="<?php echo esc_attr( 'atshift_upf_' . $key ); ?>">
-				<?php if ( $this->is_required_field_for_screen( $field, $user ) ) : ?>
-					<?php $this->render_required_badge(); ?>
-				<?php endif; ?>
-				<?php echo esc_html( $field['label'] ); ?>
+				<?php $this->render_profile_label_content( $field, $user ); ?>
 			</label>
 			<?php $this->render_input( $field, $field_name, $value, $user ); ?>
 			<?php if ( $description ) : ?>
@@ -1223,10 +1240,7 @@ class Atshift_UPF_Profile {
 		>
 					<th>
 						<label for="<?php echo esc_attr( 'atshift_upf_' . $key ); ?>">
-							<?php if ( $this->is_required_field_for_screen( $field, $user ) ) : ?>
-								<?php $this->render_required_badge(); ?>
-							<?php endif; ?>
-							<?php echo esc_html( $field['label'] ); ?>
+							<?php $this->render_profile_label_content( $field, $user ); ?>
 						</label>
 			</th>
 			<td>
@@ -1319,10 +1333,7 @@ class Atshift_UPF_Profile {
 		?>
 		<div class="atshift-upf-feature-group-item" data-atshift-upf-field="<?php echo esc_attr( $key ); ?>"<?php $this->render_validation_attributes( $field, $user ); ?><?php $this->render_core_replacement_attribute( $field ); ?><?php $this->render_condition_attributes( $field ); ?>>
 			<label for="<?php echo esc_attr( 'atshift_upf_' . $key ); ?>">
-				<?php if ( $this->is_required_field_for_screen( $field, $user ) ) : ?>
-					<?php $this->render_required_badge(); ?>
-				<?php endif; ?>
-				<?php echo esc_html( $field['label'] ); ?>
+				<?php $this->render_profile_label_content( $field, $user ); ?>
 			</label>
 			<div class="atshift-upf-feature-control-main">
 				<?php $this->render_input( $field, $field_name, $value, $user ); ?>
@@ -1351,6 +1362,22 @@ class Atshift_UPF_Profile {
 			$choices     = isset( $field['choices'] ) && is_array( $field['choices'] ) ? $field['choices'] : array();
 			if ( '' === $placeholder ) {
 				$placeholder = $this->get_default_placeholder( $field );
+			}
+
+			/**
+			 * Lets add-ons render custom profile inputs before the base renderer
+			 * falls back to the built-in field types.
+			 *
+			 * Add-ons should echo their control and return true when handled.
+			 *
+			 * @param bool                 $handled Whether the input was rendered.
+			 * @param array<string, mixed> $field Field definition.
+			 * @param string               $name Input name.
+			 * @param mixed                $value Current value.
+			 * @param WP_User|null         $user User being edited, or null on add-user screen.
+			 */
+			if ( (bool) apply_filters( 'atshift_upf_render_profile_input', false, $field, $name, $value, $user ) ) {
+				return;
 			}
 
 			if ( 'core_username' === $type ) {
@@ -1736,6 +1763,21 @@ class Atshift_UPF_Profile {
 	 */
 	private function sanitize_value( $value, $field ) {
 		$type = isset( $field['type'] ) ? $field['type'] : 'text';
+
+		/**
+		 * Lets add-ons sanitize values for custom profile input types.
+		 *
+		 * Return null to let the base plugin continue with its built-in
+		 * sanitizer. Any non-null value is used as the sanitized value.
+		 *
+		 * @param mixed|null            $sanitized Sanitized value, or null to continue.
+		 * @param mixed                 $value Raw submitted value.
+		 * @param array<string, mixed>  $field Field definition.
+		 */
+		$custom_sanitized = apply_filters( 'atshift_upf_sanitize_profile_value', null, $value, $field );
+		if ( null !== $custom_sanitized ) {
+			return $custom_sanitized;
+		}
 
 		if ( 'core_bio' === $type ) {
 			return sanitize_textarea_field( $value );
@@ -2289,6 +2331,46 @@ class Atshift_UPF_Profile {
 	 */
 	private function render_required_badge() {
 		echo '<span class="atshift-upf-required-badge">' . esc_html__( 'Required', 'atshift-user-profile-fields' ) . '</span>';
+	}
+
+	/**
+	 * Render profile labels as required badge + heading/help blocks.
+	 *
+	 * @param array<string, mixed> $field Field definition.
+	 * @param WP_User             $user User being edited.
+	 * @return void
+	 */
+	private function render_profile_label_content( $field, $user ) {
+		if ( $this->is_required_field_for_screen( $field, $user ) ) {
+			$this->render_required_badge();
+		}
+
+		echo '<span class="atshift-upf-profile-label-main">';
+		echo '<span class="atshift-upf-profile-label-title">' . esc_html( $field['label'] ) . '</span>';
+		$this->render_label_tooltip( $field );
+		echo '</span>';
+
+		$label_note = apply_filters( 'atshift_upf_profile_label_note', '', $field, $user );
+		$label_note = is_scalar( $label_note ) ? trim( (string) $label_note ) : '';
+		if ( '' !== $label_note ) {
+			echo '<span class="atshift-upf-profile-label-note">' . esc_html( $label_note ) . '</span>';
+		}
+	}
+
+	/**
+	 * Render an optional label tooltip supplied by an add-on field definition.
+	 *
+	 * @param array<string, mixed> $field Field definition.
+	 * @return void
+	 */
+	private function render_label_tooltip( $field ) {
+		$tooltip = isset( $field['tooltip'] ) ? trim( (string) $field['tooltip'] ) : '';
+
+		if ( '' === $tooltip ) {
+			return;
+		}
+
+		echo '<span class="cfs_tooltip">?<span class="tooltip_inner">' . esc_html( $tooltip ) . '</span></span>';
 	}
 
 	/**
@@ -3242,5 +3324,21 @@ class Atshift_UPF_Profile {
 	 */
 	private function meta_key( $field_key ) {
 		return '_atshift_upf_' . sanitize_key( $field_key );
+	}
+
+	/**
+	 * Return a cache-busting asset version.
+	 *
+	 * @param string $relative_path Asset path relative to the plugin root.
+	 * @return string
+	 */
+	private function asset_version( $relative_path ) {
+		$path = ATSHIFT_UPF_DIR . ltrim( $relative_path, '/' );
+
+		if ( file_exists( $path ) ) {
+			return ATSHIFT_UPF_VERSION . '.' . filemtime( $path );
+		}
+
+		return ATSHIFT_UPF_VERSION;
 	}
 }

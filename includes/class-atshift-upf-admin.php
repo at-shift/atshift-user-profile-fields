@@ -13,6 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Builds the plugin settings interface.
  */
 class Atshift_UPF_Admin {
+	const PAGE_SLUG        = 'atshift-user-profile-fields';
+	const EXTRAS_PAGE_SLUG = 'atshift-user-profile-fields-extras';
+
 	/**
 	 * Supported custom field types.
 	 *
@@ -72,7 +75,7 @@ class Atshift_UPF_Admin {
 		$this->field_types = apply_filters( 'atshift_upf_admin_field_types', $this->field_types );
 
 		add_action( 'admin_menu', array( $this, 'add_menu' ) );
-		add_action( 'load-settings_page_atshift-user-profile-fields', array( $this, 'register_screen_options' ) );
+		add_action( 'load-toplevel_page_atshift-user-profile-fields', array( $this, 'register_screen_options' ) );
 		add_action( 'admin_init', array( $this, 'redirect_legacy_page_url' ), 1 );
 		add_action( 'admin_init', array( $this, 'handle_posts' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
@@ -86,12 +89,31 @@ class Atshift_UPF_Admin {
 	 * @return void
 	 */
 	public function add_menu() {
-		add_options_page(
+		add_menu_page(
 			__( 'atshift User Profile Fields', 'atshift-user-profile-fields' ),
 			__( 'atshift User Profile Fields', 'atshift-user-profile-fields' ),
 			$this->get_capability(),
-			'atshift-user-profile-fields',
+			self::PAGE_SLUG,
+			array( $this, 'render_page' ),
+			'dashicons-id'
+		);
+
+		add_submenu_page(
+			self::PAGE_SLUG,
+			__( 'Field Management', 'atshift-user-profile-fields' ),
+			__( 'Field Management', 'atshift-user-profile-fields' ),
+			$this->get_capability(),
+			self::PAGE_SLUG,
 			array( $this, 'render_page' )
+		);
+
+		add_submenu_page(
+			self::PAGE_SLUG,
+			__( 'Display Settings', 'atshift-user-profile-fields' ),
+			__( 'Display Settings', 'atshift-user-profile-fields' ),
+			$this->get_capability(),
+			self::EXTRAS_PAGE_SLUG,
+			array( $this, 'render_extras_page' )
 		);
 	}
 
@@ -105,14 +127,14 @@ class Atshift_UPF_Admin {
 	}
 
 	/**
-	 * Redirect the previous Users submenu URL to the current Settings URL.
+	 * Redirect previous submenu URLs to the current top-level pages.
 	 *
 	 * @return void
 	 */
 	public function redirect_legacy_page_url() {
 		global $pagenow;
 
-		if ( 'users.php' !== $pagenow || empty( $_GET['page'] ) || 'atshift-user-profile-fields' !== sanitize_key( wp_unslash( $_GET['page'] ) ) ) {
+		if ( ! in_array( $pagenow, array( 'users.php', 'options-general.php' ), true ) || empty( $_GET['page'] ) || self::PAGE_SLUG !== sanitize_key( wp_unslash( $_GET['page'] ) ) ) {
 			return;
 		}
 
@@ -121,18 +143,23 @@ class Atshift_UPF_Admin {
 		}
 
 		$args = array(
-			'page' => 'atshift-user-profile-fields',
+			'page' => self::PAGE_SLUG,
 		);
 
 		if ( ! empty( $_GET['tab'] ) ) {
-			$args['tab'] = sanitize_key( wp_unslash( $_GET['tab'] ) );
+			$tab = sanitize_key( wp_unslash( $_GET['tab'] ) );
+			if ( 'extras' === $tab ) {
+				$args['page'] = self::EXTRAS_PAGE_SLUG;
+			} else {
+				$args['tab'] = $tab;
+			}
 		}
 
 		if ( ! empty( $_GET['edit'] ) ) {
 			$args['edit'] = sanitize_key( wp_unslash( $_GET['edit'] ) );
 		}
 
-		wp_safe_redirect( add_query_arg( $args, admin_url( 'options-general.php' ) ) );
+		wp_safe_redirect( add_query_arg( $args, admin_url( 'admin.php' ) ) );
 		exit;
 	}
 
@@ -143,7 +170,9 @@ class Atshift_UPF_Admin {
 	 * @return void
 	 */
 	public function enqueue_assets( $hook ) {
-		if ( 'settings_page_atshift-user-profile-fields' !== $hook ) {
+		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+
+		if ( ! in_array( $hook, array( 'toplevel_page_atshift-user-profile-fields', 'atshift-user-profile-fields_page_atshift-user-profile-fields-extras' ), true ) && ! in_array( $page, array( self::PAGE_SLUG, self::EXTRAS_PAGE_SLUG ), true ) ) {
 			return;
 		}
 
@@ -188,7 +217,7 @@ class Atshift_UPF_Admin {
 					'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
 					'screenOptionsNonce' => wp_create_nonce( 'atshift_upf_screen_options' ),
 					'toolsNonce'        => wp_create_nonce( 'atshift_upf_tools' ),
-					'pageUrl'           => admin_url( 'options-general.php?page=atshift-user-profile-fields' ),
+					'pageUrl'           => admin_url( 'admin.php?page=' . self::PAGE_SLUG ),
 					'fieldTypeButtonLabels' => $this->get_field_type_toggle_labels(),
 					'singleUseCoreFieldTypes' => $this->single_use_core_field_types(),
 					'strings'           => array(
@@ -327,11 +356,39 @@ class Atshift_UPF_Admin {
 		?>
 		<div class="wrap atshift-upf">
 			<div class="atshift-upf-page-head">
-				<h1><?php esc_html_e( 'Profile Field Settings', 'atshift-user-profile-fields' ); ?></h1>
+				<h1>
+					<?php esc_html_e( 'Field Management', 'atshift-user-profile-fields' ); ?>
+					<?php echo wp_kses_post( apply_filters( 'atshift_upf_admin_field_management_title_suffix', '' ) ); ?>
+				</h1>
 			</div>
 			<?php
 			$this->render_fields_tab();
 			?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render the standalone Extras page.
+	 *
+	 * @return void
+	 */
+	public function render_extras_page() {
+		?>
+		<div class="wrap atshift-upf">
+			<div class="atshift-upf-page-head">
+				<h1><?php esc_html_e( 'Display Settings', 'atshift-user-profile-fields' ); ?></h1>
+			</div>
+			<form method="post" class="atshift-upf-extras-page-form">
+				<?php wp_nonce_field( 'atshift_upf_save_display_options' ); ?>
+				<input type="hidden" name="atshift_upf_action" value="save_display_options">
+				<input type="hidden" name="atshift_upf_options_context" value="extras">
+				<input type="hidden" name="show_extras" value="1">
+				<?php $this->render_extras_panel( true ); ?>
+				<p class="submit">
+					<button type="submit" class="button button-primary button-large"><?php esc_html_e( 'Save Display Settings', 'atshift-user-profile-fields' ); ?></button>
+				</p>
+			</form>
 		</div>
 		<?php
 	}
@@ -353,22 +410,20 @@ class Atshift_UPF_Admin {
 	 * @return string
 	 */
 	public function render_screen_options_meta( $settings_html, $screen ) {
-		if ( 'settings_page_atshift-user-profile-fields' !== $screen->id ) {
+		if ( 'toplevel_page_atshift-user-profile-fields' !== $screen->id ) {
 			return $settings_html;
 		}
 
 		$settings      = Atshift_UPF_Plugin::get_settings();
 		$editor_layout = isset( $settings['editor_layout'] ) && 'one' === $settings['editor_layout'] ? 'one' : 'two';
-		$show_extras   = ! empty( $settings['show_extras'] );
 
 		ob_start();
 		?>
 		<div class="atshift-upf-display-options-panel">
 			<h3><?php esc_html_e( 'Screen elements', 'atshift-user-profile-fields' ); ?></h3>
-			<p><?php esc_html_e( 'Some screen elements can be shown or hidden by using the checkboxes. Expand or collapse the elements by clicking on their headings, and arrange them by dragging their headings or by clicking on the up and down arrows.', 'atshift-user-profile-fields' ); ?></p>
+			<p><?php esc_html_e( 'Choose how the field editor is arranged on this screen.', 'atshift-user-profile-fields' ); ?></p>
 			<div class="atshift-upf-display-options-row atshift-upf-display-options-elements">
 				<label><input type="checkbox" checked disabled> <?php esc_html_e( 'Fields', 'atshift-user-profile-fields' ); ?></label>
-				<label><input type="checkbox" name="show_extras" value="1" data-atshift-upf-screen-option="extras" <?php checked( $show_extras ); ?>> <?php esc_html_e( 'Extras', 'atshift-user-profile-fields' ); ?></label>
 			</div>
 			<div class="atshift-upf-display-options-row atshift-upf-display-options-layout">
 				<strong><?php esc_html_e( 'Layout', 'atshift-user-profile-fields' ); ?></strong>
@@ -435,7 +490,6 @@ class Atshift_UPF_Admin {
 							<?php $this->render_new_field_item(); ?>
 						</template>
 					</section>
-					<?php $this->render_extras_panel(); ?>
 				</form>
 			</div>
 			<aside class="atshift-upf-editor-side">
@@ -537,6 +591,21 @@ class Atshift_UPF_Admin {
 	 * @return void
 	 */
 	private function render_field_item( $field, $edit_field, $name_prefix, $field_tree = null ) {
+			/**
+			 * Allows add-ons to render a custom field row in the field editor.
+			 *
+			 * Return true after printing the full <li> row.
+			 *
+			 * @param bool                    $handled Whether the row has been rendered.
+			 * @param array<string, mixed>    $field Field definition.
+			 * @param array<string, mixed>|null $edit_field Field currently open.
+			 * @param string                  $name_prefix Input name prefix, such as fields[0].
+			 * @param array<string, mixed>|null $field_tree Prepared field tree.
+			 */
+			if ( apply_filters( 'atshift_upf_admin_render_field_item', false, $field, $edit_field, $name_prefix, $field_tree ) ) {
+				return;
+			}
+
 			$is_open = $edit_field && isset( $field['id'], $edit_field['id'] ) && $field['id'] === $edit_field['id'];
 			$type    = isset( $field['type'] ) ? $field['type'] : 'text';
 			$is_required = ! empty( $field['required'] ) || $this->is_system_required_field_type( $type );
@@ -1405,13 +1474,14 @@ class Atshift_UPF_Admin {
 	}
 
 	/**
-	 * Render extra profile settings below the field editor.
+	 * Render extra profile settings.
 	 *
+	 * @param bool $force_visible Whether to render the panel visible regardless of screen option state.
 	 * @return void
 	 */
-	private function render_extras_panel() {
+	private function render_extras_panel( $force_visible = false ) {
 		$settings     = Atshift_UPF_Plugin::get_settings();
-		$show_extras  = ! empty( $settings['show_extras'] );
+		$show_extras  = $force_visible || ! empty( $settings['show_extras'] );
 		$hidden       = (array) $settings['hidden_core_fields'];
 		$disabled     = (array) $settings['disabled_hidden_core_fields'];
 		$core_options = Atshift_UPF_Profile::get_core_field_options();
@@ -1420,7 +1490,7 @@ class Atshift_UPF_Admin {
 		?>
 		<section class="atshift-upf-panel atshift-upf-extras-panel <?php echo $show_extras ? '' : 'is-hidden'; ?>" <?php echo $show_extras ? '' : 'hidden'; ?>>
 			<div class="atshift-upf-panel-head">
-				<h2><?php esc_html_e( 'Extras', 'atshift-user-profile-fields' ); ?></h2>
+				<h2><?php esc_html_e( 'Display Settings', 'atshift-user-profile-fields' ); ?></h2>
 			</div>
 			<div class="atshift-upf-extras-form">
 				<p class="description"><?php esc_html_e( 'Hide WordPress and supported plugin profile items that are not needed for this site.', 'atshift-user-profile-fields' ); ?></p>
@@ -1490,7 +1560,7 @@ class Atshift_UPF_Admin {
 				</div>
 				<label class="atshift-upf-inline-check">
 					<input type="checkbox" name="apply_to_own_profile" value="1" <?php checked( ! empty( $settings['apply_to_own_profile'] ) ); ?>>
-					<?php esc_html_e( 'Apply these extras to my own profile screen too.', 'atshift-user-profile-fields' ); ?>
+					<?php esc_html_e( 'Apply these display settings to my own profile screen too.', 'atshift-user-profile-fields' ); ?>
 				</label>
 			</div>
 		</section>
@@ -1995,7 +2065,7 @@ class Atshift_UPF_Admin {
 		}
 
 		if ( 'screen' === $context ) {
-			$show_extras = ! empty( $_POST['show_extras'] );
+			$show_extras = isset( $_POST['show_extras'] ) ? ! empty( $_POST['show_extras'] ) : $show_extras;
 		} else {
 			$hidden       = isset( $_POST['hidden_core_fields'] ) ? (array) wp_unslash( $_POST['hidden_core_fields'] ) : array();
 			$hidden       = array_values( array_intersect( array_map( 'sanitize_key', $hidden ), $allowed ) );
@@ -2020,7 +2090,7 @@ class Atshift_UPF_Admin {
 			false
 		);
 
-		wp_safe_redirect( $this->admin_url( array( 'atshift_upf_updated' => '1' ) ) );
+		wp_safe_redirect( $this->admin_url( array( 'atshift_upf_updated' => '1' ), 'extras' === $context ? self::EXTRAS_PAGE_SLUG : self::PAGE_SLUG ) );
 		exit;
 	}
 
@@ -2032,17 +2102,25 @@ class Atshift_UPF_Admin {
 	private function save_extra_settings_from_fields_form( $fields = null ) {
 		$current       = Atshift_UPF_Plugin::get_settings();
 		$allowed       = array_keys( Atshift_UPF_Profile::get_core_field_options() );
-		$hidden        = isset( $_POST['hidden_core_fields'] ) ? (array) wp_unslash( $_POST['hidden_core_fields'] ) : array();
-		$hidden        = array_values( array_intersect( array_map( 'sanitize_key', $hidden ), $allowed ) );
-		$disabled      = $this->sanitize_disabled_hidden_core_fields(
-			isset( $_POST['disabled_hidden_core_fields'] ) ? (array) wp_unslash( $_POST['disabled_hidden_core_fields'] ) : array(),
-			$hidden
-		);
+		$hidden        = (array) $current['hidden_core_fields'];
+		$disabled      = (array) $current['disabled_hidden_core_fields'];
+		$apply_to_own  = ! empty( $current['apply_to_own_profile'] );
 		$editor_layout = isset( $current['editor_layout'] ) && 'one' === $current['editor_layout'] ? 'one' : 'two';
 		$show_extras   = ! empty( $current['show_extras'] );
 		$field_group_enabled = isset( $_POST['field_group_enabled'] ) ? '1' === sanitize_key( wp_unslash( $_POST['field_group_enabled'] ) ) : ! empty( $current['field_group_enabled'] );
 
+		if ( isset( $_POST['hidden_core_fields'] ) || isset( $_POST['disabled_hidden_core_fields'] ) || isset( $_POST['apply_to_own_profile'] ) ) {
+			$hidden       = isset( $_POST['hidden_core_fields'] ) ? (array) wp_unslash( $_POST['hidden_core_fields'] ) : array();
+			$hidden       = array_values( array_intersect( array_map( 'sanitize_key', $hidden ), $allowed ) );
+			$disabled     = $this->sanitize_disabled_hidden_core_fields(
+				isset( $_POST['disabled_hidden_core_fields'] ) ? (array) wp_unslash( $_POST['disabled_hidden_core_fields'] ) : array(),
+				$hidden
+			);
+			$apply_to_own = ! empty( $_POST['apply_to_own_profile'] );
+		}
+
 		if ( is_array( $fields ) ) {
+			$hidden = $this->add_active_managed_core_fields_to_hidden( $hidden, $fields, $field_group_enabled );
 			$hidden = $this->remove_inactive_managed_core_fields_from_hidden( $hidden, $fields, $field_group_enabled );
 			$disabled = $this->remove_managed_core_fields_from_disabled( $disabled, $fields, $field_group_enabled );
 		}
@@ -2052,13 +2130,38 @@ class Atshift_UPF_Admin {
 			array(
 				'hidden_core_fields'          => $hidden,
 				'disabled_hidden_core_fields' => $disabled,
-				'apply_to_own_profile'        => ! empty( $_POST['apply_to_own_profile'] ),
+				'apply_to_own_profile'        => $apply_to_own,
 				'editor_layout'               => $editor_layout,
 				'show_extras'                 => $show_extras,
 				'field_group_enabled'         => $field_group_enabled,
 			),
 			false
 		);
+	}
+
+	/**
+	 * Add hidden core flags for active standard fields managed in the field set.
+	 *
+	 * @param array<int, string>              $hidden Hidden core option keys.
+	 * @param array<int, array<string,mixed>> $fields Saved field definitions.
+	 * @param bool                            $field_group_enabled Whether the profile field group is enabled.
+	 * @return array<int, string>
+	 */
+	private function add_active_managed_core_fields_to_hidden( $hidden, $fields, $field_group_enabled ) {
+		if ( ! $field_group_enabled ) {
+			return $hidden;
+		}
+
+		$map = $this->get_core_extra_field_type_map();
+
+		foreach ( $fields as $field ) {
+			$type = isset( $field['type'] ) ? (string) $field['type'] : '';
+			if ( isset( $map[ $type ] ) ) {
+				$hidden[] = $map[ $type ];
+			}
+		}
+
+		return array_values( array_unique( array_map( 'sanitize_key', $hidden ) ) );
 	}
 
 	/**
@@ -2163,7 +2266,7 @@ class Atshift_UPF_Admin {
 
 		$current       = Atshift_UPF_Plugin::get_settings();
 		$editor_layout = isset( $_POST['editor_layout'] ) && 'one' === sanitize_key( wp_unslash( $_POST['editor_layout'] ) ) ? 'one' : 'two';
-		$show_extras   = ! empty( $_POST['show_extras'] );
+		$show_extras   = isset( $_POST['show_extras'] ) ? ! empty( $_POST['show_extras'] ) : ! empty( $current['show_extras'] );
 
 		$settings = array(
 			'hidden_core_fields'          => (array) $current['hidden_core_fields'],
@@ -2284,17 +2387,18 @@ class Atshift_UPF_Admin {
 	 * Build the plugin admin URL.
 	 *
 	 * @param array<string, string> $args Query args.
+	 * @param string                $page Page slug.
 	 * @return string
 	 */
-	private function admin_url( $args = array() ) {
+	private function admin_url( $args = array(), $page = self::PAGE_SLUG ) {
 		return add_query_arg(
 			array_merge(
 				array(
-					'page' => 'atshift-user-profile-fields',
+					'page' => $page,
 				),
 				$args
 			),
-			admin_url( 'options-general.php' )
+			admin_url( 'admin.php' )
 		);
 	}
 }

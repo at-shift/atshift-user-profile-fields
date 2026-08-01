@@ -354,8 +354,27 @@ msgstr ""
 msgid "Profile Field Settings"
 msgstr ""
 
+#: includes/class-atshift-upf-admin.php:103
+#: includes/class-atshift-upf-admin.php:357
+msgid "Field Management"
+msgstr ""
+
+#: includes/class-atshift-upf-admin.php:112
+#: includes/class-atshift-upf-admin.php:378
+#: includes/class-atshift-upf-admin.php:1476
+msgid "Display Settings"
+msgstr ""
+
+#: includes/class-atshift-upf-admin.php:387
+msgid "Save Display Settings"
+msgstr ""
+
 #: includes/class-atshift-upf-admin.php:330
 msgid "Screen elements"
+msgstr ""
+
+#: includes/class-atshift-upf-admin.php:416
+msgid "Choose how the field editor is arranged on this screen."
 msgstr ""
 
 #: includes/class-atshift-upf-admin.php:331
@@ -373,6 +392,10 @@ msgstr ""
 #: includes/class-atshift-upf-admin.php:334
 #: includes/class-atshift-upf-admin.php:1337
 msgid "Extras"
+msgstr ""
+
+#: includes/class-atshift-upf-admin.php:384
+msgid "Save Extras"
 msgstr ""
 
 #: includes/class-atshift-upf-admin.php:337
@@ -694,7 +717,7 @@ msgid ""
 msgstr ""
 
 #: includes/class-atshift-upf-admin.php:1373
-msgid "Apply these extras to my own profile screen too."
+msgid "Apply these display settings to my own profile screen too."
 msgstr ""
 
 #: includes/class-atshift-upf-admin.php:1388

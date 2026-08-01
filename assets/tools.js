@@ -88,7 +88,9 @@
 	});
 
 	var initialTab = window.location.hash.replace('#', '');
-	if (['export', 'import', 'delete'].indexOf(initialTab) !== -1) {
+	if (tabs.some(function (tab) {
+		return tab.getAttribute('data-atshift-upf-tools-tab') === initialTab;
+	})) {
 		activateTab(initialTab, false);
 	}
 

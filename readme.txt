@@ -4,7 +4,7 @@ Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 0.2.0
+Stable tag: 0.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,12 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 3. Open Settings > atshift User Profile Fields.
 
 == Changelog ==
+
+= 0.9 =
+* Add the base integration layer used by optional add-ons.
+* Organize Fields and Display Settings as plugin submenus.
+* Improve required labels, array-value validation, profile layouts, tooltips, and cache-safe asset loading.
+* Allow add-ons to extend field types, profile rendering, field settings, tools tabs, and field ordering.
 
 = 0.2.0 =
 * Prevent saved read-only usernames from being treated as empty during required-field validation.

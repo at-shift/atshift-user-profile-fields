@@ -73,7 +73,7 @@
 }
 
 .atshift-upf-profile-fields.form-table th {
-	color: var(--atshift-upf-chrome);
+	color: #1d2327;
 	font-weight: 700;
 	padding: 24px 28px;
 	vertical-align: top;
@@ -91,8 +91,29 @@
 	align-items: center;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 4px 0;
+	gap: 4px 10px;
 	line-height: 1.45;
+}
+
+.atshift-upf-profile-label-main {
+	align-items: center;
+	display: inline-flex;
+	gap: 4px;
+	max-width: 100%;
+	min-width: 0;
+}
+
+.atshift-upf-profile-label-title {
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+.atshift-upf-profile-label-note {
+	color: #646970;
+	flex-basis: 100%;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.4;
 }
 
 .atshift-upf-choice-list {
@@ -151,8 +172,7 @@
 	font-size: 11px;
 	font-weight: 700;
 	line-height: 1.5;
-	margin-left: 0;
-	margin-right: 10px;
+	margin: 0;
 	padding: 1px 6px;
 	vertical-align: 1px;
 }
@@ -438,7 +458,7 @@
 }
 
 .atshift-upf-profile-submit-section-row .atshift-upf-feature-group-item > label {
-	color: var(--atshift-upf-chrome);
+	color: #1d2327;
 	font-size: 16px;
 }
 
@@ -699,7 +719,7 @@
 
 .atshift-upf-profile-fields.form-table > tbody > tr.atshift-upf-field-invalid > th:first-child {
 	box-shadow: inset 4px 0 0 #d63638;
-	color: #8a2424;
+	color: #1d2327;
 }
 
 .atshift-upf-profile-field-block.atshift-upf-field-invalid,
@@ -714,7 +734,16 @@
 
 .atshift-upf-profile-field-block.atshift-upf-field-invalid > label,
 .atshift-upf-feature-group-item.atshift-upf-field-invalid > label {
-	color: #8a2424;
+	color: #1d2327;
+}
+
+.atshift-upf-profile-fields.form-table > tbody > tr.atshift-upf-field-invalid .atshift-upf-profile-label-main,
+.atshift-upf-profile-fields.form-table > tbody > tr.atshift-upf-field-invalid .atshift-upf-profile-label-title,
+.atshift-upf-profile-field-block.atshift-upf-field-invalid .atshift-upf-profile-label-main,
+.atshift-upf-profile-field-block.atshift-upf-field-invalid .atshift-upf-profile-label-title,
+.atshift-upf-feature-group-item.atshift-upf-field-invalid .atshift-upf-profile-label-main,
+.atshift-upf-feature-group-item.atshift-upf-field-invalid .atshift-upf-profile-label-title {
+	color: #1d2327;
 }
 
 .atshift-upf-field-invalid input:not([type="button"]):not([type="submit"]):not([type="reset"]),
