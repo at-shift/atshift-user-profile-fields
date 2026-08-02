@@ -186,7 +186,7 @@
     {
       "id": "field_role",
       "key": "role",
-      "label": "ユーザー権限グループ",
+      "label": "権限グループ",
       "type": "core_role",
       "parent_id": "section_permissions"
     },

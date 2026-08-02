@@ -356,7 +356,7 @@ class Atshift_UPF_Profile {
 			'Application Passwords'         => 'アプリケーションパスワード',
 			'Application passwords'         => 'アプリケーションパスワード',
 			'Permissions and Notifications' => '権限・通知',
-			'Role'                          => 'ユーザー権限グループ',
+			'Role'                          => '権限グループ',
 			'User Notification'             => 'メール通知',
 			'Add User / Save'               => 'ユーザー追加・保存',
 		);
