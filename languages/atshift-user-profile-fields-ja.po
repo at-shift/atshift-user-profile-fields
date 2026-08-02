@@ -171,7 +171,7 @@ msgstr "メール通知"
 #: includes/class-atshift-upf-admin.php:61
 #: includes/class-atshift-upf-profile.php:102
 msgid "Role"
-msgstr "ユーザー権限グループ"
+msgstr "権限グループ"
 
 #: includes/class-atshift-upf-admin.php:62
 #: includes/class-atshift-upf-profile.php:114
@@ -620,15 +620,15 @@ msgstr "形式チェック"
 
 #: includes/class-atshift-upf-admin.php:745
 msgid "Allowed User Role Groups"
-msgstr "表示を許可するユーザー権限グループ"
+msgstr "表示を許可する権限グループ"
 
 #: includes/class-atshift-upf-admin.php:746
 msgid "Leave blank to allow every user role."
-msgstr "空欄の場合は、すべてのユーザー権限グループに表示します。"
+msgstr "空欄の場合は、すべての権限グループに表示します。"
 
 #: includes/class-atshift-upf-admin.php:750
 msgid "Leave blank to allow any role that can edit this post"
-msgstr "空欄の場合は、すべてのユーザー権限グループに表示します"
+msgstr "空欄の場合は、すべての権限グループに表示します"
 
 #: includes/class-atshift-upf-admin.php:761
 msgid "Close"
@@ -863,7 +863,7 @@ msgstr "新規ユーザーへの通知メール設定です。"
 
 #: includes/class-atshift-upf-profile.php:103
 msgid "WordPress user role selector."
-msgstr "WordPress ユーザー権限グループの選択です。"
+msgstr "WordPress の権限グループを選択します。"
 
 #: includes/class-atshift-upf-profile.php:107
 msgid "WordPress Gravatar profile picture row."
