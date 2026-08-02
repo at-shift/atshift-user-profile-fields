@@ -309,10 +309,15 @@
 			node.nodeValue = value.replace(trimmed, replacement);
 		}
 
-		function replaceElementText(element, map) {
+		function replaceDescendantText(element, map) {
 			Array.prototype.slice.call(element.childNodes).forEach(function (node) {
 				if (node.nodeType === window.Node.TEXT_NODE) {
 					replaceMappedTextNode(node, map);
+					return;
+				}
+
+				if (node.nodeType === window.Node.ELEMENT_NODE && !node.matches('script, style, input, textarea, select, option')) {
+					replaceDescendantText(node, map);
 				}
 			});
 		}
@@ -322,15 +327,53 @@
 			var translations = previewTranslations[language] || {};
 			var labelMap = translations.label || {};
 			var descriptionMap = translations.description || {};
+			var nativeMap = translations.native || {};
 			var requiredText = translations.required || strings.required || 'Required';
 
-			document.querySelectorAll('.atshift-upf-profile-card label, .atshift-upf-profile-card h3, .atshift-upf-profile-accordion-title').forEach(function (element) {
-				replaceElementText(element, labelMap);
+			document.querySelectorAll('.atshift-upf-profile-card label, .atshift-upf-profile-card th, .atshift-upf-profile-card h3, .atshift-upf-profile-accordion-title').forEach(function (element) {
+				replaceDescendantText(element, labelMap);
 			});
 
 			document.querySelectorAll('.atshift-upf-profile-card p.description').forEach(function (element) {
 				if (descriptionMap[element.textContent.trim()]) {
 					element.textContent = descriptionMap[element.textContent.trim()];
+				}
+			});
+
+			document.querySelectorAll('[data-atshift-upf-core-replacement]').forEach(function (element) {
+				replaceDescendantText(element, nativeMap);
+			});
+
+			document.querySelectorAll('[data-atshift-upf-core-replacement] input[type="button"], [data-atshift-upf-core-replacement] input[type="submit"]').forEach(function (element) {
+				var value = element.value.trim();
+				if (nativeMap[value]) {
+					element.value = nativeMap[value];
+				}
+			});
+
+			document.querySelectorAll('.atshift-upf-profile-card select option').forEach(function (option) {
+				var text = option.textContent.trim();
+				if (nativeMap[text]) {
+					option.textContent = nativeMap[text];
+				}
+			});
+
+			document.querySelectorAll('.atshift-upf-profile-label-note').forEach(function (element) {
+				replaceDescendantText(element, nativeMap);
+			});
+
+			document.querySelectorAll('[data-atshift-upf-core-replacement="profile_picture"] p').forEach(function (element) {
+				Array.prototype.slice.call(element.childNodes).forEach(function (node) {
+					if (node.nodeType === window.Node.TEXT_NODE && (node.nodeValue.trim() === '.' || node.nodeValue.trim() === '。')) {
+						node.nodeValue = language === 'ja' ? '。' : '.';
+					}
+				});
+			});
+
+			document.querySelectorAll('[data-atshift-upf-validation-label]').forEach(function (element) {
+				var validationLabel = element.getAttribute('data-atshift-upf-validation-label') || '';
+				if (labelMap[validationLabel]) {
+					element.setAttribute('data-atshift-upf-validation-label', labelMap[validationLabel]);
 				}
 			});
 

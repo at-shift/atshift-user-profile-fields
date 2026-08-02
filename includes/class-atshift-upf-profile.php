@@ -285,11 +285,13 @@ class Atshift_UPF_Profile {
 				'required'     => 'Required',
 				'label'        => array(),
 				'description'  => array(),
+				'native'       => array(),
 			),
 			'ja' => array(
 				'required'     => '必須',
 				'label'        => array(),
 				'description'  => array(),
+				'native'       => array(),
 			),
 		);
 
@@ -305,6 +307,13 @@ class Atshift_UPF_Profile {
 			$translations['en']['description'][ $japanese ] = $english;
 			$translations['ja']['description'][ $english ]  = $japanese;
 			$translations['ja']['description'][ $japanese ] = $japanese;
+		}
+
+		foreach ( $this->get_language_preview_native_text_pairs() as $english => $japanese ) {
+			$translations['en']['native'][ $english ]  = $english;
+			$translations['en']['native'][ $japanese ] = $english;
+			$translations['ja']['native'][ $english ]  = $japanese;
+			$translations['ja']['native'][ $japanese ] = $japanese;
 		}
 
 		return array(
@@ -376,6 +385,49 @@ class Atshift_UPF_Profile {
 			'Use a hard-to-guess password of at least 8 characters that combines letters, numbers, and symbols.' => '推測されにくい、英字・数字・記号を組み合わせた8文字以上のパスワードを使用してください。',
 			'Use a password that is difficult to guess, combines letters, numbers, and symbols, and is at least 8 characters long.' => '推測されにくい、英字・数字・記号を組み合わせた8文字以上のパスワードを使用してください。',
 			'Used to add users and save profiles.' => 'ユーザーの追加とプロフィールの保存に使用します。',
+		);
+	}
+
+	/**
+	 * Return English/Japanese pairs for managed WordPress sections.
+	 *
+	 * @return array<string, string>
+	 */
+	private function get_language_preview_native_text_pairs() {
+		return array(
+			'Sessions' => 'セッション',
+			'Log Out Everywhere Else' => '他のすべての場所でログアウト',
+			'You are only logged in at this location.' => 'この場所でのみログインしています。',
+			'Did you lose your phone or leave your account logged in at a public computer? You can log out everywhere else, and stay logged in here.' => '携帯電話を紛失したり、公共のコンピューターでログインしたままにしたりした場合は、この場所でのログインを維持したまま、他のすべての場所からログアウトできます。',
+			'Log Out Everywhere' => 'すべての場所でログアウト',
+			'There are no active sessions for this user.' => 'このユーザーに有効なセッションはありません。',
+			'Session controls are managed by WordPress after the user is saved.' => 'セッション操作は、ユーザー保存後に WordPress で管理されます。',
+			'You can change your profile picture on Gravatar' => 'プロフィール写真は Gravatar で変更できます',
+			'Generate Password' => 'パスワードを生成',
+			'Set New Password' => '新しいパスワードを設定',
+			'Show' => '表示',
+			'Hide' => '非表示',
+			'Update User' => 'ユーザーを更新',
+			'Add New User' => '新規ユーザーを追加',
+			'Please select...' => '選択してください...',
+			'Multiple selections allowed' => '複数選択できます',
+			'Application Passwords' => 'アプリケーションパスワード',
+			'Application passwords allow authentication via non-interactive systems, such as XML-RPC or the REST API, without providing your actual password. Application passwords can be easily revoked. They cannot be used for traditional logins to your website.' => 'アプリケーションパスワードを使用すると、実際のパスワードを入力しなくても XML-RPC や REST API などの非対話型システムを介した認証が可能になります。アプリケーションパスワードは簡単に取り消すことができます。サイトへの従来のログインには使用できません。',
+			'New Application Password Name' => '新しいアプリケーションパスワード名',
+			'Required to create an Application Password, but not to update the user.' => 'アプリケーションパスワードの作成に必要ですが、ユーザーの更新には不要です。',
+			'Add Application Password' => 'アプリケーションパスワードを追加',
+			'Your website appears to use Basic Authentication, which is not currently compatible with Application Passwords.' => 'サイトでは Basic 認証が使われているようですが、現在、アプリケーションパスワードとは互換性がありません。',
+			'The application password feature requires HTTPS, which is not enabled on this site.' => 'アプリケーションパスワードには HTTPS が必要ですが、このサイトでは有効ではありません。',
+			'If this is a development website, you can' => 'これが開発用サイトであれば、',
+			'set the environment type accordingly' => '適宜、環境タイプを設定して',
+			'to enable application passwords.' => '、アプリケーションパスワードを有効化できます。',
+			'Name' => '名前',
+			'Created' => '作成日',
+			'Last Used' => '最終使用日',
+			'Last IP' => '最後の IP',
+			'Revoke' => '取消',
+			'Revoke all application passwords' => 'すべてのアプリケーションパスワードを取り消す',
+			'Application password controls are managed by WordPress after the user is saved.' => 'アプリケーションパスワードは、ユーザー保存後に WordPress で管理されます。',
 		);
 	}
 
