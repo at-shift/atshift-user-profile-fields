@@ -62,7 +62,7 @@ class Atshift_UPF_Admin {
 			'core_sessions'     => __( 'Sessions', 'atshift-user-profile-fields' ),
 			'core_application_passwords' => __( 'Application passwords', 'atshift-user-profile-fields' ),
 			'core_notification' => __( 'Email Notification', 'atshift-user-profile-fields' ),
-			'core_role'         => __( 'Role', 'atshift-user-profile-fields' ),
+			'core_role'         => __( 'Role' ),
 			'core_submit_button' => __( 'Add / Save User button', 'atshift-user-profile-fields' ),
 		);
 		/**
@@ -1006,6 +1006,9 @@ class Atshift_UPF_Admin {
 		$groups = apply_filters( 'atshift_upf_admin_field_type_groups', $groups );
 		?>
 		<select name="<?php echo esc_attr( $name ); ?>" class="atshift-upf-field-type-select">
+			<?php if ( ! isset( $this->field_types[ $current_type ] ) ) : ?>
+				<option value="<?php echo esc_attr( $current_type ); ?>" selected><?php echo esc_html( $current_type ); ?></option>
+			<?php endif; ?>
 			<?php foreach ( $groups as $group_label => $types ) : ?>
 				<optgroup label="<?php echo esc_attr( $group_label ); ?>">
 					<?php foreach ( $types as $type ) : ?>
@@ -1719,6 +1722,14 @@ class Atshift_UPF_Admin {
 		$type_by_id = array();
 		$seen_keys  = array();
 		$used_ids   = array();
+		$stored_by_id = array();
+
+		foreach ( Atshift_UPF_Plugin::get_fields() as $stored_field ) {
+			$stored_id = isset( $stored_field['id'] ) ? sanitize_key( $stored_field['id'] ) : '';
+			if ( '' !== $stored_id ) {
+				$stored_by_id[ $stored_id ] = $stored_field;
+			}
+		}
 
 		foreach ( $raw_fields as $index => $raw_field ) {
 			if ( ! is_array( $raw_field ) ) {
@@ -1729,8 +1740,9 @@ class Atshift_UPF_Admin {
 			$client_id          = isset( $raw_field['client_id'] ) ? sanitize_key( $raw_field['client_id'] ) : '';
 			$field_id           = $submitted_field_id;
 			$type               = isset( $raw_field['type'] ) ? sanitize_key( $raw_field['type'] ) : 'text';
+			$stored_type        = isset( $stored_by_id[ $submitted_field_id ]['type'] ) ? sanitize_key( $stored_by_id[ $submitted_field_id ]['type'] ) : '';
 
-			if ( ! isset( $this->field_types[ $type ] ) ) {
+			if ( ! isset( $this->field_types[ $type ] ) && $stored_type !== $type ) {
 				$type = 'text';
 			}
 
@@ -1831,6 +1843,11 @@ class Atshift_UPF_Admin {
 				'initial_enabled' => Atshift_UPF_Plugin::supports_initial_state( $type ) && ! empty( $raw_field['initial_enabled'] ),
 				'sort_order'  => $prepared_field['position'] * 10,
 			);
+
+			if ( isset( $stored_by_id[ $field_id ] ) ) {
+				$extension_data = array_diff_key( $stored_by_id[ $field_id ], array_fill_keys( array_keys( $field ), true ) );
+				$field          = array_merge( $extension_data, $field );
+			}
 			/**
 			 * Filters one field definition before it is saved from the editor.
 			 *

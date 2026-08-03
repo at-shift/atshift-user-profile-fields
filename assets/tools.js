@@ -57,6 +57,13 @@
 		body.append('nonce', settings.nonce || '');
 
 		Object.keys(data || {}).forEach(function (key) {
+			if (Array.isArray(data[key])) {
+				data[key].forEach(function (value) {
+					body.append(key + '[]', value);
+				});
+				return;
+			}
+
 			body.append(key, data[key]);
 		});
 
@@ -210,6 +217,12 @@
 
 	deleteButton.addEventListener('click', function () {
 		var deleteValues = root.querySelector('[data-atshift-upf-tools-delete-values]');
+		var addonOptions = Array.prototype.slice.call(root.querySelectorAll('[data-atshift-upf-tools-delete-addon]'));
+		var selectedAddonData = addonOptions.filter(function (option) {
+			return option.checked;
+		}).map(function (option) {
+			return option.value;
+		});
 
 		if (!deleteConfirm.checked || !window.confirm(settings.deleteConfirm)) {
 			return;
@@ -220,11 +233,15 @@
 
 		request('delete', {
 			delete_confirm: deleteConfirm.checked ? '1' : '',
-			delete_values: deleteValues.checked ? '1' : ''
+			delete_values: deleteValues.checked ? '1' : '',
+			delete_addon_data: selectedAddonData
 		}).then(function (data) {
 			showMessage('delete', data.message || '', false);
 			deleteConfirm.checked = false;
 			deleteValues.checked = false;
+			addonOptions.forEach(function (option) {
+				option.checked = false;
+			});
 		}).catch(function (error) {
 			showMessage('delete', error.message, true);
 			deleteButton.disabled = false;

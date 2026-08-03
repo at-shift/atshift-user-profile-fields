@@ -4,7 +4,7 @@ Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 0.9.2
+Stable tag: 0.9.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,13 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 3. Open Settings > atshift User Profile Fields.
 
 == Changelog ==
+
+= 0.9.3 =
+* Integrate the planned 1.0 compatibility updates into the public beta.
+* Restrict the Role field to roles the current user is allowed to assign, including compatible custom roles.
+* Preserve registered add-on field types and settings when saving the field editor.
+* Hide add-on field types from profile screens while their registering add-on is inactive.
+* Add live language previews, WordPress role terminology, plugin details links, and add-on cleanup support.
 
 = 0.9.2 =
 * Update live language previews for managed profile labels, controls, notes, and WordPress account sections.

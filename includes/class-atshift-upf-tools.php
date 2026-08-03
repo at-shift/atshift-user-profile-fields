@@ -197,6 +197,15 @@ class Atshift_UPF_Tools {
 							<small><?php esc_html_e( 'Deletes user metadata created by this plugin, including values left by fields that were removed earlier.', 'atshift-user-profile-fields' ); ?></small>
 						</span>
 					</label>
+					<?php
+					/**
+					 * Fires after the base deletion options are rendered.
+					 *
+					 * Add-ons can render additional checkboxes with the
+					 * data-atshift-upf-tools-delete-addon attribute.
+					 */
+					do_action( 'atshift_upf_tools_delete_options' );
+					?>
 					<label class="atshift-upf-tools-check atshift-upf-tools-confirm">
 						<input type="checkbox" value="1" data-atshift-upf-tools-delete-confirm>
 						<span><?php esc_html_e( 'I understand that deleted data cannot be restored.', 'atshift-user-profile-fields' ); ?></span>
@@ -445,8 +454,18 @@ class Atshift_UPF_Tools {
 			wp_send_json_error( array( 'message' => __( 'Confirm that deleted data cannot be restored before continuing.', 'atshift-user-profile-fields' ) ), 400 );
 		}
 
-		$delete_values = ! empty( $_POST['delete_values'] );
-		$meta_keys     = $delete_values ? $this->get_plugin_user_meta_keys() : array();
+		$delete_values     = ! empty( $_POST['delete_values'] );
+		$raw_addon_data    = isset( $_POST['delete_addon_data'] ) ? (array) wp_unslash( $_POST['delete_addon_data'] ) : array();
+		$delete_addon_data = array_values( array_unique( array_filter( array_map( 'sanitize_key', $raw_addon_data ) ) ) );
+		$meta_keys         = $delete_values ? $this->get_plugin_user_meta_keys() : array();
+		/**
+		 * Filters plugin-owned user metadata keys before destructive cleanup.
+		 *
+		 * @param array<int, string> $meta_keys         Metadata keys selected by the base plugin.
+		 * @param bool               $delete_values     Whether custom profile values were selected.
+		 * @param array<int, string> $delete_addon_data Add-on data groups selected for deletion.
+		 */
+		$meta_keys = (array) apply_filters( 'atshift_upf_tools_delete_user_meta_keys', $meta_keys, $delete_values, $delete_addon_data );
 
 		delete_option( 'atshift_upf_fields' );
 		delete_option( 'atshift_upf_settings' );
@@ -458,13 +477,23 @@ class Atshift_UPF_Tools {
 		/**
 		 * Fires after the base plugin deletes its settings and, optionally, values.
 		 *
-		 * @param bool $delete_values Whether plugin-owned user meta was deleted.
+		 * @param bool              $delete_values     Whether plugin-owned user meta was deleted.
+		 * @param array<int, string> $delete_addon_data Add-on data groups selected for deletion.
 		 */
-		do_action( 'atshift_upf_deleted_plugin_data', $delete_values );
+		do_action( 'atshift_upf_deleted_plugin_data', $delete_values, $delete_addon_data );
 
 		$message = $delete_values
 			? __( 'Plugin settings and custom profile values were deleted. WordPress standard profile data was preserved.', 'atshift-user-profile-fields' )
 			: __( 'Plugin settings were deleted. Existing custom profile values were preserved.', 'atshift-user-profile-fields' );
+
+		/**
+		 * Filters the deletion result shown on the Tools screen.
+		 *
+		 * @param string             $message           Base deletion result.
+		 * @param bool               $delete_values     Whether plugin-owned user meta was deleted.
+		 * @param array<int, string> $delete_addon_data Add-on data groups selected for deletion.
+		 */
+		$message = apply_filters( 'atshift_upf_tools_delete_success_message', $message, $delete_values, $delete_addon_data );
 
 		wp_send_json_success( array( 'message' => $message ) );
 	}

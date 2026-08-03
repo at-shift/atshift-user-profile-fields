@@ -18,6 +18,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+#: atshift-user-profile-fields.php
+msgid "Beautiful and practical WordPress user profiles with custom fields and flexible control over default profile items."
+msgstr ""
+
+#: includes/class-atshift-upf-plugin.php
+msgid "View details"
+msgstr ""
+
+#: includes/class-atshift-upf-plugin.php
+msgid "Usage guide"
+msgstr ""
+
+msgid "Upgrade to Pro"
+msgstr ""
+
 #: includes/class-atshift-upf-admin.php:28
 msgid "Text"
 msgstr ""
