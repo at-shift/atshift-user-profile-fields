@@ -110,7 +110,7 @@ class Atshift_UPF_Profile {
 				'off_label'   => __( 'Do not send an account email to the new user', 'atshift-user-profile-fields' ),
 			),
 			'role'                  => array(
-				'label'       => __( 'Role', 'atshift-user-profile-fields' ),
+				'label'       => __( 'Role' ),
 				'description' => __( 'WordPress user role selector.', 'atshift-user-profile-fields' ),
 			),
 			'profile_picture'       => array(
@@ -1565,7 +1565,15 @@ class Atshift_UPF_Profile {
 			}
 
 			if ( 'core_role' === $type ) {
-				$roles = wp_roles()->roles;
+				$roles = $this->get_assignable_roles();
+				if ( empty( $roles ) ) {
+					$default_role = sanitize_key( get_option( 'default_role', 'subscriber' ) );
+					$all_roles    = wp_roles()->roles;
+					$role_label   = isset( $all_roles[ $default_role ]['name'] ) ? translate_user_role( $all_roles[ $default_role ]['name'] ) : $default_role;
+					echo '<span class="atshift-upf-readonly-value">' . esc_html( $role_label ) . '</span>';
+					return;
+				}
+
 				echo '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '">';
 				foreach ( $roles as $role_key => $role ) {
 					echo '<option value="' . esc_attr( $role_key ) . '" ' . selected( $value, $role_key, false ) . '>' . esc_html( translate_user_role( $role['name'] ) ) . '</option>';
@@ -1880,8 +1888,10 @@ class Atshift_UPF_Profile {
 		}
 
 		if ( 'core_role' === $type ) {
-			$role = sanitize_key( $value );
-			return isset( wp_roles()->roles[ $role ] ) ? $role : get_option( 'default_role', 'subscriber' );
+			$role             = sanitize_key( $value );
+			$assignable_roles = $this->get_assignable_roles();
+
+			return isset( $assignable_roles[ $role ] ) ? $role : '';
 		}
 
 		if ( in_array( $type, array( 'core_profile_picture', 'core_sessions', 'core_application_passwords', 'core_submit_button' ), true ) ) {
@@ -2303,7 +2313,8 @@ class Atshift_UPF_Profile {
 					}
 					break;
 				case 'core_role':
-					if ( current_user_can( 'promote_user', $updates['ID'] ) ) {
+					$assignable_roles = $this->get_assignable_roles();
+					if ( $this->current_user_can_assign_roles( $updates['ID'] ) && isset( $assignable_roles[ $value ] ) ) {
 						$updates['role'] = $value;
 					}
 					break;
@@ -3155,6 +3166,96 @@ class Atshift_UPF_Profile {
 	}
 
 	/**
+	 * Return roles the current user is allowed to assign.
+	 *
+	 * WordPress and role-management plugins restrict delegated user managers
+	 * through the editable_roles filter.
+	 *
+	 * @return array<string, array<string, mixed>>
+	 */
+	private function get_assignable_roles() {
+		$roles = function_exists( 'get_editable_roles' )
+			? get_editable_roles()
+			: apply_filters( 'editable_roles', wp_roles()->roles );
+
+		if ( ! is_array( $roles ) ) {
+			return array();
+		}
+
+		return $this->restrict_roles_to_current_user_capabilities( $roles );
+	}
+
+	/**
+	 * Limit delegated user managers to roles no more capable than themselves.
+	 *
+	 * This supports custom roles without inventing a role-name hierarchy. An
+	 * actual administrator or super administrator still uses WordPress's full
+	 * editable_roles result.
+	 *
+	 * @param array<string, array<string, mixed>> $roles Editable roles.
+	 * @return array<string, array<string, mixed>>
+	 */
+	private function restrict_roles_to_current_user_capabilities( $roles ) {
+		$current_user = wp_get_current_user();
+
+		if ( is_super_admin() || in_array( 'administrator', (array) $current_user->roles, true ) ) {
+			return $roles;
+		}
+
+		foreach ( $roles as $role_key => $role ) {
+			$role_capabilities = isset( $role['capabilities'] ) && is_array( $role['capabilities'] ) ? $role['capabilities'] : array();
+
+			foreach ( $role_capabilities as $capability => $granted ) {
+				if ( preg_match( '/^level_[0-9]+$/', (string) $capability ) ) {
+					continue;
+				}
+
+				if ( $granted && empty( $current_user->allcaps[ $capability ] ) ) {
+					unset( $roles[ $role_key ] );
+					break;
+				}
+			}
+		}
+
+		return $roles;
+	}
+
+	/**
+	 * Check whether the current user may assign a role to a user.
+	 *
+	 * @param int $user_id User being edited, or zero before creation.
+	 * @return bool
+	 */
+	private function current_user_can_assign_roles( $user_id = 0 ) {
+		if ( ! current_user_can( 'promote_users' ) ) {
+			return false;
+		}
+
+		return ! $user_id || current_user_can( 'promote_user', $user_id );
+	}
+
+	/**
+	 * Return the user ID targeted by the current profile request.
+	 *
+	 * @return int
+	 */
+	private function get_requested_profile_user_id() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only profile screen selection.
+		if ( isset( $_GET['user_id'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only profile screen selection.
+			return absint( wp_unslash( $_GET['user_id'] ) );
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Read-only target lookup; the profile form nonce is verified by WordPress.
+		if ( isset( $_POST['user_id'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Read-only target lookup; the profile form nonce is verified by WordPress.
+			return absint( wp_unslash( $_POST['user_id'] ) );
+		}
+
+		return 0;
+	}
+
+	/**
 	 * Check that the WordPress API needed by a core replacement is available.
 	 *
 	 * The filter lets site code disable one replacement without disabling custom
@@ -3180,7 +3281,9 @@ class Atshift_UPF_Profile {
 				$supported = function_exists( 'get_avatar' ) && (bool) get_option( 'show_avatars' );
 				break;
 			case 'core_role':
-				$supported = function_exists( 'wp_roles' ) && ( ! isset( $GLOBALS['pagenow'] ) || 'profile.php' !== $GLOBALS['pagenow'] );
+				$supported = function_exists( 'wp_roles' )
+					&& ( ! isset( $GLOBALS['pagenow'] ) || 'profile.php' !== $GLOBALS['pagenow'] )
+					&& $this->current_user_can_assign_roles( $this->get_requested_profile_user_id() );
 				break;
 			case 'core_sessions':
 				$supported = 'edit' === $screen && class_exists( 'WP_Session_Tokens' );

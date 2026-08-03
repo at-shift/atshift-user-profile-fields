@@ -62,7 +62,7 @@ class Atshift_UPF_Admin {
 			'core_sessions'     => __( 'Sessions', 'atshift-user-profile-fields' ),
 			'core_application_passwords' => __( 'Application passwords', 'atshift-user-profile-fields' ),
 			'core_notification' => __( 'Email Notification', 'atshift-user-profile-fields' ),
-			'core_role'         => __( 'Role', 'atshift-user-profile-fields' ),
+			'core_role'         => __( 'Role' ),
 			'core_submit_button' => __( 'Add / Save User button', 'atshift-user-profile-fields' ),
 		);
 		/**
