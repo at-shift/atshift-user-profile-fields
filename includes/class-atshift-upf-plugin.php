@@ -39,6 +39,53 @@ final class Atshift_UPF_Plugin {
 	private function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'announce_loaded' ), 20 );
 		add_action( 'init', array( $this, 'boot' ) );
+		add_filter( 'plugin_row_meta', array( $this, 'filter_plugin_row_meta' ), 10, 4 );
+	}
+
+	/**
+	 * Replace the generic plugin-site link and add the official usage guide.
+	 *
+	 * @param array<int, string>   $links       Existing plugin metadata links.
+	 * @param string               $plugin_file Plugin basename.
+	 * @param array<string, mixed> $plugin_data Parsed plugin headers.
+	 * @param string               $status      Plugin status.
+	 * @return array<int, string>
+	 */
+	public function filter_plugin_row_meta( $links, $plugin_file, $plugin_data, $status ) {
+		unset( $plugin_data, $status );
+
+		if ( plugin_basename( ATSHIFT_UPF_FILE ) !== $plugin_file ) {
+			return $links;
+		}
+
+		$details_url  = 'https://github.com/at-shift/atshift-user-profile-fields';
+		$guide_url    = 0 === strpos( determine_locale(), 'ja' ) ? 'https://upf.at-shift.net/guide/' : 'https://upf.at-shift.net/en/guide/';
+		$details_link = sprintf(
+			'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+			esc_url( $details_url ),
+			esc_html__( 'View details', 'atshift-user-profile-fields' )
+		);
+		$replaced     = false;
+
+		foreach ( $links as $index => $link ) {
+			if ( false !== strpos( $link, esc_url( $details_url ) ) ) {
+				$links[ $index ] = $details_link;
+				$replaced        = true;
+				break;
+			}
+		}
+
+		if ( ! $replaced ) {
+			$links[] = $details_link;
+		}
+
+		$links[] = sprintf(
+			'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+			esc_url( $guide_url ),
+			esc_html__( 'Usage guide', 'atshift-user-profile-fields' )
+		);
+
+		return $links;
 	}
 
 	/**

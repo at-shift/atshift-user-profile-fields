@@ -2,7 +2,7 @@
 /**
  * Plugin Name: atshift User Profile Fields
  * Plugin URI: https://github.com/at-shift/atshift-user-profile-fields
- * Description: Add custom user profile fields and hide unnecessary default WordPress profile fields.
+ * Description: Beautiful and practical WordPress user profiles with custom fields and flexible control over default profile items.
  * Version: 1.0
  * Author: @shift
  * Author URI: https://github.com/at-shift
