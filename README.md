@@ -80,6 +80,7 @@ Pro adds user classifications, visibility and editing permissions, public profil
 | Official website | [upf.at-shift.net/en](https://upf.at-shift.net/en/) | [upf.at-shift.net](https://upf.at-shift.net/) |
 | Adding and arranging fields | [Setup guide](https://upf.at-shift.net/en/guide/) | [導入ガイド](https://upf.at-shift.net/guide/) |
 | Retrieving and displaying values | [Display and output](https://upf.at-shift.net/en/output/) | [表示・出力](https://upf.at-shift.net/output/) |
+| Pro Upgrade | [Upgrade to Pro](https://upf.at-shift.net/pro/en) | [Proへアップグレード](https://upf.at-shift.net/pro/) |
 | Pro shortcodes | [Shortcode reference](https://upf.at-shift.net/en/shortcodes/) | [リファレンス](https://upf.at-shift.net/shortcodes/) |
 
 ## Reporting Issues
