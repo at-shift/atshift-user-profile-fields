@@ -30,6 +30,9 @@ msgstr ""
 msgid "Usage guide"
 msgstr ""
 
+msgid "Upgrade to Pro"
+msgstr ""
+
 #: includes/class-atshift-upf-admin.php:28
 msgid "Text"
 msgstr ""

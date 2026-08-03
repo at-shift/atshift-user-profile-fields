@@ -39,7 +39,54 @@ final class Atshift_UPF_Plugin {
 	private function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'announce_loaded' ), 20 );
 		add_action( 'init', array( $this, 'boot' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( ATSHIFT_UPF_FILE ), array( $this, 'filter_plugin_action_links' ) );
 		add_filter( 'plugin_row_meta', array( $this, 'filter_plugin_row_meta' ), 10, 4 );
+	}
+
+	/**
+	 * Add a Pro purchase link while the add-on is not installed.
+	 *
+	 * @param array<int, string> $links Existing plugin action links.
+	 * @return array<int, string>
+	 */
+	public function filter_plugin_action_links( $links ) {
+		if ( $this->is_pro_installed() ) {
+			return $links;
+		}
+
+		$price_url = 0 === strpos( determine_locale(), 'ja' ) ? 'https://upf.at-shift.net/price/' : 'https://upf.at-shift.net/en/price/';
+		$pro_link  = sprintf(
+			'<a href="%1$s" target="_blank" rel="noopener noreferrer"><strong>%2$s</strong></a>',
+			esc_url( $price_url ),
+			esc_html__( 'Upgrade to Pro', 'atshift-user-profile-fields' )
+		);
+
+		array_unshift( $links, $pro_link );
+
+		return $links;
+	}
+
+	/**
+	 * Determine whether the Pro add-on is installed, including when inactive.
+	 *
+	 * @return bool
+	 */
+	private function is_pro_installed() {
+		if ( defined( 'ATSHIFT_UPF_PRO_FILE' ) ) {
+			return true;
+		}
+
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		foreach ( array_keys( get_plugins() ) as $plugin_file ) {
+			if ( 'atshift-user-profile-fields-pro.php' === basename( $plugin_file ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

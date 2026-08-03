@@ -24,6 +24,9 @@ msgstr "詳細を表示"
 msgid "Usage guide"
 msgstr "使用方法"
 
+msgid "Upgrade to Pro"
+msgstr "Pro版へアップグレード"
+
 #: includes/class-atshift-upf-admin.php:28
 msgid "Text"
 msgstr "単一行テキスト"
