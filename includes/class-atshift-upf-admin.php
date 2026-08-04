@@ -1725,6 +1725,40 @@ class Atshift_UPF_Admin {
 	}
 
 	/**
+	 * Sanitize submitted extension settings before exposing them to callbacks.
+	 *
+	 * The base field definition passed as the first filter argument already uses
+	 * type-specific sanitizers. This helper protects nested add-on settings while
+	 * preserving their submitted array shape for compatible callbacks.
+	 *
+	 * @param mixed $value Submitted value.
+	 * @return mixed Sanitized value.
+	 */
+	private function sanitize_submitted_filter_data( $value ) {
+		if ( is_array( $value ) ) {
+			$sanitized = array();
+
+			foreach ( $value as $key => $item ) {
+				$sanitized_key = is_int( $key ) ? $key : sanitize_key( $key );
+
+				if ( ! is_int( $key ) && '' === $sanitized_key ) {
+					continue;
+				}
+
+				$sanitized[ $sanitized_key ] = $this->sanitize_submitted_filter_data( $item );
+			}
+
+			return $sanitized;
+		}
+
+		if ( is_scalar( $value ) ) {
+			return sanitize_text_field( (string) $value );
+		}
+
+		return '';
+	}
+
+	/**
 	 * Save all field definitions from the atshift Fields-style editor.
 	 *
 	 * @return void
@@ -1866,14 +1900,15 @@ class Atshift_UPF_Admin {
 				$extension_data = array_diff_key( $stored_by_id[ $field_id ], array_fill_keys( array_keys( $field ), true ) );
 				$field          = array_merge( $extension_data, $field );
 			}
+			$submitted_field = $this->sanitize_submitted_filter_data( $raw_field );
 			/**
 			 * Filters one field definition before it is saved from the editor.
 			 *
 			 * @param array<string, mixed> $field Field definition sanitized by the base plugin.
-			 * @param array<string, mixed> $raw_field Raw submitted field data.
+			 * @param array<string, mixed> $submitted_field Sanitized submitted field data.
 			 * @param string               $type Field type.
 			 */
-			$fields[] = apply_filters( 'atshift_upf_admin_sanitize_field', $field, $raw_field, $type );
+			$fields[] = apply_filters( 'atshift_upf_admin_sanitize_field', $field, $submitted_field, $type );
 			}
 
 			update_option( 'atshift_upf_fields', $fields, false );
@@ -1890,7 +1925,8 @@ class Atshift_UPF_Admin {
 	private function save_field() {
 		check_admin_referer( 'atshift_upf_save_field' );
 
-		$fields   = Atshift_UPF_Plugin::get_fields();
+		$fields          = Atshift_UPF_Plugin::get_fields();
+		$submitted_field = $this->sanitize_submitted_filter_data( wp_unslash( $_POST ) );
 		$field_id = isset( $_POST['field_id'] ) ? sanitize_key( wp_unslash( $_POST['field_id'] ) ) : '';
 		$key      = isset( $_POST['field_key'] ) ? sanitize_key( wp_unslash( $_POST['field_key'] ) ) : '';
 		$type     = isset( $_POST['type'] ) ? sanitize_key( wp_unslash( $_POST['type'] ) ) : 'text';
@@ -1973,7 +2009,7 @@ class Atshift_UPF_Admin {
 		if ( '' === $description ) {
 			$description = $this->get_default_field_description( $type );
 		}
-		$role_control = $this->sanitize_role_control_settings( wp_unslash( $_POST ), $type );
+		$role_control = $this->sanitize_role_control_settings( $submitted_field, $type );
 
 		$new_field = array(
 			'id'          => $field_id,
@@ -1999,10 +2035,10 @@ class Atshift_UPF_Admin {
 		 * Filters one field definition before it is saved from the single-field route.
 		 *
 		 * @param array<string, mixed> $new_field Field definition sanitized by the base plugin.
-		 * @param array<string, mixed> $raw_field Raw submitted field data.
+		 * @param array<string, mixed> $submitted_field Sanitized submitted field data.
 		 * @param string               $type Field type.
 		 */
-		$new_field = apply_filters( 'atshift_upf_admin_sanitize_field', $new_field, wp_unslash( $_POST ), $type );
+		$new_field = apply_filters( 'atshift_upf_admin_sanitize_field', $new_field, $submitted_field, $type );
 
 		$updated = false;
 		foreach ( $fields as $index => $field ) {

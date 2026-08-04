@@ -66,6 +66,7 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 * Prepare the first stable WordPress.org release.
 * Use the standard WordPress.org plugin update channel.
 * Limit user-role choices to roles the current user is permitted to assign, including compatible custom roles.
+* Sanitize submitted field data before passing it to validation and extension hooks.
 
 = 0.9 =
 * Add the base integration layer used by optional add-ons.

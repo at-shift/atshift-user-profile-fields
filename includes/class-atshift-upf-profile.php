@@ -541,7 +541,7 @@ class Atshift_UPF_Profile {
 		$this->apply_disabled_hidden_core_fields( $update ? 'edit' : 'new', $user );
 
 		// WordPress verifies the profile form nonce before this validation hook runs.
-		// Values are validated by field type below and are not stored here.
+		// get_submitted_value() sanitizes each value by field type before use.
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$values = isset( $_POST['atshift_upf_fields'] ) ? (array) wp_unslash( $_POST['atshift_upf_fields'] ) : array();
 
@@ -565,16 +565,16 @@ class Atshift_UPF_Profile {
 				continue;
 			}
 
-				$value = $this->get_submitted_value( $field, $values );
-				$trimmed_value = is_array( $value ) ? '' : trim( (string) $value );
+			$value         = $this->get_submitted_value( $field, $values );
+			$trimmed_value = is_array( $value ) ? '' : trim( (string) $value );
 
-				if ( 'core_nickname' === ( $field['type'] ?? '' ) && $update && '' === $trimmed_value ) {
-					$errors->remove( 'nickname' );
-					$this->add_field_error( $errors, $field, __( 'This field cannot be left blank.', 'atshift-user-profile-fields' ), 'nickname_empty' );
-					continue;
-				}
+			if ( 'core_nickname' === ( $field['type'] ?? '' ) && $update && '' === $trimmed_value ) {
+				$errors->remove( 'nickname' );
+				$this->add_field_error( $errors, $field, __( 'This field cannot be left blank.', 'atshift-user-profile-fields' ), 'nickname_empty' );
+				continue;
+			}
 
-				if ( 'core_password' === ( $field['type'] ?? '' ) ) {
+			if ( 'core_password' === ( $field['type'] ?? '' ) ) {
 				if ( ! $update && '' === $trimmed_value ) {
 					$this->add_field_error( $errors, $field, __( 'This field is required.', 'atshift-user-profile-fields' ), 'required' );
 					continue;
@@ -682,7 +682,7 @@ class Atshift_UPF_Profile {
 		}
 
 		// WordPress verifies the profile form nonce before this save hook runs.
-		// Values are sanitized by field type before they are stored.
+		// get_submitted_value() sanitizes each value by field type before storage.
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$values = isset( $_POST['atshift_upf_fields'] ) ? (array) wp_unslash( $_POST['atshift_upf_fields'] ) : array();
 		$core_updates = array(
@@ -716,7 +716,6 @@ class Atshift_UPF_Profile {
 			}
 
 			$value = $this->get_submitted_value( $field, $values );
-			$value = $this->sanitize_value( $value, $field );
 
 			if ( $this->is_core_field( $field ) ) {
 				$this->queue_core_field_update( $core_updates, $field, $value );
@@ -1998,14 +1997,16 @@ class Atshift_UPF_Profile {
 	 *
 	 * @param array<string, mixed> $field Field definition.
 	 * @param array<string, mixed> $values Submitted plugin values.
-	 * @return mixed
+	 * @return mixed Sanitized submitted value.
 	 */
 	private function get_submitted_value( $field, $values ) {
 		$key  = isset( $field['key'] ) ? sanitize_key( $field['key'] ) : '';
 		$name = $this->get_input_name( $field, $key );
 
 		if ( 0 === strpos( $name, 'atshift_upf_fields[' ) ) {
-			return isset( $values[ $key ] ) ? $values[ $key ] : '';
+			$value = isset( $values[ $key ] ) ? $values[ $key ] : '';
+
+			return $this->sanitize_value( $value, $field );
 		}
 
 		if ( in_array( $field['type'] ?? '', array( 'core_visual_editor', 'core_syntax_highlighting', 'core_keyboard_shortcuts', 'core_toolbar', 'core_notification' ), true ) ) {
@@ -2015,12 +2016,16 @@ class Atshift_UPF_Profile {
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$value     = $has_value ? sanitize_text_field( wp_unslash( $_POST[ $name ] ) ) : '';
 
-			return $this->normalize_core_checkbox_value( $field['type'], $value, $has_value );
+			$value = $this->normalize_core_checkbox_value( $field['type'], $value, $has_value );
+
+			return $this->sanitize_value( $value, $field );
 		}
 
-		// The caller sanitizes this value according to its field type before storage.
+		// WordPress verifies the profile form nonce before submitted values reach this helper.
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		return isset( $_POST[ $name ] ) ? wp_unslash( $_POST[ $name ] ) : '';
+		$value = isset( $_POST[ $name ] ) ? wp_unslash( $_POST[ $name ] ) : '';
+
+		return $this->sanitize_value( $value, $field );
 	}
 
 	/**
