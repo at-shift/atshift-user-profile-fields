@@ -285,10 +285,8 @@
 			var locale = value || '';
 			var language;
 
-			if (locale === 'site-default') {
+			if (locale === 'site-default' || locale === '') {
 				language = languagePreview.siteLanguage || languagePreview.currentLanguage || 'en';
-			} else if (locale === '') {
-				language = 'en';
 			} else {
 				language = locale.toLowerCase().replace('_', '-').split('-')[0];
 			}
@@ -391,6 +389,7 @@
 
 		select.addEventListener('change', updatePreview);
 		select.addEventListener('input', updatePreview);
+		updatePreview();
 	}
 
 	initLanguagePreview();

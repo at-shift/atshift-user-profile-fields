@@ -115,6 +115,18 @@ class Atshift_UPF_Admin {
 			self::EXTRAS_PAGE_SLUG,
 			array( $this, 'render_extras_page' )
 		);
+
+		if ( ! Atshift_UPF_Plugin::instance()->is_pro_installed() ) {
+			$price_url = 0 === strpos( determine_locale(), 'ja' ) ? 'https://upf.at-shift.net/price/' : 'https://upf.at-shift.net/en/price/';
+
+			add_submenu_page(
+				self::PAGE_SLUG,
+				__( 'Upgrade to Pro', 'atshift-user-profile-fields' ),
+				__( 'Upgrade to Pro', 'atshift-user-profile-fields' ),
+				$this->get_capability(),
+				$price_url
+			);
+		}
 	}
 
 	/**

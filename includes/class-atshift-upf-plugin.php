@@ -37,7 +37,9 @@ final class Atshift_UPF_Plugin {
 	 * Constructor.
 	 */
 	private function __construct() {
-		new Atshift_UPF_GitHub_Updater();
+		if ( class_exists( 'Atshift_UPF_GitHub_Updater' ) ) {
+			new Atshift_UPF_GitHub_Updater();
+		}
 
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_action( 'plugins_loaded', array( $this, 'announce_loaded' ), 20 );
@@ -47,12 +49,20 @@ final class Atshift_UPF_Plugin {
 	}
 
 	/**
-	 * Add a Pro purchase link while the add-on is not installed.
+	 * Add settings and optional Pro purchase links to the plugin row.
 	 *
 	 * @param array<int, string> $links Existing plugin action links.
 	 * @return array<int, string>
 	 */
 	public function filter_plugin_action_links( $links ) {
+		$settings_link = sprintf(
+			'<a href="%1$s">%2$s</a>',
+			esc_url( admin_url( 'admin.php?page=atshift-user-profile-fields' ) ),
+			esc_html__( 'Settings' )
+		);
+
+		array_unshift( $links, $settings_link );
+
 		if ( $this->is_pro_installed() ) {
 			return $links;
 		}
@@ -64,7 +74,7 @@ final class Atshift_UPF_Plugin {
 			esc_html__( 'Upgrade to Pro', 'atshift-user-profile-fields' )
 		);
 
-		array_unshift( $links, $pro_link );
+		array_splice( $links, 1, 0, array( $pro_link ) );
 
 		return $links;
 	}
@@ -74,7 +84,7 @@ final class Atshift_UPF_Plugin {
 	 *
 	 * @return bool
 	 */
-	private function is_pro_installed() {
+	public function is_pro_installed() {
 		if ( defined( 'ATSHIFT_UPF_PRO_FILE' ) ) {
 			return true;
 		}

@@ -211,6 +211,13 @@ class Atshift_UPF_Profile {
 			'atshift-upf-profile',
 			Atshift_UPF_Plugin::get_admin_color_scheme_css( 'body.wp-admin' )
 		);
+		$boot_hide_css = $this->get_profile_boot_hide_css( $settings, $screen );
+		if ( '' !== $boot_hide_css ) {
+			wp_add_inline_style(
+				'atshift-upf-profile',
+				$boot_hide_css
+			);
+		}
 
 		wp_enqueue_script(
 			'atshift-upf-profile',
@@ -247,6 +254,79 @@ class Atshift_UPF_Profile {
 					'passwordWeak' => __( 'Use at least 8 characters and combine letters, numbers, or symbols.', 'atshift-user-profile-fields' ),
 				),
 			)
+		);
+	}
+
+	/**
+	 * Return critical CSS that hides managed WordPress rows before profile.js runs.
+	 *
+	 * @param array<string, mixed> $settings Plugin settings.
+	 * @param string               $screen Screen context: new or edit.
+	 * @return string
+	 */
+	private function get_profile_boot_hide_css( $settings, $screen ) {
+		$hidden_fields = $this->get_hidden_core_fields( $settings, $screen );
+
+		if ( empty( $hidden_fields ) ) {
+			return '';
+		}
+
+		$selector_map = $this->get_core_field_boot_hide_selectors();
+		$selectors    = array();
+
+		foreach ( $hidden_fields as $field ) {
+			if ( empty( $selector_map[ $field ] ) ) {
+				continue;
+			}
+
+			$selectors = array_merge( $selectors, $selector_map[ $field ] );
+		}
+
+		$selectors = array_values( array_unique( $selectors ) );
+
+		if ( empty( $selectors ) ) {
+			return '';
+		}
+
+		return implode(
+			"\n",
+			array_map(
+				static function ( $selector ) {
+					return $selector . " {\n\tdisplay: none !important;\n}";
+				},
+				$selectors
+			)
+		) . "\n";
+	}
+
+	/**
+	 * Return the WordPress profile selectors that should be hidden as early CSS.
+	 *
+	 * @return array<string, array<int, string>>
+	 */
+	private function get_core_field_boot_hide_selectors() {
+		return array(
+			'username'              => array( '.user-user-login-wrap', '.form-field.form-required:has(#user_login)' ),
+			'email'                 => array( '.user-email-wrap', '.form-field.form-required:has(#email)' ),
+			'visual_editor'         => array( '.user-rich-editing-wrap' ),
+			'syntax_highlighting'   => array( '.user-syntax-highlighting-wrap' ),
+			'admin_color'           => array( '.user-admin-color-wrap' ),
+			'keyboard_shortcuts'    => array( '.user-comment-shortcuts-wrap' ),
+			'toolbar'               => array( '.show-admin-bar' ),
+			'language'              => array( '.user-language-wrap' ),
+			'first_name'            => array( '.user-first-name-wrap' ),
+			'last_name'             => array( '.user-last-name-wrap' ),
+			'nickname'              => array( '.user-nickname-wrap' ),
+			'display_name'          => array( '.user-display-name-wrap' ),
+			'website'               => array( '.user-url-wrap' ),
+			'bio'                   => array( '.user-description-wrap' ),
+			'password'              => array( '.user-pass1-wrap', '.user-pass2-wrap', '.pw-weak', '.user-generate-reset-link-wrap', '.form-field:has(#pass1)', '.form-field:has(.wp-generate-pw)' ),
+			'sessions'              => array( '.user-sessions-wrap' ),
+			'notification'          => array( '.user-send-user-notification-wrap', '.form-field:has(#send_user_notification)' ),
+			'role'                  => array( '.user-role-wrap', '.form-field:has(#role)' ),
+			'profile_picture'       => array( '.user-profile-picture' ),
+			'application_passwords' => array( '#application-passwords-section:not(.atshift-upf-native-section-embedded)', '.application-passwords:not(.atshift-upf-native-section-embedded)' ),
+			'submit_button'         => array( 'p.submit' ),
 		);
 	}
 
@@ -2520,7 +2600,8 @@ class Atshift_UPF_Profile {
 		} while ( count( $filtered ) < $before_count );
 
 		return $this->localize_default_field_texts(
-			$this->filter_conditional_choices_for_available_children( $filtered )
+			$this->filter_conditional_choices_for_available_children( $filtered ),
+			$screen
 		);
 	}
 
@@ -2586,9 +2667,12 @@ class Atshift_UPF_Profile {
 	 * Translate bundled default field labels and notes without changing custom text.
 	 *
 	 * @param array<int, array<string, mixed>> $fields Field definitions.
+	 * @param string                           $screen Screen context: new or edit.
 	 * @return array<int, array<string, mixed>>
 	 */
-	private function localize_default_field_texts( $fields ) {
+	private function localize_default_field_texts( $fields, $screen ) {
+		$language = $this->get_profile_text_language( $screen );
+
 		foreach ( $fields as &$field ) {
 			if ( ! is_array( $field ) ) {
 				continue;
@@ -2599,16 +2683,51 @@ class Atshift_UPF_Profile {
 			}
 
 			if ( isset( $field['label'] ) && is_scalar( $field['label'] ) ) {
-				$field['label'] = $this->localize_default_field_text( (string) $field['label'], 'label' );
+				$field['label'] = $this->localize_default_field_text( (string) $field['label'], 'label', $language );
 			}
 
 			if ( isset( $field['description'] ) && is_scalar( $field['description'] ) ) {
-				$field['description'] = $this->localize_default_field_text( (string) $field['description'], 'description' );
+				$field['description'] = $this->localize_default_field_text( (string) $field['description'], 'description', $language );
 			}
 		}
 		unset( $field );
 
 		return $fields;
+	}
+
+	/**
+	 * Return the display language for bundled profile field text.
+	 *
+	 * @param string $screen Screen context: new or edit.
+	 * @return string
+	 */
+	private function get_profile_text_language( $screen ) {
+		$locale = null;
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Read-only preview of submitted profile language.
+		if ( isset( $_POST['locale'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Read-only preview of submitted profile language.
+			$locale = sanitize_text_field( wp_unslash( $_POST['locale'] ) );
+		}
+
+		if ( null === $locale && 'edit' === $screen ) {
+			$user_id = $this->get_requested_profile_user_id();
+			if ( ! $user_id && isset( $GLOBALS['pagenow'] ) && 'profile.php' === $GLOBALS['pagenow'] ) {
+				$user_id = get_current_user_id();
+			}
+
+			if ( $user_id ) {
+				$locale = (string) get_user_meta( $user_id, 'locale', true );
+			}
+		}
+
+		if ( null === $locale || '' === $locale || 'site-default' === $locale ) {
+			$locale = get_locale();
+		}
+
+		$language = strtolower( substr( str_replace( '_', '-', (string) $locale ), 0, 2 ) );
+
+		return 'ja' === $language ? 'ja' : 'en';
 	}
 
 	/**
@@ -2659,100 +2778,94 @@ class Atshift_UPF_Profile {
 	 *
 	 * @param string $text Text saved in the field definition.
 	 * @param string $kind Text kind: label or description.
+	 * @param string $language Target language.
 	 * @return string
 	 */
-	private function localize_default_field_text( $text, $kind ) {
+	private function localize_default_field_text( $text, $kind, $language ) {
 		$map = 'description' === $kind
-			? $this->get_default_description_translation_map()
-			: $this->get_default_label_translation_map();
+			? $this->get_default_description_translation_map( $language )
+			: $this->get_default_label_translation_map( $language );
 
 		return isset( $map[ $text ] ) ? $map[ $text ] : $text;
 	}
 
 	/**
-	 * Return bundled default label translations keyed by stored English text.
+	 * Build a two-way translation map from English/Japanese default text pairs.
 	 *
+	 * @param array<string, string> $pairs English => Japanese text pairs.
+	 * @param string                $language Target language.
 	 * @return array<string, string>
 	 */
-	private function get_default_label_translation_map() {
-		return array(
-			'Personal Options'              => __( 'Personal Options', 'atshift-user-profile-fields' ),
-			'Syntax Highlighting'           => __( 'Syntax highlighting', 'atshift-user-profile-fields' ),
-			'Admin Color Scheme'            => __( 'Admin color scheme', 'atshift-user-profile-fields' ),
-			'Keyboard Shortcuts'            => __( 'Keyboard shortcuts', 'atshift-user-profile-fields' ),
-			'Toolbar'                       => __( 'Toolbar', 'atshift-user-profile-fields' ),
-			'Language'                      => __( 'Language', 'atshift-user-profile-fields' ),
-			'Username'                      => __( 'Username', 'atshift-user-profile-fields' ),
-			'Name'                          => __( 'Name', 'atshift-user-profile-fields' ),
-			'First Name'                    => __( 'First name', 'atshift-user-profile-fields' ),
-			'Last Name'                     => __( 'Last name', 'atshift-user-profile-fields' ),
-			'Nickname'                      => __( 'Nickname', 'atshift-user-profile-fields' ),
-			'Name Display Format'           => __( 'Name Display Format', 'atshift-user-profile-fields' ),
-			'Name Shown on the Site'        => __( 'Name Shown on the Site', 'atshift-user-profile-fields' ),
-			'Contact Info'                  => __( 'Contact Info', 'atshift-user-profile-fields' ),
-			'Email'                         => __( 'Email', 'atshift-user-profile-fields' ),
-			'Website'                       => __( 'Website', 'atshift-user-profile-fields' ),
-			'About Yourself'                => __( 'About Yourself', 'atshift-user-profile-fields' ),
-			'Biographical Info'             => __( 'Biographical info', 'atshift-user-profile-fields' ),
-			'Profile Picture'               => __( 'Profile picture', 'atshift-user-profile-fields' ),
-			'Security'                      => __( 'Security', 'atshift-user-profile-fields' ),
-			'Password'                      => __( 'Password', 'atshift-user-profile-fields' ),
-			'Sessions'                      => __( 'Sessions', 'atshift-user-profile-fields' ),
-			'Application Passwords'         => __( 'Application passwords', 'atshift-user-profile-fields' ),
-			'Permissions and Notifications' => __( 'Permissions and Notifications', 'atshift-user-profile-fields' ),
-			'Role'                          => __( 'Role', 'atshift-user-profile-fields' ),
-			'User Notification'             => __( 'User Notification', 'atshift-user-profile-fields' ),
-			'Add User / Save'               => __( 'Add User / Save', 'atshift-user-profile-fields' ),
-			'個人設定'                      => __( 'Personal Options', 'atshift-user-profile-fields' ),
-			'シンタックスハイライト'        => __( 'Syntax highlighting', 'atshift-user-profile-fields' ),
-			'管理画面の配色'                => __( 'Admin color scheme', 'atshift-user-profile-fields' ),
-			'キーボードショートカット'      => __( 'Keyboard shortcuts', 'atshift-user-profile-fields' ),
-			'ツールバー'                    => __( 'Toolbar', 'atshift-user-profile-fields' ),
-			'言語'                          => __( 'Language', 'atshift-user-profile-fields' ),
-			'ユーザー名'                    => __( 'Username', 'atshift-user-profile-fields' ),
-			'名前'                          => __( 'Name', 'atshift-user-profile-fields' ),
-			'名'                            => __( 'First name', 'atshift-user-profile-fields' ),
-			'姓'                            => __( 'Last name', 'atshift-user-profile-fields' ),
-			'ニックネーム'                  => __( 'Nickname', 'atshift-user-profile-fields' ),
-			'サイトに表示する名前'          => __( 'Name Shown on the Site', 'atshift-user-profile-fields' ),
-			'連絡先情報'                    => __( 'Contact Info', 'atshift-user-profile-fields' ),
-			'メールアドレス'                => __( 'Email', 'atshift-user-profile-fields' ),
-			'サイト'                        => __( 'Website', 'atshift-user-profile-fields' ),
-			'あなたについて'                => __( 'About Yourself', 'atshift-user-profile-fields' ),
-			'プロフィール'                  => __( 'About Yourself', 'atshift-user-profile-fields' ),
-			'プロフィール情報'              => __( 'Biographical info', 'atshift-user-profile-fields' ),
-			'プロフィール写真'              => __( 'Profile picture', 'atshift-user-profile-fields' ),
-			'セキュリティ'                  => __( 'Security', 'atshift-user-profile-fields' ),
-			'パスワード'                    => __( 'Password', 'atshift-user-profile-fields' ),
-			'セッション'                    => __( 'Sessions', 'atshift-user-profile-fields' ),
-			'アプリケーションパスワード'    => __( 'Application passwords', 'atshift-user-profile-fields' ),
-			'権限・通知'                    => __( 'Permissions and Notifications', 'atshift-user-profile-fields' ),
-			'権限グループ'                  => __( 'Role', 'atshift-user-profile-fields' ),
-			'ユーザー権限グループ'          => __( 'Role', 'atshift-user-profile-fields' ),
-			'メール通知'                    => __( 'User Notification', 'atshift-user-profile-fields' ),
-			'ユーザーを追加／保存'          => __( 'Add User / Save', 'atshift-user-profile-fields' ),
-			'ユーザー追加・保存'            => __( 'Add User / Save', 'atshift-user-profile-fields' ),
-		);
+	private function build_default_text_translation_map( $pairs, $language ) {
+		$map = array();
+
+		foreach ( $pairs as $english => $japanese ) {
+			$target = 'ja' === $language ? $japanese : $english;
+
+			$map[ $english ]  = $target;
+			$map[ $japanese ] = $target;
+		}
+
+		return $map;
 	}
 
 	/**
-	 * Return bundled default note translations keyed by stored English text.
+	 * Add legacy or alternate saved text to a default text translation map.
 	 *
+	 * @param array<string, string> $map Existing translation map.
+	 * @param string                $language Target language.
+	 * @param string                $english English text.
+	 * @param string                $japanese Japanese text.
+	 * @param array<int, string>    $aliases Additional saved text aliases.
+	 * @return void
+	 */
+	private function add_default_text_translation_alias( &$map, $language, $english, $japanese, $aliases = array() ) {
+		$target = 'ja' === $language ? $japanese : $english;
+
+		$map[ $english ]  = $target;
+		$map[ $japanese ] = $target;
+
+		foreach ( $aliases as $alias ) {
+			$map[ $alias ] = $target;
+		}
+	}
+
+	/**
+	 * Return bundled default label translations keyed by saved text.
+	 *
+	 * @param string $language Target language.
 	 * @return array<string, string>
 	 */
-	private function get_default_description_translation_map() {
-		return array(
-			'Enter the username required for login using letters, numbers, and the supported symbols (_ . - @). Spaces are not allowed. The username cannot be changed later.' => __( 'Enter the username required for login using half-width letters, numbers, and allowed symbols (_ . - @). Spaces cannot be used. This cannot be changed later.', 'atshift-user-profile-fields' ),
-			'Used for password resets and account notifications. It can be changed later and can also be used instead of the username when logging in.' => __( 'This email address is used for password resets and other account notifications. It can be changed at any time and can also be used instead of the user ID when logging in.', 'atshift-user-profile-fields' ),
-			'Use a hard-to-guess password of at least 8 characters that combines letters, numbers, and symbols.' => __( 'Use a password that is difficult to guess, combines letters, numbers, and symbols, and is at least 8 characters long.', 'atshift-user-profile-fields' ),
-			'Used to add users and save profiles.' => __( 'Used to add users and save profiles.', 'atshift-user-profile-fields' ),
-			'ログインに必要なユーザー名を、半角英数字と使用可能な記号（_ . - @）で入力してください。スペースは使用できません。後から変更することはできません。' => __( 'Enter the username required for login using half-width letters, numbers, and allowed symbols (_ . - @). Spaces cannot be used. This cannot be changed later.', 'atshift-user-profile-fields' ),
-			'ログインに必要なユーザー名を、半角英数字と使用可能な記号 (_ . - @) で入力してください。スペースは使用できません。ユーザー名は後で変更できません。' => __( 'Enter the username required for login using half-width letters, numbers, and allowed symbols (_ . - @). Spaces cannot be used. This cannot be changed later.', 'atshift-user-profile-fields' ),
-			'パスワードの再設定やアカウント通知に使用します。後から変更でき、ログイン時にユーザー名の代わりとしても使用できます。' => __( 'This email address is used for password resets and other account notifications. It can be changed at any time and can also be used instead of the user ID when logging in.', 'atshift-user-profile-fields' ),
-			'パスワードリセットとアカウント通知に使用します。メールアドレスはいつでも変更でき、ログイン時にユーザー名の代わりにも使用できます。' => __( 'This email address is used for password resets and other account notifications. It can be changed at any time and can also be used instead of the user ID when logging in.', 'atshift-user-profile-fields' ),
-			'推測されにくい、英字・数字・記号を組み合わせた8文字以上のパスワードを使用してください。' => __( 'Use a password that is difficult to guess, combines letters, numbers, and symbols, and is at least 8 characters long.', 'atshift-user-profile-fields' ),
-			'ユーザーの追加とプロフィールの保存に使用します。' => __( 'Used to add users and save profiles.', 'atshift-user-profile-fields' ),
+	private function get_default_label_translation_map( $language ) {
+		$map = $this->build_default_text_translation_map( $this->get_language_preview_label_pairs(), $language );
+
+		$this->add_default_text_translation_alias( $map, $language, 'About Yourself', 'プロフィール', array( 'あなたについて' ) );
+		$this->add_default_text_translation_alias( $map, $language, 'Role', '権限グループ', array( 'ユーザー権限グループ', 'ユーザーの権限' ) );
+		$this->add_default_text_translation_alias( $map, $language, 'Add User / Save', 'ユーザー追加・保存', array( 'ユーザーを追加／保存' ) );
+
+		return $map;
+	}
+
+	/**
+	 * Return bundled default note translations keyed by saved text.
+	 *
+	 * @param string $language Target language.
+	 * @return array<string, string>
+	 */
+	private function get_default_description_translation_map( $language ) {
+		$map = $this->build_default_text_translation_map( $this->get_language_preview_description_pairs(), $language );
+
+		$this->add_default_text_translation_alias(
+			$map,
+			$language,
+			'Enter the username required for login using half-width letters, numbers, and allowed symbols (_ . - @). Spaces cannot be used. This cannot be changed later.',
+			'ログインに必要なユーザー名を、半角英数字と使用可能な記号 (_ . - @) で入力してください。スペースは使用できません。ユーザー名は後で変更できません。',
+			array(
+				'ログインに必要なユーザー名を、半角英数字と使用可能な記号（_ . - @）で入力してください。スペースは使用できません。後から変更することはできません。',
+			)
 		);
+
+		return $map;
 	}
 
 	/**

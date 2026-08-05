@@ -49,6 +49,7 @@
 }
 
 .atshift-upf-profile-fields.form-table {
+	--atshift-upf-profile-label-column-width: 260px;
 	border-collapse: collapse;
 	margin: 0;
 	table-layout: fixed;
@@ -56,7 +57,7 @@
 }
 
 .atshift-upf-profile-fields .atshift-upf-profile-label-column {
-	width: 260px;
+	width: var(--atshift-upf-profile-label-column-width);
 }
 
 .atshift-upf-profile-fields.form-table th,
@@ -77,7 +78,7 @@
 	font-weight: 700;
 	padding: 24px 28px;
 	vertical-align: top;
-	width: 260px;
+	width: var(--atshift-upf-profile-label-column-width);
 }
 
 .atshift-upf-profile-fields.form-table td {
@@ -465,6 +466,7 @@
 .wp-core-ui .atshift-upf-profile-submit-section-row .button-primary.button-large {
 	font-size: 15px;
 	font-weight: 700;
+	min-width: 220px;
 	min-height: 50px;
 	padding-left: 26px;
 	padding-right: 26px;
@@ -477,6 +479,22 @@
 	gap: 8px 22px;
 	grid-template-columns: minmax(170px, 24%) minmax(0, 1fr);
 	padding: 20px 22px;
+}
+
+@media (min-width: 783px) {
+	.atshift-upf-profile-feature-group-row .atshift-upf-feature-group-item {
+		grid-template-columns:
+			minmax(0, calc(var(--atshift-upf-profile-label-column-width) - 45px))
+			minmax(0, 1fr);
+	}
+
+	.atshift-upf-profile-submit-section-row .atshift-upf-feature-group-item {
+		grid-template-columns:
+			minmax(0, calc(var(--atshift-upf-profile-label-column-width) - 46px))
+			minmax(0, 1fr);
+		padding-left: 22px;
+		padding-right: 22px;
+	}
 }
 
 .atshift-upf-feature-group-item + .atshift-upf-feature-group-item {
@@ -847,6 +865,10 @@
 		align-items: start;
 		grid-template-columns: 1fr;
 		padding: 22px 20px;
+	}
+
+	.wp-core-ui .atshift-upf-profile-submit-section-row .button-primary.button-large {
+		width: 100%;
 	}
 
 	.atshift-upf-additional-name-field {
