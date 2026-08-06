@@ -62,7 +62,7 @@ class Atshift_UPF_Admin {
 			'core_sessions'     => __( 'Sessions', 'atshift-user-profile-fields' ),
 			'core_application_passwords' => __( 'Application passwords', 'atshift-user-profile-fields' ),
 			'core_notification' => __( 'Email Notification', 'atshift-user-profile-fields' ),
-			'core_role'         => __( 'Role' ),
+			'core_role'         => __( 'Role', 'atshift-user-profile-fields' ),
 			'core_submit_button' => __( 'Add / Save User button', 'atshift-user-profile-fields' ),
 		);
 		/**
@@ -761,7 +761,7 @@ class Atshift_UPF_Admin {
 		$initial_enabled    = Atshift_UPF_Plugin::get_field_initial_enabled( $field );
 		$field['description'] = $this->normalize_default_field_description( $current_type, (string) $field['description'] );
 		?>
-			<div class="atshift-upf-cfs-form field_form" <?php echo $is_hidden ? 'style="display:none;"' : ''; ?>>
+			<div class="atshift-upf-cfs-form field_form" data-atshift-upf-saved-field="<?php echo empty( $field['id'] ) ? '0' : '1'; ?>" <?php echo $is_hidden ? 'style="display:none;"' : ''; ?>>
 				<input type="hidden" name="<?php echo esc_attr( $name_prefix . '[field_id]' ); ?>" value="<?php echo esc_attr( $field['id'] ); ?>">
 				<input type="hidden" name="<?php echo esc_attr( $name_prefix . '[client_id]' ); ?>" class="atshift-upf-client-id-input" value="<?php echo esc_attr( $field['id'] ); ?>">
 				<input type="hidden" name="<?php echo esc_attr( $name_prefix . '[parent_id]' ); ?>" class="atshift-upf-parent-select" value="<?php echo esc_attr( $selected_parent ); ?>">
@@ -1303,6 +1303,27 @@ class Atshift_UPF_Admin {
 	}
 
 	/**
+	 * Prepare editable notes before saving a field.
+	 *
+	 * Default notes are helpful when a default field is first added, but an
+	 * existing empty note means the user intentionally removed it.
+	 *
+	 * @param string $type Field type.
+	 * @param string $description Current submitted or stored description.
+	 * @param bool   $is_new Whether the field is newly created.
+	 * @return string
+	 */
+	private function prepare_field_description_for_save( $type, $description, $is_new ) {
+		$description = $this->normalize_default_field_description( $type, $description );
+
+		if ( $is_new && '' === trim( $description ) ) {
+			return $this->get_default_field_description( $type );
+		}
+
+		return $description;
+	}
+
+	/**
 	 * Older generated note text kept only so it can be replaced safely.
 	 *
 	 * @return array<string, array<int, string>>
@@ -1828,11 +1849,15 @@ class Atshift_UPF_Admin {
 			if ( '' === $label && isset( $this->field_types[ $type ] ) ) {
 				$label = $this->field_types[ $type ];
 			}
-			$description = isset( $raw_field['description'] ) ? sanitize_textarea_field( $raw_field['description'] ) : '';
-			$description = $this->normalize_default_field_description( $type, $description );
-			if ( '' === $description ) {
-				$description = $this->get_default_field_description( $type );
+			$stored_field = isset( $stored_by_id[ $field_id ] ) ? $stored_by_id[ $field_id ] : null;
+			if ( array_key_exists( 'description', $raw_field ) ) {
+				$description = sanitize_textarea_field( $raw_field['description'] );
+			} elseif ( is_array( $stored_field ) && isset( $stored_field['description'] ) ) {
+				$description = (string) $stored_field['description'];
+			} else {
+				$description = '';
 			}
+			$description = $this->prepare_field_description_for_save( $type, $description, ! is_array( $stored_field ) );
 			$role_control = $this->sanitize_role_control_settings( $raw_field, $type );
 
 			$field = array(
@@ -1962,11 +1987,22 @@ class Atshift_UPF_Admin {
 		if ( '' === $label && isset( $this->field_types[ $type ] ) ) {
 			$label = $this->field_types[ $type ];
 		}
-		$description = isset( $_POST['description'] ) ? sanitize_textarea_field( wp_unslash( $_POST['description'] ) ) : '';
-		$description = $this->normalize_default_field_description( $type, $description );
-		if ( '' === $description ) {
-			$description = $this->get_default_field_description( $type );
+		$stored_field = null;
+		foreach ( $fields as $field ) {
+			if ( isset( $field['id'] ) && $field_id === $field['id'] ) {
+				$stored_field = $field;
+				break;
+			}
 		}
+
+		if ( array_key_exists( 'description', $_POST ) ) {
+			$description = sanitize_textarea_field( wp_unslash( $_POST['description'] ) );
+		} elseif ( is_array( $stored_field ) && isset( $stored_field['description'] ) ) {
+			$description = (string) $stored_field['description'];
+		} else {
+			$description = '';
+		}
+		$description = $this->prepare_field_description_for_save( $type, $description, ! is_array( $stored_field ) );
 		$role_control = $this->sanitize_role_control_settings( wp_unslash( $_POST ), $type );
 
 		$new_field = array(

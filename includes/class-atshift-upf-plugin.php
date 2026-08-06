@@ -58,7 +58,7 @@ final class Atshift_UPF_Plugin {
 		$settings_link = sprintf(
 			'<a href="%1$s">%2$s</a>',
 			esc_url( admin_url( 'admin.php?page=atshift-user-profile-fields' ) ),
-			esc_html__( 'Settings' )
+			esc_html__( 'Settings', 'atshift-user-profile-fields' )
 		);
 
 		array_unshift( $links, $settings_link );

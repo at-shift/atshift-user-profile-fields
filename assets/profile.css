@@ -154,7 +154,7 @@
 
 .atshift-upf-profile-fields p.description {
 	line-height: 1.55;
-	margin: 18px 0 0;
+	margin: 18px 0 8px;
 	max-width: 100%;
 }
 
@@ -162,6 +162,11 @@
 .atshift-upf-profile-field-block > :last-child,
 .atshift-upf-feature-control-main > :last-child {
 	margin-bottom: 0;
+}
+
+.atshift-upf-profile-fields td > p.description:last-child,
+.atshift-upf-profile-field-block > p.description:last-child {
+	margin-bottom: 8px;
 }
 
 .atshift-upf-required-badge {
@@ -375,7 +380,7 @@
 
 .atshift-upf-profile-grid {
 	display: grid;
-	gap: 22px 28px;
+	gap: 32px 28px;
 }
 
 .atshift-upf-profile-grid-2 {

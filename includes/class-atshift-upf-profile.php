@@ -110,7 +110,7 @@ class Atshift_UPF_Profile {
 				'off_label'   => __( 'Do not send an account email to the new user', 'atshift-user-profile-fields' ),
 			),
 			'role'                  => array(
-				'label'       => __( 'Role' ),
+				'label'       => __( 'Role', 'atshift-user-profile-fields' ),
 				'description' => __( 'WordPress user role selector.', 'atshift-user-profile-fields' ),
 			),
 			'profile_picture'       => array(
@@ -1488,13 +1488,14 @@ class Atshift_UPF_Profile {
 	private function render_input( $field, $name, $value, $user = null ) {
 		$key         = sanitize_key( $field['key'] );
 		$id          = 'atshift_upf_' . $key;
-			$type        = isset( $field['type'] ) ? $field['type'] : 'text';
-			$stored_type = $type;
-			$placeholder = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
-			$choices     = isset( $field['choices'] ) && is_array( $field['choices'] ) ? $field['choices'] : array();
-			if ( '' === $placeholder ) {
-				$placeholder = $this->get_default_placeholder( $field );
-			}
+		$type        = isset( $field['type'] ) ? $field['type'] : 'text';
+		$stored_type = $type;
+		$placeholder = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
+		$choices     = isset( $field['choices'] ) && is_array( $field['choices'] ) ? $field['choices'] : array();
+		$placeholder = $this->normalize_core_placeholder( $field, $placeholder );
+		if ( '' === $placeholder ) {
+			$placeholder = $this->get_default_placeholder( $field );
+		}
 
 			/**
 			 * Lets add-ons render custom profile inputs before the base renderer
@@ -1881,9 +1882,7 @@ class Atshift_UPF_Profile {
 		$type = isset( $field['type'] ) ? (string) $field['type'] : 'text';
 
 		$placeholders = array(
-			'core_username' => __( 'example_user', 'atshift-user-profile-fields' ),
 			'core_email'    => __( 'name@example.com', 'atshift-user-profile-fields' ),
-			'core_password' => __( '8+ characters, not letters-only or numbers-only', 'atshift-user-profile-fields' ),
 			'email'         => __( 'name@example.com', 'atshift-user-profile-fields' ),
 			'phone'         => __( '090-1234-5678', 'atshift-user-profile-fields' ),
 			'url'           => __( 'https://example.com/', 'atshift-user-profile-fields' ),
@@ -1892,6 +1891,33 @@ class Atshift_UPF_Profile {
 		);
 
 		return isset( $placeholders[ $type ] ) ? $placeholders[ $type ] : '';
+	}
+
+	/**
+	 * Treat older auto-generated native placeholders as empty.
+	 *
+	 * @param array<string, mixed> $field Field definition.
+	 * @param string               $placeholder Stored placeholder.
+	 * @return string
+	 */
+	private function normalize_core_placeholder( $field, $placeholder ) {
+		$type        = isset( $field['type'] ) ? (string) $field['type'] : 'text';
+		$placeholder = (string) $placeholder;
+		$legacy      = array(
+			'core_username' => array(
+				'example_user',
+			),
+			'core_password' => array(
+				'8+ characters, not letters-only or numbers-only',
+				'8文字以上 (英字のみ・数字のみは不可)',
+			),
+		);
+
+		if ( isset( $legacy[ $type ] ) && in_array( $placeholder, $legacy[ $type ], true ) ) {
+			return '';
+		}
+
+		return $placeholder;
 	}
 
 	/**

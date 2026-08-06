@@ -1047,12 +1047,13 @@
 
 			function updateDefaultDescription() {
 				var type = typeSelect.value;
-					var defaults = [
-						strings.coreUsernameDescription || '',
-						strings.coreEmailDescription || '',
-						strings.corePasswordDescription || '',
-						strings.additionalNameDescription || ''
-					].concat(legacyDefaultDescriptions);
+				var defaults = [
+					strings.coreUsernameDescription || '',
+					strings.coreEmailDescription || '',
+					strings.corePasswordDescription || '',
+					strings.additionalNameDescription || ''
+				].concat(legacyDefaultDescriptions);
+				var canFillEmptyDescription = form.getAttribute('data-atshift-upf-saved-field') !== '1';
 				var description = '';
 
 				if (!descriptionInput) {
@@ -1067,19 +1068,19 @@
 					description = strings.coreEmailDescription || '';
 				}
 
-					if (type === 'core_password') {
-						description = strings.corePasswordDescription || '';
-					}
+				if (type === 'core_password') {
+					description = strings.corePasswordDescription || '';
+				}
 
-					if (type === 'additional_name') {
-						description = strings.additionalNameDescription || '';
-					}
+				if (type === 'additional_name') {
+					description = strings.additionalNameDescription || '';
+				}
 
 				if (!description) {
 					return;
 				}
 
-				if (descriptionInput.value.trim() === '' || defaults.indexOf(descriptionInput.value) !== -1) {
+				if ((canFillEmptyDescription && descriptionInput.value.trim() === '') || defaults.indexOf(descriptionInput.value) !== -1) {
 					descriptionInput.value = description;
 				}
 			}
