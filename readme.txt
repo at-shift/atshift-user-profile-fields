@@ -4,7 +4,7 @@ Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 0.9.4
+Stable tag: 1.0.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,10 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 3. Open Settings > atshift User Profile Fields.
 
 == Changelog ==
+
+= 1.0.0.2 =
+* Sanitize submitted field-editor and profile values before extension hooks receive them.
+* Keep WordPress.org review packages free of development-only markdown files.
 
 = 0.9.3 =
 * Integrate the planned 1.0 compatibility updates into the public beta.

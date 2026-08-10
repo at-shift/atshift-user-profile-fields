@@ -1243,6 +1243,52 @@ class Atshift_UPF_Admin {
 	}
 
 	/**
+	 * Sanitize a list of submitted field editor rows.
+	 *
+	 * @param array<int|string, mixed> $fields Submitted field rows.
+	 * @return array<int|string, mixed>
+	 */
+	private function sanitize_admin_fields_input( $fields ) {
+		$sanitized = array();
+
+		foreach ( $fields as $index => $field ) {
+			$sanitized[ $index ] = is_array( $field ) ? $this->sanitize_admin_field_input( $field ) : sanitize_text_field( (string) $field );
+		}
+
+		return $sanitized;
+	}
+
+	/**
+	 * Sanitize submitted field editor data before passing it to extension hooks.
+	 *
+	 * @param array<int|string, mixed> $field Submitted field data.
+	 * @return array<int|string, mixed>
+	 */
+	private function sanitize_admin_field_input( $field ) {
+		$textarea_keys = array( 'choices', 'description' );
+		$sanitized     = array();
+
+		foreach ( $field as $key => $value ) {
+			$sanitized_key = is_int( $key ) ? $key : sanitize_key( $key );
+
+			if ( '' === $sanitized_key && ! is_int( $key ) ) {
+				continue;
+			}
+
+			if ( is_array( $value ) ) {
+				$sanitized[ $sanitized_key ] = $this->sanitize_admin_field_input( $value );
+				continue;
+			}
+
+			$sanitized[ $sanitized_key ] = in_array( $sanitized_key, $textarea_keys, true )
+				? sanitize_textarea_field( (string) $value )
+				: sanitize_text_field( (string) $value );
+		}
+
+		return $sanitized;
+	}
+
+	/**
 	 * Return the field type labels shown on atshift Fields-style open/close buttons.
 	 *
 	 * @return array<string, string>
@@ -1749,8 +1795,9 @@ class Atshift_UPF_Admin {
 	private function save_fields() {
 		check_admin_referer( 'atshift_upf_save_fields' );
 
-		$raw_fields = isset( $_POST['fields'] ) ? (array) wp_unslash( $_POST['fields'] ) : array();
-		$prepared   = array();
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Field rows are sanitized recursively by sanitize_admin_fields_input().
+		$submitted_fields = isset( $_POST['fields'] ) ? $this->sanitize_admin_fields_input( (array) wp_unslash( $_POST['fields'] ) ) : array();
+		$prepared         = array();
 		$id_map     = array();
 		$type_by_id = array();
 		$seen_keys  = array();
@@ -1764,15 +1811,15 @@ class Atshift_UPF_Admin {
 			}
 		}
 
-		foreach ( $raw_fields as $index => $raw_field ) {
-			if ( ! is_array( $raw_field ) ) {
+		foreach ( $submitted_fields as $index => $submitted_field ) {
+			if ( ! is_array( $submitted_field ) ) {
 				continue;
 			}
 
-			$submitted_field_id = isset( $raw_field['field_id'] ) ? sanitize_key( $raw_field['field_id'] ) : '';
-			$client_id          = isset( $raw_field['client_id'] ) ? sanitize_key( $raw_field['client_id'] ) : '';
+			$submitted_field_id = isset( $submitted_field['field_id'] ) ? sanitize_key( $submitted_field['field_id'] ) : '';
+			$client_id          = isset( $submitted_field['client_id'] ) ? sanitize_key( $submitted_field['client_id'] ) : '';
 			$field_id           = $submitted_field_id;
-			$type               = isset( $raw_field['type'] ) ? sanitize_key( $raw_field['type'] ) : 'text';
+			$type               = isset( $submitted_field['type'] ) ? sanitize_key( $submitted_field['type'] ) : 'text';
 			$stored_type        = isset( $stored_by_id[ $submitted_field_id ]['type'] ) ? sanitize_key( $stored_by_id[ $submitted_field_id ]['type'] ) : '';
 
 			if ( ! isset( $this->field_types[ $type ] ) && $stored_type !== $type ) {
@@ -1793,7 +1840,7 @@ class Atshift_UPF_Admin {
 			}
 
 			$prepared[ $index ] = array(
-				'raw'      => $raw_field,
+				'input'    => $submitted_field,
 				'id'       => $field_id,
 				'type'     => $type,
 				'position' => count( $prepared ) + 1,
@@ -1804,10 +1851,10 @@ class Atshift_UPF_Admin {
 		$fields = array();
 
 		foreach ( $prepared as $prepared_field ) {
-			$raw_field = $prepared_field['raw'];
-			$field_id  = $prepared_field['id'];
-			$type      = $prepared_field['type'];
-			$key       = isset( $raw_field['field_key'] ) ? sanitize_key( $raw_field['field_key'] ) : '';
+			$submitted_field = $prepared_field['input'];
+			$field_id        = $prepared_field['id'];
+			$type            = $prepared_field['type'];
+			$key             = isset( $submitted_field['field_key'] ) ? sanitize_key( $submitted_field['field_key'] ) : '';
 
 			if ( $this->uses_generated_field_key( $type ) && ( 0 === strpos( $type, 'core_' ) || empty( $key ) || $this->is_legacy_generated_field_key( $type, $key ) ) ) {
 				$key = $this->generate_field_key( $type, $field_id, $seen_keys );
@@ -1824,16 +1871,16 @@ class Atshift_UPF_Admin {
 			}
 			$seen_keys[ $key ] = true;
 
-			$choices = isset( $raw_field['choices'] ) ? sanitize_textarea_field( $raw_field['choices'] ) : '';
+			$choices = isset( $submitted_field['choices'] ) ? sanitize_textarea_field( $submitted_field['choices'] ) : '';
 			$choices = array_values(
 				array_filter(
 					array_map( 'trim', preg_split( '/\r\n|\r|\n/', $choices ) )
 				)
 			);
 
-			$parent_id         = isset( $raw_field['parent_id'] ) ? sanitize_key( $raw_field['parent_id'] ) : '';
+			$parent_id         = isset( $submitted_field['parent_id'] ) ? sanitize_key( $submitted_field['parent_id'] ) : '';
 			$parent_id         = isset( $id_map[ $parent_id ] ) ? $id_map[ $parent_id ] : $parent_id;
-			$conditional_value = isset( $raw_field['conditional_value'] ) ? sanitize_text_field( $raw_field['conditional_value'] ) : '';
+			$conditional_value = isset( $submitted_field['conditional_value'] ) ? sanitize_text_field( $submitted_field['conditional_value'] ) : '';
 			$parent_type       = isset( $type_by_id[ $parent_id ] ) ? $type_by_id[ $parent_id ] : '';
 
 			if ( ! $this->can_field_type_use_parent( $type, $parent_type ) ) {
@@ -1845,20 +1892,20 @@ class Atshift_UPF_Admin {
 				$conditional_value = '';
 			}
 
-			$label = isset( $raw_field['label'] ) ? sanitize_text_field( $raw_field['label'] ) : '';
+			$label = isset( $submitted_field['label'] ) ? sanitize_text_field( $submitted_field['label'] ) : '';
 			if ( '' === $label && isset( $this->field_types[ $type ] ) ) {
 				$label = $this->field_types[ $type ];
 			}
 			$stored_field = isset( $stored_by_id[ $field_id ] ) ? $stored_by_id[ $field_id ] : null;
-			if ( array_key_exists( 'description', $raw_field ) ) {
-				$description = sanitize_textarea_field( $raw_field['description'] );
+			if ( array_key_exists( 'description', $submitted_field ) ) {
+				$description = sanitize_textarea_field( $submitted_field['description'] );
 			} elseif ( is_array( $stored_field ) && isset( $stored_field['description'] ) ) {
 				$description = (string) $stored_field['description'];
 			} else {
 				$description = '';
 			}
 			$description = $this->prepare_field_description_for_save( $type, $description, ! is_array( $stored_field ) );
-			$role_control = $this->sanitize_role_control_settings( $raw_field, $type );
+			$role_control = $this->sanitize_role_control_settings( $submitted_field, $type );
 
 			$field = array(
 				'id'          => $field_id,
@@ -1866,18 +1913,18 @@ class Atshift_UPF_Admin {
 				'label'       => $label,
 				'type'        => $type,
 				'description' => $description,
-				'placeholder' => isset( $raw_field['placeholder'] ) ? sanitize_text_field( $raw_field['placeholder'] ) : '',
+				'placeholder' => isset( $submitted_field['placeholder'] ) ? sanitize_text_field( $submitted_field['placeholder'] ) : '',
 				'choices'     => $choices,
 				'parent_id'   => $parent_id,
 				'conditional_value' => $conditional_value,
-				'group_columns' => isset( $raw_field['group_columns'] ) ? min( 3, max( 2, absint( $raw_field['group_columns'] ) ) ) : 2,
-				'conditional_input' => isset( $raw_field['conditional_input'] ) && 'radio' === sanitize_key( $raw_field['conditional_input'] ) ? 'radio' : 'select',
-				'accordion_open' => ! empty( $raw_field['accordion_open'] ),
+				'group_columns' => isset( $submitted_field['group_columns'] ) ? min( 3, max( 2, absint( $submitted_field['group_columns'] ) ) ) : 2,
+				'conditional_input' => isset( $submitted_field['conditional_input'] ) && 'radio' === sanitize_key( $submitted_field['conditional_input'] ) ? 'radio' : 'select',
+				'accordion_open' => ! empty( $submitted_field['accordion_open'] ),
 				'role_control' => $role_control['mode'],
 				'role_control_roles' => $role_control['roles'],
-				'required'    => ! in_array( $type, array( 'core_username', 'core_email', 'core_password', 'core_language', 'core_notification', 'core_role' ), true ) && ! empty( $raw_field['required'] ),
-				'validation_enabled' => in_array( $type, array( 'email', 'url', 'phone' ), true ) && ! empty( $raw_field['validation_enabled'] ),
-				'initial_enabled' => Atshift_UPF_Plugin::supports_initial_state( $type ) && ! empty( $raw_field['initial_enabled'] ),
+				'required'    => ! in_array( $type, array( 'core_username', 'core_email', 'core_password', 'core_language', 'core_notification', 'core_role' ), true ) && ! empty( $submitted_field['required'] ),
+				'validation_enabled' => in_array( $type, array( 'email', 'url', 'phone' ), true ) && ! empty( $submitted_field['validation_enabled'] ),
+				'initial_enabled' => Atshift_UPF_Plugin::supports_initial_state( $type ) && ! empty( $submitted_field['initial_enabled'] ),
 				'sort_order'  => $prepared_field['position'] * 10,
 			);
 
@@ -1889,10 +1936,10 @@ class Atshift_UPF_Admin {
 			 * Filters one field definition before it is saved from the editor.
 			 *
 			 * @param array<string, mixed> $field Field definition sanitized by the base plugin.
-			 * @param array<string, mixed> $raw_field Raw submitted field data.
+			 * @param array<string, mixed> $submitted_field Submitted field data sanitized by the base plugin.
 			 * @param string               $type Field type.
 			 */
-			$fields[] = apply_filters( 'atshift_upf_admin_sanitize_field', $field, $raw_field, $type );
+			$fields[] = apply_filters( 'atshift_upf_admin_sanitize_field', $field, $submitted_field, $type );
 			}
 
 			update_option( 'atshift_upf_fields', $fields, false );
@@ -2003,7 +2050,8 @@ class Atshift_UPF_Admin {
 			$description = '';
 		}
 		$description = $this->prepare_field_description_for_save( $type, $description, ! is_array( $stored_field ) );
-		$role_control = $this->sanitize_role_control_settings( wp_unslash( $_POST ), $type );
+		$submitted_field = $this->sanitize_admin_field_input( wp_unslash( $_POST ) );
+		$role_control    = $this->sanitize_role_control_settings( $submitted_field, $type );
 
 		$new_field = array(
 			'id'          => $field_id,
@@ -2029,10 +2077,10 @@ class Atshift_UPF_Admin {
 		 * Filters one field definition before it is saved from the single-field route.
 		 *
 		 * @param array<string, mixed> $new_field Field definition sanitized by the base plugin.
-		 * @param array<string, mixed> $raw_field Raw submitted field data.
+		 * @param array<string, mixed> $submitted_field Submitted field data sanitized by the base plugin.
 		 * @param string               $type Field type.
 		 */
-		$new_field = apply_filters( 'atshift_upf_admin_sanitize_field', $new_field, wp_unslash( $_POST ), $type );
+		$new_field = apply_filters( 'atshift_upf_admin_sanitize_field', $new_field, $submitted_field, $type );
 
 		$updated = false;
 		foreach ( $fields as $index => $field ) {
@@ -2132,10 +2180,12 @@ class Atshift_UPF_Admin {
 		if ( 'screen' === $context ) {
 			$show_extras = isset( $_POST['show_extras'] ) ? ! empty( $_POST['show_extras'] ) : $show_extras;
 		} else {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized with sanitize_key() after unslashing.
 			$hidden       = isset( $_POST['hidden_core_fields'] ) ? (array) wp_unslash( $_POST['hidden_core_fields'] ) : array();
 			$hidden       = array_values( array_intersect( array_map( 'sanitize_key', $hidden ), $allowed ) );
 			$disabled     = $this->sanitize_disabled_hidden_core_fields(
-				isset( $_POST['disabled_hidden_core_fields'] ) ? (array) wp_unslash( $_POST['disabled_hidden_core_fields'] ) : array(),
+					// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized by sanitize_disabled_hidden_core_fields().
+					isset( $_POST['disabled_hidden_core_fields'] ) ? (array) wp_unslash( $_POST['disabled_hidden_core_fields'] ) : array(),
 				$hidden
 			);
 			$apply_to_own = ! empty( $_POST['apply_to_own_profile'] );
@@ -2175,9 +2225,11 @@ class Atshift_UPF_Admin {
 		$field_group_enabled = isset( $_POST['field_group_enabled'] ) ? '1' === sanitize_key( wp_unslash( $_POST['field_group_enabled'] ) ) : ! empty( $current['field_group_enabled'] );
 
 		if ( isset( $_POST['hidden_core_fields'] ) || isset( $_POST['disabled_hidden_core_fields'] ) || isset( $_POST['apply_to_own_profile'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized with sanitize_key() after unslashing.
 			$hidden       = isset( $_POST['hidden_core_fields'] ) ? (array) wp_unslash( $_POST['hidden_core_fields'] ) : array();
 			$hidden       = array_values( array_intersect( array_map( 'sanitize_key', $hidden ), $allowed ) );
 			$disabled     = $this->sanitize_disabled_hidden_core_fields(
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized by sanitize_disabled_hidden_core_fields().
 				isset( $_POST['disabled_hidden_core_fields'] ) ? (array) wp_unslash( $_POST['disabled_hidden_core_fields'] ) : array(),
 				$hidden
 			);

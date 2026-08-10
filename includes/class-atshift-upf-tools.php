@@ -331,6 +331,7 @@ class Atshift_UPF_Tools {
 	 */
 	private function import_configuration( $code = null ) {
 		if ( null === $code ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Import JSON is validated and normalized by validate_import_payload().
 			$code = isset( $_POST['import_code'] ) ? trim( wp_unslash( $_POST['import_code'] ) ) : '';
 		} else {
 			$code = trim( (string) $code );
@@ -455,6 +456,7 @@ class Atshift_UPF_Tools {
 		}
 
 		$delete_values     = ! empty( $_POST['delete_values'] );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized with sanitize_key() immediately below.
 		$raw_addon_data    = isset( $_POST['delete_addon_data'] ) ? (array) wp_unslash( $_POST['delete_addon_data'] ) : array();
 		$delete_addon_data = array_values( array_unique( array_filter( array_map( 'sanitize_key', $raw_addon_data ) ) ) );
 		$meta_keys         = $delete_values ? $this->get_plugin_user_meta_keys() : array();

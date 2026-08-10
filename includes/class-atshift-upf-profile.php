@@ -618,9 +618,9 @@ class Atshift_UPF_Profile {
 
 		$this->apply_disabled_hidden_core_fields( $update ? 'edit' : 'new', $user );
 
-		$values = isset( $_POST['atshift_upf_fields'] ) ? (array) wp_unslash( $_POST['atshift_upf_fields'] ) : array();
-
 		$fields = $this->filter_fields_for_screen( Atshift_UPF_Plugin::get_enabled_fields(), $update ? 'edit' : 'new' );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Profile values are sanitized field-by-field by sanitize_submitted_profile_values().
+		$values = isset( $_POST['atshift_upf_fields'] ) ? $this->sanitize_submitted_profile_values( (array) wp_unslash( $_POST['atshift_upf_fields'] ), $fields ) : array();
 		$screen = $update ? 'edit' : 'new';
 
 		foreach ( $fields as $field ) {
@@ -756,7 +756,6 @@ class Atshift_UPF_Profile {
 			return;
 		}
 
-		$values = isset( $_POST['atshift_upf_fields'] ) ? (array) wp_unslash( $_POST['atshift_upf_fields'] ) : array();
 		$core_updates = array(
 			'ID' => $user_id,
 		);
@@ -769,6 +768,8 @@ class Atshift_UPF_Profile {
 		}
 
 		$fields = $this->filter_fields_for_screen( $all_fields, $screen );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Profile values are sanitized field-by-field by sanitize_submitted_profile_values().
+		$values = isset( $_POST['atshift_upf_fields'] ) ? $this->sanitize_submitted_profile_values( (array) wp_unslash( $_POST['atshift_upf_fields'] ), $fields ) : array();
 
 		foreach ( $fields as $field ) {
 			if ( $this->is_horizontal_group( $field ) || $this->is_box_group( $field ) || $this->is_accordion_group( $field ) ) {
@@ -1929,6 +1930,9 @@ class Atshift_UPF_Profile {
 	 */
 	private function sanitize_value( $value, $field ) {
 		$type = isset( $field['type'] ) ? $field['type'] : 'text';
+		if ( is_array( $value ) ) {
+			$value = $this->sanitize_profile_input_array( $value );
+		}
 
 		/**
 		 * Lets add-ons sanitize values for custom profile input types.
@@ -1943,6 +1947,10 @@ class Atshift_UPF_Profile {
 		$custom_sanitized = apply_filters( 'atshift_upf_sanitize_profile_value', null, $value, $field );
 		if ( null !== $custom_sanitized ) {
 			return $custom_sanitized;
+		}
+
+		if ( is_array( $value ) ) {
+			return 'checkbox' === $type && ! empty( $value ) ? '1' : '';
 		}
 
 		if ( 'core_bio' === $type ) {
@@ -1977,7 +1985,7 @@ class Atshift_UPF_Profile {
 		}
 
 		if ( 'core_password' === $type ) {
-			return (string) $value;
+			return wp_check_invalid_utf8( (string) $value );
 		}
 
 		if ( 'core_notification' === $type ) {
@@ -2029,7 +2037,67 @@ class Atshift_UPF_Profile {
 			return in_array( $value, $choices, true ) ? sanitize_text_field( $value ) : '';
 		}
 
-		return sanitize_text_field( $value );
+			return sanitize_text_field( $value );
+	}
+
+	/**
+	 * Sanitize submitted plugin profile values before validation hooks read them.
+	 *
+	 * @param array<string, mixed>                  $values Submitted plugin values.
+	 * @param array<int, array<string, mixed>>      $fields Field definitions.
+	 * @return array<string, mixed>
+	 */
+	private function sanitize_submitted_profile_values( $values, $fields ) {
+		$fields_by_key = array();
+
+		foreach ( $fields as $field ) {
+			$key = isset( $field['key'] ) ? sanitize_key( $field['key'] ) : '';
+			if ( '' !== $key ) {
+				$fields_by_key[ $key ] = $field;
+			}
+		}
+
+		$sanitized = array();
+
+		foreach ( $values as $key => $value ) {
+			$key = sanitize_key( $key );
+			if ( '' === $key ) {
+				continue;
+			}
+
+			$field = isset( $fields_by_key[ $key ] ) ? $fields_by_key[ $key ] : array(
+				'key'  => $key,
+				'type' => 'text',
+			);
+
+			$sanitized[ $key ] = $this->sanitize_value( $value, $field );
+		}
+
+		return $sanitized;
+	}
+
+	/**
+	 * Recursively sanitize a submitted profile input array.
+	 *
+	 * @param array<int|string, mixed> $value Submitted value.
+	 * @return array<int|string, mixed>
+	 */
+	private function sanitize_profile_input_array( $value ) {
+		$sanitized = array();
+
+		foreach ( $value as $key => $item ) {
+			$sanitized_key = is_int( $key ) ? $key : sanitize_key( $key );
+
+			if ( '' === $sanitized_key && ! is_int( $key ) ) {
+				continue;
+			}
+
+			$sanitized[ $sanitized_key ] = is_array( $item )
+				? $this->sanitize_profile_input_array( $item )
+				: sanitize_text_field( (string) $item );
+		}
+
+		return $sanitized;
 	}
 
 	/**
@@ -2112,7 +2180,10 @@ class Atshift_UPF_Profile {
 			return $this->normalize_core_checkbox_value( $field['type'], $value, $has_value );
 		}
 
-		return isset( $_POST[ $name ] ) ? wp_unslash( $_POST[ $name ] ) : '';
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Native field values are sanitized by sanitize_value() below.
+			$value = isset( $_POST[ $name ] ) ? wp_unslash( $_POST[ $name ] ) : '';
+
+		return $this->sanitize_value( $value, $field );
 	}
 
 	/**
@@ -2194,6 +2265,7 @@ class Atshift_UPF_Profile {
 	 */
 	private function get_submitted_additional_name_type( $field ) {
 		$key   = isset( $field['key'] ) ? sanitize_key( $field['key'] ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized by sanitize_additional_name_type().
 		$types = isset( $_POST['atshift_upf_additional_name_types'] ) ? (array) wp_unslash( $_POST['atshift_upf_additional_name_types'] ) : array();
 
 		return $this->sanitize_additional_name_type( isset( $types[ $key ] ) ? $types[ $key ] : '' );
