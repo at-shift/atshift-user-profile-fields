@@ -62,6 +62,8 @@ After saving the field set, open **Users > All Users** or **Users > Add User** a
 
 ![Add User screen rendered from a saved field set.](screenshots/add-user_en-US.png)
 
+![Display Settings screen for hiding unused default WordPress profile items.](screenshots/display_settings.png)
+
 ## Retrieving Saved Values
 
 Values added by the plugin can be retrieved with the provided helper or the standard WordPress user meta API.

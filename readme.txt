@@ -76,6 +76,7 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 1. Field Management screen with draggable grouped profile fields and WordPress default profile fields.
 2. New field editor with custom field types, groups, and default WordPress profile fields.
 3. Add User screen rendered from a saved field set with required badges and grouped controls.
+4. Display Settings screen for hiding unused default WordPress profile items.
 
 == Related Projects ==
 
