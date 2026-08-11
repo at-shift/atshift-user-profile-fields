@@ -7,7 +7,7 @@
     <a href="https://upf.at-shift.net/en/guide/">Setup Guide</a> ·
     <a href="https://upf.at-shift.net/en/output/">Reference</a> ·
     <a href="https://upf.at-shift.net/en/pro/">Pro Add-on</a> ·
-    <a href="https://github.com/at-shift/atshift-user-profile-fields/releases">Download</a> ·
+    <a href="https://wordpress.org/plugins/atshift-user-profile-fields/">WordPress.org</a> ·
     <a href="https://upf.at-shift.net/">日本語</a>
   </p>
 </div>
@@ -37,7 +37,7 @@ Remove unnecessary settings, arrange fields in a natural order, and configure la
 
 ## Installation
 
-1. Download the plugin ZIP from [Releases](https://github.com/at-shift/atshift-user-profile-fields/releases).
+1. Install the plugin from [WordPress.org](https://wordpress.org/plugins/atshift-user-profile-fields/) or download a ZIP from [Releases](https://github.com/at-shift/atshift-user-profile-fields/releases).
 2. In WordPress, open **Plugins > Add Plugin > Upload Plugin** and upload the ZIP.
 3. Activate the plugin.
 4. Open **atshift User Profile Fields > Field Management** in the WordPress admin menu.
@@ -53,6 +53,14 @@ The Field Management screen offers three ways to begin:
 3. Import a field set exported from another site.
 
 After saving the field set, open **Users > All Users** or **Users > Add User** and confirm that labels, descriptions, inputs, required indicators, and ordering appear as intended.
+
+## Screenshots
+
+![Field Management screen with draggable grouped profile fields.](screenshots/field-manage_en-US.png)
+
+![New field editor showing custom, group, and default WordPress field types.](screenshots/new-fields_en-US.png)
+
+![Add User screen rendered from a saved field set.](screenshots/add-user_en-US.png)
 
 ## Retrieving Saved Values
 

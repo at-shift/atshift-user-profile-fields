@@ -71,6 +71,12 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 2. Activate the plugin from the Plugins screen.
 3. Open Settings > atshift User Profile Fields.
 
+== Screenshots ==
+
+1. Field Management screen with draggable grouped profile fields and WordPress default profile fields.
+2. New field editor with custom field types, groups, and default WordPress profile fields.
+3. Add User screen rendered from a saved field set with required badges and grouped controls.
+
 == Related Projects ==
 
 * [atshift Freeform Login beta](https://upf.at-shift.net/en/freeform-login/) - design the WordPress login screen and place a matching login form on site pages.

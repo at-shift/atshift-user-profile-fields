@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: atshift User Profile Fields
- * Plugin URI: https://github.com/at-shift/atshift-user-profile-fields
+ * Plugin URI: https://upf.at-shift.net/en/
  * Description: Beautiful and practical WordPress user profiles with custom fields and flexible control over default profile items.
  * Version: 1.0.0.2
  * Author: @shift
- * Author URI: https://github.com/at-shift
+ * Author URI: https://at-shift.net/
  * Update URI: https://github.com/at-shift/atshift-user-profile-fields
  * License: GPLv2 or later
  * Text Domain: atshift-user-profile-fields
