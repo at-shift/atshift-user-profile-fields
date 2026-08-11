@@ -37,7 +37,7 @@ Remove unnecessary settings, arrange fields in a natural order, and configure la
 
 ## Installation
 
-1. Install the plugin from [WordPress.org](https://wordpress.org/plugins/atshift-user-profile-fields/) or download a ZIP from [Releases](https://github.com/at-shift/atshift-user-profile-fields/releases).
+1. Install the plugin from [WordPress.org](https://wordpress.org/plugins/atshift-user-profile-fields/)
 2. In WordPress, open **Plugins > Add Plugin > Upload Plugin** and upload the ZIP.
 3. Activate the plugin.
 4. Open **atshift User Profile Fields > Field Management** in the WordPress admin menu.
