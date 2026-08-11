@@ -28,9 +28,13 @@ The basic version includes:
 == Links ==
 
 * Official website: [upf.at-shift.net/en](https://upf.at-shift.net/en/)
-* Pro add-on: [Upgrade to Pro](https://upf.at-shift.net/pro/en)
-* Related beta: [atshift Freeform Login](https://upf.at-shift.net/en/freeform-login/)
-* Related plugin: [at-shift Fields](https://wordpress.org/plugins/atshift-fields-maintenance-for-custom-field-suite/)
+* Pro add-on: [Upgrade to Pro](https://upf.at-shift.net/en/pro/)
+
+== Pro Add-on ==
+
+The optional Pro add-on extends the field sets created with the free plugin. It is installed alongside this free base plugin.
+
+Pro adds user classifications, visibility and editing permissions, public profiles, user directories, shortcodes, and CSV workflows for sites that need to publish or manage profile data beyond the WordPress admin screens.
 
 == Displaying Custom Field Values ==
 
@@ -66,6 +70,11 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 1. Upload the plugin folder to `/wp-content/plugins/`.
 2. Activate the plugin from the Plugins screen.
 3. Open Settings > atshift User Profile Fields.
+
+== Related Projects ==
+
+* [atshift Freeform Login beta](https://upf.at-shift.net/en/freeform-login/) - design the WordPress login screen and place a matching login form on site pages.
+* [at-shift Fields](https://wordpress.org/plugins/atshift-fields-maintenance-for-custom-field-suite/) - arrange custom fields for posts and custom post types with a similar field-building experience.
 
 == Changelog ==
 
