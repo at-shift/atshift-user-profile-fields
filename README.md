@@ -6,6 +6,7 @@
     <a href="https://upf.at-shift.net/en/">Official Website</a> ·
     <a href="https://upf.at-shift.net/en/guide/">Setup Guide</a> ·
     <a href="https://upf.at-shift.net/en/output/">Reference</a> ·
+    <a href="https://upf.at-shift.net/pro/en">Pro Add-on</a> ·
     <a href="https://github.com/at-shift/atshift-user-profile-fields/releases">Download</a> ·
     <a href="https://upf.at-shift.net/">日本語</a>
   </p>
@@ -82,6 +83,8 @@ Pro adds user classifications, visibility and editing permissions, public profil
 | Retrieving and displaying values | [Display and output](https://upf.at-shift.net/en/output/) | [表示・出力](https://upf.at-shift.net/output/) |
 | Pro Upgrade | [Upgrade to Pro](https://upf.at-shift.net/pro/en) | [Proへアップグレード](https://upf.at-shift.net/pro/) |
 | Pro shortcodes | [Shortcode reference](https://upf.at-shift.net/en/shortcodes/) | [リファレンス](https://upf.at-shift.net/shortcodes/) |
+| Freeform Login beta | [Login design beta](https://upf.at-shift.net/en/freeform-login/) | [Freeform Login ベータ](https://upf.at-shift.net/freeform-login/) |
+| at-shift Fields | [WordPress.org plugin](https://wordpress.org/plugins/atshift-fields-maintenance-for-custom-field-suite/) | [WordPress.org プラグイン](https://wordpress.org/plugins/atshift-fields-maintenance-for-custom-field-suite/) |
 
 ## Reporting Issues
 

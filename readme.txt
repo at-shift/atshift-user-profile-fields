@@ -25,6 +25,13 @@ The basic version includes:
 * Protected deletion of plugin settings and optional custom profile values
 * A designed admin interface for everyday profile management
 
+== Links ==
+
+* Official website: [upf.at-shift.net/en](https://upf.at-shift.net/en/)
+* Pro add-on: [Upgrade to Pro](https://upf.at-shift.net/pro/en)
+* Related beta: [atshift Freeform Login](https://upf.at-shift.net/en/freeform-login/)
+* Related plugin: [at-shift Fields](https://wordpress.org/plugins/atshift-fields-maintenance-for-custom-field-suite/)
+
 == Displaying Custom Field Values ==
 
 Custom fields are saved as user meta. Use the field key shown in the field editor.
