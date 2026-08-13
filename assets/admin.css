@@ -1166,15 +1166,16 @@
 .cfs_tooltip .tooltip_inner {
 	background: #1d2327;
 	border-radius: 4px;
+	box-sizing: border-box;
 	color: #fff;
 	display: none;
 	font-weight: 400;
-	left: 50%;
+	left: -8px;
 	line-height: 1.4;
+	max-width: calc(100vw - 64px);
 	padding: 8px 10px;
 	position: absolute;
 	top: 22px;
-	transform: translateX(-50%);
 	width: 240px;
 	z-index: 100000;
 }
