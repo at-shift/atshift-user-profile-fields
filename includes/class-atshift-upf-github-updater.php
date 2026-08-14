@@ -69,7 +69,7 @@ final class Atshift_UPF_GitHub_Updater {
 			'version'      => $version,
 			'url'          => isset( $release['html_url'] ) ? esc_url_raw( $release['html_url'] ) : self::UPDATE_URI . '/releases',
 			'package'      => $package,
-			'tested'       => '7.0',
+			'tested'       => '7.1',
 			'requires_php' => '7.4',
 		);
 	}

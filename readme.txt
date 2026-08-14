@@ -2,7 +2,7 @@
 Contributors: atshift
 Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 1.0.0.3
 License: GPLv2 or later
@@ -86,6 +86,7 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 == Changelog ==
 
 = 1.0.0.3 =
+* Confirmed compatibility with WordPress 7.1 RC3.
 * Keep field editor tooltips visible within the field panel and narrow screens.
 
 = 1.0.0.2 =
