@@ -96,7 +96,7 @@ Pro adds user classifications, visibility and editing permissions, public profil
 
 ## Related Projects
 
-- [atshift Freeform Login beta](https://upf.at-shift.net/en/freeform-login/) designs the WordPress login screen and provides a matching login form shortcode for site pages.
+- [atshift Freeform Login](https://wordpress.org/plugins/atshift-freeform-login/) designs the WordPress login screen and provides a matching login form shortcode for site pages.
 - [at-shift Fields](https://wordpress.org/plugins/atshift-fields-maintenance-for-custom-field-suite/) brings a similar field-building experience to posts and custom post types.
 
 ## Reporting Issues
