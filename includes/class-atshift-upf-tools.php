@@ -932,6 +932,10 @@ class Atshift_UPF_Tools {
 			'core_submit_button',
 		);
 
+		if ( (bool) apply_filters( 'atshift_upf_passkeys_field_available', false ) ) {
+			$types[] = 'passkeys';
+		}
+
 		/**
 		 * Filters field types accepted by field-set imports.
 		 *

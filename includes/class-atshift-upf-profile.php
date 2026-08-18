@@ -628,6 +628,10 @@ class Atshift_UPF_Profile {
 				continue;
 			}
 
+			if ( 'passkeys' === ( $field['type'] ?? '' ) ) {
+				continue;
+			}
+
 			if ( ! $this->field_matches_profile_context( $field, 'admin_profile_validate', $screen, $user ) ) {
 				continue;
 			}
@@ -773,6 +777,10 @@ class Atshift_UPF_Profile {
 
 		foreach ( $fields as $field ) {
 			if ( $this->is_horizontal_group( $field ) || $this->is_box_group( $field ) || $this->is_accordion_group( $field ) ) {
+				continue;
+			}
+
+			if ( 'passkeys' === ( $field['type'] ?? '' ) ) {
 				continue;
 			}
 
@@ -1305,6 +1313,19 @@ class Atshift_UPF_Profile {
 		$field_name  = $this->get_input_name( $field, $key );
 		$description = isset( $field['description'] ) ? $field['description'] : '';
 		$classes     = $this->get_profile_field_classes( $field, 'atshift-upf-profile-field-block' );
+		if ( 'passkeys' === ( $field['type'] ?? '' ) ) {
+			?>
+			<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" data-atshift-upf-field="<?php echo esc_attr( $key ); ?>"<?php $this->render_condition_attributes( $field ); ?>>
+				<div class="atshift-upf-profile-passkeys-label"><?php $this->render_profile_label_content( $field, $user ); ?></div>
+				<?php $this->render_input( $field, $field_name, $value, $user ); ?>
+				<?php if ( $description ) : ?>
+					<p class="description"><?php echo esc_html( $description ); ?></p>
+				<?php endif; ?>
+			</div>
+			<?php
+			return;
+		}
+
 		if ( $this->is_profile_feature_field( $field ) ) {
 			?>
 			<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php $this->render_core_replacement_attribute( $field ); ?><?php $this->render_condition_attributes( $field ); ?>>
@@ -1346,6 +1367,25 @@ class Atshift_UPF_Profile {
 		$field_name  = $this->get_input_name( $field, $key );
 		$description = isset( $field['description'] ) ? $field['description'] : '';
 		$row_classes = $this->get_profile_field_classes( $field, 'atshift-upf-profile-field-row' );
+		if ( 'passkeys' === ( $field['type'] ?? '' ) ) {
+			?>
+			<tr
+				class="<?php echo esc_attr( implode( ' ', $row_classes ) ); ?>"
+				data-atshift-upf-field="<?php echo esc_attr( $key ); ?>"
+				<?php $this->render_condition_attributes( $field ); ?>
+			>
+				<th scope="row"><?php $this->render_profile_label_content( $field, $user ); ?></th>
+				<td>
+					<?php $this->render_input( $field, $field_name, $value, $user ); ?>
+					<?php if ( $description ) : ?>
+						<p class="description"><?php echo esc_html( $description ); ?></p>
+					<?php endif; ?>
+				</td>
+			</tr>
+			<?php
+			return;
+		}
+
 		if ( $this->is_profile_feature_field( $field ) ) {
 			?>
 			<tr
@@ -1496,6 +1536,11 @@ class Atshift_UPF_Profile {
 		$placeholder = $this->normalize_core_placeholder( $field, $placeholder );
 		if ( '' === $placeholder ) {
 			$placeholder = $this->get_default_placeholder( $field );
+		}
+
+		if ( 'passkeys' === $type ) {
+			do_action( 'atshift_upf_render_passkeys_field', $user, $field, $user instanceof WP_User ? 'edit' : 'new' );
+			return;
 		}
 
 			/**
@@ -2751,6 +2796,10 @@ class Atshift_UPF_Profile {
 		);
 		$registered = array_fill_keys( $base_types, '' );
 
+		if ( (bool) apply_filters( 'atshift_upf_passkeys_field_available', false ) ) {
+			$registered['passkeys'] = '';
+		}
+
 		/**
 		 * Reuse the editor registration contract so inactive add-on fields stay dormant.
 		 *
@@ -3044,6 +3093,7 @@ class Atshift_UPF_Profile {
 			'core_profile_picture',
 			'core_sessions',
 			'core_application_passwords',
+			'passkeys',
 		);
 	}
 

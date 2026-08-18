@@ -2,6 +2,7 @@
 	'use strict';
 
 	var structureTypes = ['group', 'box', 'conditional', 'accordion'];
+	var fullWidthFieldTypes = ['core_password', 'core_bio', 'core_profile_picture', 'passkeys'];
 	var activeDraggedItem = null;
 	var singleUseCoreFieldTypes = Array.isArray(window.atshiftUPFAdmin && window.atshiftUPFAdmin.singleUseCoreFieldTypes) ? window.atshiftUPFAdmin.singleUseCoreFieldTypes : [];
 
@@ -16,6 +17,39 @@
 
 	function isSingleUseCoreFieldType(type) {
 		return singleUseCoreFieldTypes.indexOf(type) !== -1;
+	}
+
+	function updateFullWidthBadges(root) {
+		var strings = (window.atshiftUPFAdmin && window.atshiftUPFAdmin.strings) || {};
+		var scope = root || document;
+
+		scope.querySelectorAll('li[data-field-id]').forEach(function (item) {
+			var field = directField(item);
+			var label = field ? field.querySelector('.field_label') : null;
+			var parentItem = item.parentElement && item.parentElement.classList.contains('atshift-upf-child-fields')
+				? item.parentElement.closest('li[data-field-id]')
+				: null;
+			var showBadge = fullWidthFieldTypes.indexOf(getFieldItemType(item)) !== -1
+				&& getFieldItemType(parentItem) === 'group';
+			var badge = field ? field.querySelector('.atshift-upf-full-row-chip') : null;
+
+			if (!showBadge) {
+				if (badge) {
+					badge.remove();
+				}
+				return;
+			}
+
+			if (!badge && label) {
+				badge = document.createElement('span');
+				badge.className = 'atshift-upf-cfs-chip is-context atshift-upf-full-row-chip';
+				label.appendChild(badge);
+			}
+
+			if (badge) {
+				badge.textContent = strings.fullRow || 'Full row';
+			}
+		});
 	}
 
 	function isDisallowedParentChild(parentItem, item) {
@@ -1194,6 +1228,7 @@
 						syncParentFieldsFromDom();
 					}
 					updateGroupDropzones(fieldItem || document);
+					updateFullWidthBadges(document);
 					updateStandardFieldAvailability();
 				}, 0);
 			}
@@ -1449,6 +1484,7 @@
 						syncParentFieldsFromDom();
 					}
 					updateGroupDropzones(root);
+					updateFullWidthBadges(root);
 					initSortableFields();
 				}
 			});
@@ -1678,8 +1714,9 @@
 					syncParentFieldsFromDom();
 				}
 				updateGroupDropzones(parentItem || item);
-				updateAddBelowButtons();
-				updateStandardFieldAvailability();
+					updateAddBelowButtons();
+					updateFullWidthBadges(document);
+					updateStandardFieldAvailability();
 
 				item.scrollIntoView({ block: 'center', behavior: 'smooth' });
 			firstInput = item.querySelector('input:not([type="hidden"]):not(:disabled), select:not(:disabled), textarea:not(:disabled)');
@@ -1817,8 +1854,9 @@
 				initSortableFields();
 				syncParentFieldsFromDom();
 				updateGroupDropzones(clone);
-				updateAddBelowButtons();
-				updateStandardFieldAvailability();
+					updateAddBelowButtons();
+					updateFullWidthBadges(document);
+					updateStandardFieldAvailability();
 			}
 			});
 
@@ -1839,8 +1877,9 @@
 				}
 
 			window.setTimeout(function () {
-				updateAddBelowButtons();
-				updateStandardFieldAvailability();
+			updateAddBelowButtons();
+			updateFullWidthBadges(document);
+			updateStandardFieldAvailability();
 			}, 0);
 		});
 

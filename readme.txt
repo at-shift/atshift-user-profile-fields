@@ -4,7 +4,7 @@ Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.0.3
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,7 @@ The basic version includes:
 * Default WordPress profile field visibility controls
 * Downloadable JSON distribution sets and validated file import
 * Bundled WordPress default profile preset for user creation and saved-user editing
+* Optional Passkeys field placement when atshift Freeform Login provides passkey management
 * Protected deletion of plugin settings and optional custom profile values
 * A designed admin interface for everyday profile management
 
@@ -80,10 +81,15 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 
 == Related Projects ==
 
-* [atshift Freeform Login beta](https://upf.at-shift.net/en/freeform-login/) - design the WordPress login screen and place a matching login form on site pages.
+* [atshift Freeform Login](https://wordpress.org/plugins/atshift-freeform-login/) - design the WordPress login screen and place a matching login form on site pages.
 * [at-shift Fields](https://wordpress.org/plugins/atshift-fields-maintenance-for-custom-field-suite/) - arrange custom fields for posts and custom post types with a similar field-building experience.
 
 == Changelog ==
+
+= 1.0.1 =
+* Add optional Passkeys field placement for atshift Freeform Login profile management controls.
+* Preserve Passkeys fields during validated field-set imports when atshift Freeform Login provides the integration.
+* Update the related project link now that atshift Freeform Login is available on WordPress.org.
 
 = 1.0.0.3 =
 * Confirmed compatibility with WordPress 7.1 RC3.

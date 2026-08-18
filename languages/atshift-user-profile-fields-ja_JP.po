@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: atshift User Profile Fields 0.1.109\n"
+"Project-Id-Version: atshift User Profile Fields 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-29 12:59+0900\n"
 "PO-Revision-Date: 2026-07-29 02:45+0900\n"
@@ -11,6 +11,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+#: includes/class-atshift-upf-admin.php:70
+msgid "Passkeys"
+msgstr "パスキー"
+
+#: includes/class-atshift-upf-admin.php
+msgid "Full row"
+msgstr "1列表示"
 
 #: atshift-user-profile-fields.php
 msgid "Beautiful and practical WordPress user profiles with custom fields and flexible control over default profile items."

@@ -96,6 +96,11 @@
 	line-height: 1.45;
 }
 
+.atshift-upf-profile-passkeys-label {
+	font-weight: 600;
+	line-height: 1.45;
+}
+
 .atshift-upf-profile-label-main {
 	align-items: center;
 	display: inline-flex;
@@ -399,8 +404,10 @@
 	grid-template-columns: 1fr;
 }
 
+.atshift-upf-profile-grid > .atshift-upf-profile-field-type-core_password,
 .atshift-upf-profile-grid > .atshift-upf-profile-field-type-core_bio,
-.atshift-upf-profile-grid > .atshift-upf-profile-field-type-core_profile_picture {
+.atshift-upf-profile-grid > .atshift-upf-profile-field-type-core_profile_picture,
+.atshift-upf-profile-grid > .atshift-upf-profile-field-type-passkeys {
 	grid-column: 1 / -1;
 }
 

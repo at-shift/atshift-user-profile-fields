@@ -65,6 +65,11 @@ class Atshift_UPF_Admin {
 			'core_role'         => __( 'Role', 'atshift-user-profile-fields' ),
 			'core_submit_button' => __( 'Add / Save User button', 'atshift-user-profile-fields' ),
 		);
+
+		if ( (bool) apply_filters( 'atshift_upf_passkeys_field_available', false ) ) {
+			$this->field_types['passkeys'] = __( 'Passkeys', 'atshift-user-profile-fields' );
+		}
+
 		/**
 		 * Filters field types available in the field editor.
 		 *
@@ -253,6 +258,7 @@ class Atshift_UPF_Admin {
 						'conditionalBranchDropLabel' => __( 'Condition "%s"', 'atshift-user-profile-fields' ),
 						/* translators: %s: Field label. */
 						'fieldDisplayLabel'       => __( 'Field "%s"', 'atshift-user-profile-fields' ),
+						'fullRow'                 => __( 'Full row', 'atshift-user-profile-fields' ),
 						'listSeparator'           => __( ', ', 'atshift-user-profile-fields' ),
 						/* translators: 1: Hidden condition labels, 2: Shown condition labels. */
 						'conditionalNewPartial'   => __( 'On the Add New User screen, %1$s are unavailable, so only %2$s are shown.', 'atshift-user-profile-fields' ),
@@ -979,6 +985,7 @@ class Atshift_UPF_Admin {
 				'radio',
 				'select',
 				'additional_name',
+				'passkeys',
 			),
 				__( 'Groups', 'atshift-user-profile-fields' ) => array(
 					'group',
@@ -1113,6 +1120,7 @@ class Atshift_UPF_Admin {
 						'core_notification',
 						'core_role',
 						'core_submit_button',
+						'passkeys',
 					)
 				)
 			)
@@ -1164,7 +1172,7 @@ class Atshift_UPF_Admin {
 	 * @return array<int, string>
 	 */
 	private function single_use_core_field_types() {
-		return array_values(
+		$types = array_values(
 			array_filter(
 				array_keys( $this->field_types ),
 				static function ( $type ) {
@@ -1172,6 +1180,12 @@ class Atshift_UPF_Admin {
 				}
 			)
 		);
+
+		if ( isset( $this->field_types['passkeys'] ) ) {
+			$types[] = 'passkeys';
+		}
+
+		return $types;
 	}
 
 	/**
@@ -1189,7 +1203,7 @@ class Atshift_UPF_Admin {
 			return __( 'Registration only', 'atshift-user-profile-fields' );
 		}
 
-		if ( in_array( $type, array( 'core_visual_editor', 'core_admin_color', 'core_syntax_highlighting', 'core_keyboard_shortcuts', 'core_toolbar', 'core_nickname', 'core_display_name', 'core_bio', 'core_profile_picture', 'core_sessions', 'core_application_passwords' ), true ) ) {
+		if ( in_array( $type, array( 'core_visual_editor', 'core_admin_color', 'core_syntax_highlighting', 'core_keyboard_shortcuts', 'core_toolbar', 'core_nickname', 'core_display_name', 'core_bio', 'core_profile_picture', 'core_sessions', 'core_application_passwords', 'passkeys' ), true ) ) {
 			return __( 'Edit only', 'atshift-user-profile-fields' );
 		}
 
@@ -1479,6 +1493,7 @@ class Atshift_UPF_Admin {
 			'core_notification' => 'send_user_notification',
 			'core_role'         => 'role',
 			'core_submit_button' => 'submit_button',
+			'passkeys'           => 'passkeys',
 		);
 
 		if ( isset( $core_map[ $type ] ) ) {
@@ -1922,7 +1937,7 @@ class Atshift_UPF_Admin {
 				'accordion_open' => ! empty( $submitted_field['accordion_open'] ),
 				'role_control' => $role_control['mode'],
 				'role_control_roles' => $role_control['roles'],
-				'required'    => ! in_array( $type, array( 'core_username', 'core_email', 'core_password', 'core_language', 'core_notification', 'core_role' ), true ) && ! empty( $submitted_field['required'] ),
+				'required'    => ! in_array( $type, array( 'core_username', 'core_email', 'core_password', 'core_language', 'core_notification', 'core_role', 'passkeys' ), true ) && ! empty( $submitted_field['required'] ),
 				'validation_enabled' => in_array( $type, array( 'email', 'url', 'phone' ), true ) && ! empty( $submitted_field['validation_enabled'] ),
 				'initial_enabled' => Atshift_UPF_Plugin::supports_initial_state( $type ) && ! empty( $submitted_field['initial_enabled'] ),
 				'sort_order'  => $prepared_field['position'] * 10,
@@ -2068,7 +2083,7 @@ class Atshift_UPF_Admin {
 			'accordion_open' => ! empty( $_POST['accordion_open'] ),
 			'role_control' => $role_control['mode'],
 			'role_control_roles' => $role_control['roles'],
-			'required'    => ! in_array( $type, array( 'core_username', 'core_email', 'core_password', 'core_language', 'core_notification', 'core_role' ), true ) && ! empty( $_POST['required'] ),
+			'required'    => ! in_array( $type, array( 'core_username', 'core_email', 'core_password', 'core_language', 'core_notification', 'core_role', 'passkeys' ), true ) && ! empty( $_POST['required'] ),
 			'validation_enabled' => in_array( $type, array( 'email', 'url', 'phone' ), true ) && ! empty( $_POST['validation_enabled'] ),
 			'initial_enabled' => Atshift_UPF_Plugin::supports_initial_state( $type ) && ! empty( $_POST['initial_enabled'] ),
 			'sort_order'  => $sort_order,
