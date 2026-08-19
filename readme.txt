@@ -4,7 +4,7 @@ Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,6 +86,9 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 * [at-shift Fields](https://wordpress.org/plugins/atshift-fields-maintenance-for-custom-field-suite/) - arrange custom fields for posts and custom post types with a similar field-building experience.
 
 == Changelog ==
+
+= 1.0.2 =
+* Standardized the plugin action and metadata links shown on the Plugins screen.
 
 = 1.0.1 =
 * Add optional Passkeys field placement for atshift Freeform Login profile management controls.

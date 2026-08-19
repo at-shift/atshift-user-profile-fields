@@ -103,7 +103,7 @@ final class Atshift_UPF_Plugin {
 	}
 
 	/**
-	 * Replace the generic plugin-site link and add the official usage guide.
+	 * Build the plugin metadata row in the shared atshift order.
 	 *
 	 * @param array<int, string>   $links       Existing plugin metadata links.
 	 * @param string               $plugin_file Plugin basename.
@@ -112,38 +112,46 @@ final class Atshift_UPF_Plugin {
 	 * @return array<int, string>
 	 */
 	public function filter_plugin_row_meta( $links, $plugin_file, $plugin_data, $status ) {
-		unset( $plugin_data, $status );
+		$original_links = $links;
+		unset( $status );
 
 		if ( plugin_basename( ATSHIFT_UPF_FILE ) !== $plugin_file ) {
-			return $links;
+			return $original_links;
 		}
 
-		$details_url  = 'https://github.com/at-shift/atshift-user-profile-fields';
-		$guide_url    = 0 === strpos( determine_locale(), 'ja' ) ? 'https://upf.at-shift.net/guide/' : 'https://upf.at-shift.net/en/guide/';
-		$details_link = sprintf(
-			'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
-			esc_url( $details_url ),
-			esc_html__( 'View details', 'atshift-user-profile-fields' )
+		$details_url   = 'https://wordpress.org/plugins/atshift-user-profile-fields/';
+		$translate_url = 'https://translate.wordpress.org/projects/wp-plugins/atshift-user-profile-fields/';
+		$price_url     = 0 === strpos( determine_locale(), 'ja' ) ? 'https://upf.at-shift.net/price/' : 'https://upf.at-shift.net/en/price/';
+		$links         = array(
+			sprintf(
+				/* translators: %s: Plugin version. */
+				esc_html__( 'Version %s' ),
+				esc_html( isset( $plugin_data['Version'] ) ? $plugin_data['Version'] : ATSHIFT_UPF_VERSION )
+			),
+			sprintf(
+				/* translators: %s: Plugin author. */
+				__( 'By %s' ),
+				'<a href="' . esc_url( 'https://cfs.at-shift.net/' ) . '" target="_blank" rel="noopener noreferrer">@shift</a>'
+			),
+			sprintf(
+				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+				esc_url( $details_url ),
+				esc_html__( 'View details' )
+			),
+			sprintf(
+				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+				esc_url( $translate_url ),
+				esc_html__( 'Translate', 'atshift-user-profile-fields' )
+			),
 		);
-		$replaced     = false;
 
-		foreach ( $links as $index => $link ) {
-			if ( false !== strpos( $link, esc_url( $details_url ) ) ) {
-				$links[ $index ] = $details_link;
-				$replaced        = true;
-				break;
-			}
+		if ( ! $this->is_pro_installed() ) {
+			$links[] = sprintf(
+				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+				esc_url( $price_url ),
+				esc_html__( 'Upgrade to Pro', 'atshift-user-profile-fields' )
+			);
 		}
-
-		if ( ! $replaced ) {
-			$links[] = $details_link;
-		}
-
-		$links[] = sprintf(
-			'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
-			esc_url( $guide_url ),
-			esc_html__( 'Usage guide', 'atshift-user-profile-fields' )
-		);
 
 		return $links;
 	}
