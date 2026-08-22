@@ -98,6 +98,7 @@ Pro adds user classifications, visibility and editing permissions, public profil
 
 - [atshift Freeform Login](https://wordpress.org/plugins/atshift-freeform-login/) designs the WordPress login screen and provides a matching login form shortcode for site pages.
 - [at-shift Fields](https://wordpress.org/plugins/atshift-fields-maintenance-for-custom-field-suite/) brings a similar field-building experience to posts and custom post types.
+- [atshift Feed Builder](https://wordpress.org/plugins/atshift-feed-builder/) creates purpose-specific RSS 2.0 and JSON Feed 1.1 feeds from structured WordPress content, including atshift User Profile Fields values.
 
 ## Reporting Issues
 

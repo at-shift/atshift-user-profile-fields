@@ -21,8 +21,7 @@ class Atshift_UPF_Profile {
 		add_action( 'edit_user_profile', array( $this, 'render_fields' ) );
 		add_action( 'user_new_form', array( $this, 'render_new_user_fields' ) );
 		add_action( 'user_profile_update_errors', array( $this, 'validate_fields' ), 10, 3 );
-		add_action( 'personal_options_update', array( $this, 'save_fields' ) );
-		add_action( 'edit_user_profile_update', array( $this, 'save_fields' ) );
+		add_action( 'profile_update', array( $this, 'save_fields' ) );
 		add_action( 'user_register', array( $this, 'save_fields' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_profile_assets' ) );
 		add_filter( 'ure_show_additional_capabilities_section', array( $this, 'filter_user_role_editor_profile_section' ) );
@@ -619,6 +618,7 @@ class Atshift_UPF_Profile {
 		$this->apply_disabled_hidden_core_fields( $update ? 'edit' : 'new', $user );
 
 		$fields = $this->filter_fields_for_screen( Atshift_UPF_Plugin::get_enabled_fields(), $update ? 'edit' : 'new' );
+		$this->validate_submitted_role( $errors, $update, $user, $fields );
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Profile values are sanitized field-by-field by sanitize_submitted_profile_values().
 		$values = isset( $_POST['atshift_upf_fields'] ) ? $this->sanitize_submitted_profile_values( (array) wp_unslash( $_POST['atshift_upf_fields'] ), $fields ) : array();
 		$screen = $update ? 'edit' : 'new';
@@ -760,12 +760,12 @@ class Atshift_UPF_Profile {
 			return;
 		}
 
-		$core_updates = array(
-			'ID' => $user_id,
-		);
-
 		$screen     = 'user_register' === current_filter() ? 'new' : 'edit';
 		$all_fields = Atshift_UPF_Plugin::get_enabled_fields();
+
+		if ( ! $this->is_profile_form_submission( $user_id, $screen ) ) {
+			return;
+		}
 
 		if ( 'new' === $screen ) {
 			$this->apply_initial_states_to_new_user( $user_id, $all_fields );
@@ -800,9 +800,8 @@ class Atshift_UPF_Profile {
 			$value = $this->sanitize_value( $value, $field );
 
 			if ( $this->is_core_field( $field ) ) {
-				$this->queue_core_field_update( $core_updates, $field, $value );
 				/**
-				 * Fires after the base plugin prepares one WordPress core profile field update.
+				 * Fires after WordPress saves one core profile field submitted through this editor.
 				 *
 				 * @param int                  $user_id User ID.
 				 * @param array<string, mixed> $field Field definition.
@@ -829,10 +828,86 @@ class Atshift_UPF_Profile {
 			 */
 			do_action( 'atshift_upf_save_profile_field', $user_id, $field, $value, $screen );
 		}
+	}
 
-		if ( count( $core_updates ) > 1 ) {
-			wp_update_user( $core_updates );
+	/**
+	 * Confirm that a successful WordPress profile form initiated this save.
+	 *
+	 * profile_update also fires for programmatic wp_update_user() calls. Requiring
+	 * the native form nonce prevents those calls from clearing custom metadata.
+	 *
+	 * @param int    $user_id User ID.
+	 * @param string $screen  Screen context: new or edit.
+	 * @return bool
+	 */
+	private function is_profile_form_submission( $user_id, $screen ) {
+		$request_method = isset( $_SERVER['REQUEST_METHOD'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) ) : '';
+		if ( 'POST' !== $request_method ) {
+			return false;
 		}
+
+		if ( 'new' === $screen ) {
+			if ( ! empty( $_POST['_wpnonce_create-user'] ) ) {
+				$nonce = sanitize_text_field( wp_unslash( $_POST['_wpnonce_create-user'] ) );
+				return (bool) wp_verify_nonce( $nonce, 'create-user' );
+			}
+
+			return isset( $_POST['atshift_upf_fields'] );
+		}
+
+		if ( empty( $_POST['_wpnonce'] ) ) {
+			return false;
+		}
+
+		$nonce = sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) );
+		return (bool) wp_verify_nonce( $nonce, 'update-user_' . absint( $user_id ) );
+	}
+
+	/**
+	 * Enforce role-field visibility and assignable-role limits on the server.
+	 *
+	 * @param WP_Error                         $errors Error object.
+	 * @param bool                             $update Whether this is an update.
+	 * @param WP_User|stdClass                 $user User data being saved.
+	 * @param array<int,array<string,mixed>>   $fields Available field definitions.
+	 * @return void
+	 */
+	private function validate_submitted_role( $errors, $update, $user, $fields ) {
+		if ( ! isset( $_POST['role'] ) || ! is_object( $user ) ) {
+			return;
+		}
+
+		$role_field = null;
+		foreach ( $fields as $field ) {
+			if ( 'core_role' === ( $field['type'] ?? '' ) ) {
+				$role_field = $field;
+				break;
+			}
+		}
+
+		if ( null === $role_field ) {
+			return;
+		}
+
+		$target_user_id = $update && isset( $user->ID ) ? absint( $user->ID ) : 0;
+		$submitted_role = sanitize_key( wp_unslash( $_POST['role'] ) );
+		$assignable     = $this->get_assignable_roles();
+		$allowed        = $this->field_matches_profile_context( $role_field, 'admin_profile_validate', $update ? 'edit' : 'new', $user )
+			&& $this->current_user_can_assign_roles( $target_user_id )
+			&& isset( $assignable[ $submitted_role ] );
+
+		if ( $allowed ) {
+			return;
+		}
+
+		if ( $update && $target_user_id ) {
+			$existing   = get_userdata( $target_user_id );
+			$user->role = $existing instanceof WP_User && ! empty( $existing->roles[0] ) ? $existing->roles[0] : '';
+		} else {
+			$user->role = get_option( 'default_role', 'subscriber' );
+		}
+
+		$errors->add( 'atshift_upf_role_not_allowed', __( 'You are not allowed to assign this role.', 'atshift-user-profile-fields' ) );
 	}
 
 	/**
@@ -3612,6 +3687,15 @@ class Atshift_UPF_Profile {
 	 */
 	private function field_matches_profile_context( $field, $context, $screen, $user ) {
 		$allowed = $this->field_matches_role_control( $field );
+		$pro     = isset( $field['pro'] ) && is_array( $field['pro'] ) ? $field['pro'] : array();
+
+		if (
+			0 === strpos( (string) $context, 'admin_profile_' )
+			&& array_key_exists( 'show_admin_profile', $pro )
+			&& empty( $pro['show_admin_profile'] )
+		) {
+			$allowed = false;
+		}
 
 		/**
 		 * Filters whether a field is available in a profile rendering, validation,

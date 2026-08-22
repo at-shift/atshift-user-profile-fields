@@ -359,6 +359,8 @@ final class Atshift_UPF_Plugin {
 		$accent_alt = '#72aee6';
 		$chrome     = '#1d2327';
 		$chrome_alt = '#2c3338';
+		$button     = '#135e96';
+		$button_alt = '#2271b1';
 
 		if ( is_string( $scheme_key ) && isset( $_wp_admin_css_colors[ $scheme_key ] ) ) {
 			$scheme = $_wp_admin_css_colors[ $scheme_key ];
@@ -386,12 +388,22 @@ final class Atshift_UPF_Plugin {
 			$accent_alt = $colors[3];
 		}
 
+		if ( ! empty( $colors[3] ) ) {
+			$button     = $colors[2];
+			$button_alt = $colors[3];
+		} elseif ( ! empty( $colors[1] ) && ! empty( $colors[2] ) ) {
+			$button     = $colors[1];
+			$button_alt = $colors[2];
+		}
+
 		return sprintf(
-			"%s{\n--atshift-upf-accent:%s;\n--atshift-upf-accent-alt:%s;\n--atshift-upf-accent-dark:%s;\n--atshift-upf-chrome:%s;\n--atshift-upf-chrome-alt:%s;\n}\n",
+			"%s{\n--atshift-upf-accent:%s;\n--atshift-upf-accent-alt:%s;\n--atshift-upf-accent-dark:%s;\n--atshift-upf-button:%s;\n--atshift-upf-button-hover:%s;\n--atshift-upf-chrome:%s;\n--atshift-upf-chrome-alt:%s;\n}\n",
 			$selector,
 			esc_attr( $accent ),
 			esc_attr( $accent_alt ),
 			esc_attr( $chrome ),
+			esc_attr( $button ),
+			esc_attr( $button_alt ),
 			esc_attr( $chrome ),
 			esc_attr( $chrome_alt )
 		);

@@ -460,6 +460,17 @@ class Atshift_UPF_Tools {
 		$raw_addon_data    = isset( $_POST['delete_addon_data'] ) ? (array) wp_unslash( $_POST['delete_addon_data'] ) : array();
 		$delete_addon_data = array_values( array_unique( array_filter( array_map( 'sanitize_key', $raw_addon_data ) ) ) );
 		$meta_keys         = $delete_values ? $this->get_plugin_user_meta_keys() : array();
+
+		if ( ! in_array( 'pro_data', $delete_addon_data, true ) ) {
+			$meta_keys = array_values(
+				array_filter(
+					$meta_keys,
+					static function ( $meta_key ) {
+						return 0 !== strpos( (string) $meta_key, '_atshift_upf_pro_' );
+					}
+				)
+			);
+		}
 		/**
 		 * Filters plugin-owned user metadata keys before destructive cleanup.
 		 *

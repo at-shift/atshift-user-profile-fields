@@ -4,7 +4,7 @@ Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,11 +84,18 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 
 * [atshift Freeform Login](https://wordpress.org/plugins/atshift-freeform-login/) - design the WordPress login screen and place a matching login form on site pages.
 * [at-shift Fields](https://wordpress.org/plugins/atshift-fields-maintenance-for-custom-field-suite/) - arrange custom fields for posts and custom post types with a similar field-building experience.
+* [atshift Feed Builder](https://wordpress.org/plugins/atshift-feed-builder/) - create purpose-specific RSS 2.0 and JSON Feed 1.1 feeds from structured WordPress content, including atshift User Profile Fields values.
 
 == Changelog ==
 
-= 1.0.2 =
+= 1.0.3 =
+* Align save-button colors with the active admin color scheme by using the stronger color normally and the lighter color on hover.
+* Improve profile saving so custom field data is only processed during real profile form submissions.
+* Enforce role-field visibility and assignable-role limits during profile saves.
+* Keep Pro-owned user metadata separate unless Pro data cleanup is explicitly selected.
 * Standardized the plugin action and metadata links shown on the Plugins screen.
+* Reviewed standalone operation and integrations between atshift projects with Codex Security Check, fixing potential defects and security issues and applying additional hardening.
+* Made other minor fixes.
 
 = 1.0.1 =
 * Add optional Passkeys field placement for atshift Freeform Login profile management controls.
