@@ -4,20 +4,20 @@
     "plugin_version": "1.1",
     "exported_at": "2026-08-24T04:00:00Z",
     "distribution_set": {
-        "name": "WordPress Default Profile (Add and Edit Users)"
+        "name": "WordPress 기본 프로필(사용자 추가 및 편집)"
     },
     "fields": [
         {
             "id": "section_personal_settings",
             "key": "section_personal_settings",
-            "label": "Personal Options",
+            "label": "개인 옵션",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_visual_editor",
             "key": "rich_editing",
-            "label": "Visual Editor",
+            "label": "비주얼 편집기",
             "type": "core_visual_editor",
             "initial_enabled": true,
             "parent_id": "section_personal_settings"
@@ -25,7 +25,7 @@
         {
             "id": "field_syntax_highlighting",
             "key": "syntax_highlighting",
-            "label": "Syntax Highlighting",
+            "label": "구문 강조",
             "type": "core_syntax_highlighting",
             "initial_enabled": true,
             "parent_id": "section_personal_settings"
@@ -33,14 +33,14 @@
         {
             "id": "field_admin_color",
             "key": "admin_color",
-            "label": "Admin Color Scheme",
+            "label": "관리자 색상표",
             "type": "core_admin_color",
             "parent_id": "section_personal_settings"
         },
         {
             "id": "field_keyboard_shortcuts",
             "key": "comment_shortcuts",
-            "label": "Keyboard Shortcuts",
+            "label": "키보드 단축키",
             "type": "core_keyboard_shortcuts",
             "initial_enabled": false,
             "parent_id": "section_personal_settings"
@@ -48,7 +48,7 @@
         {
             "id": "field_toolbar",
             "key": "show_admin_bar_front",
-            "label": "Toolbar",
+            "label": "도구 모음",
             "type": "core_toolbar",
             "initial_enabled": true,
             "parent_id": "section_personal_settings"
@@ -56,28 +56,28 @@
         {
             "id": "field_language",
             "key": "locale",
-            "label": "Language",
+            "label": "언어",
             "type": "core_language",
             "parent_id": "section_personal_settings"
         },
         {
             "id": "field_username",
             "key": "user_login",
-            "label": "Username",
+            "label": "사용자명",
             "type": "core_username",
-            "description": "Enter the username required for login using letters, numbers, and the supported symbols (_ . - @). Spaces are not allowed. The username cannot be changed later."
+            "description": "로그인에 필요한 사용자명을 문자, 숫자 및 지원되는 기호(_ . - @)로 입력하세요. 공백은 허용되지 않습니다. 사용자명은 나중에 변경할 수 없습니다."
         },
         {
             "id": "section_name",
             "key": "section_name",
-            "label": "Name",
+            "label": "이름",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_first_name",
             "key": "first_name",
-            "label": "First Name",
+            "label": "이름",
             "type": "core_first_name",
             "parent_id": "section_name",
             "required": true
@@ -85,7 +85,7 @@
         {
             "id": "field_last_name",
             "key": "last_name",
-            "label": "Last Name",
+            "label": "성",
             "type": "core_last_name",
             "parent_id": "section_name",
             "required": true
@@ -93,107 +93,107 @@
         {
             "id": "field_nickname",
             "key": "nickname",
-            "label": "Nickname",
+            "label": "별명",
             "type": "core_nickname",
             "parent_id": "section_name"
         },
         {
             "id": "field_display_name",
             "key": "display_name",
-            "label": "Name Shown on the Site",
+            "label": "사이트에 표시되는 이름",
             "type": "core_display_name",
             "parent_id": "section_name"
         },
         {
             "id": "section_contact",
             "key": "section_contact",
-            "label": "Contact Info",
+            "label": "연락처 정보",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_email",
             "key": "user_email",
-            "label": "Email",
+            "label": "이메일",
             "type": "core_email",
-            "description": "Used for password resets and account notifications. It can be changed later and can also be used instead of the username when logging in.",
+            "description": "비밀번호 재설정 및 계정 알림에 사용됩니다. 나중에 변경할 수 있으며 로그인 시 사용자명 대신 사용할 수도 있습니다.",
             "parent_id": "section_contact"
         },
         {
             "id": "field_website",
             "key": "user_url",
-            "label": "Website",
+            "label": "웹사이트",
             "type": "core_website",
             "parent_id": "section_contact"
         },
         {
             "id": "section_about",
             "key": "section_about",
-            "label": "About Yourself",
+            "label": "자기소개",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_bio",
             "key": "description",
-            "label": "Biographical Info",
+            "label": "소개 정보",
             "type": "core_bio",
             "parent_id": "section_about"
         },
         {
             "id": "field_profile_picture",
             "key": "profile_picture",
-            "label": "Profile Picture",
+            "label": "프로필 사진",
             "type": "core_profile_picture",
             "parent_id": "section_about"
         },
         {
             "id": "section_account_management",
             "key": "section_account_management",
-            "label": "Security",
+            "label": "보안",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_password",
             "key": "password",
-            "label": "Password",
+            "label": "비밀번호",
             "type": "core_password",
-            "description": "Use a hard-to-guess password of at least 8 characters that combines letters, numbers, and symbols.",
+            "description": "문자, 숫자, 기호를 조합한 8자 이상의 추측하기 어려운 비밀번호를 사용하세요.",
             "parent_id": "section_account_management"
         },
         {
             "id": "field_sessions",
             "key": "sessions",
-            "label": "Sessions",
+            "label": "세션",
             "type": "core_sessions",
             "parent_id": "section_account_management"
         },
         {
             "id": "field_application_passwords",
             "key": "application_passwords",
-            "label": "Application Passwords",
+            "label": "애플리케이션 비밀번호",
             "type": "core_application_passwords",
             "parent_id": "section_account_management"
         },
         {
             "id": "section_permissions",
             "key": "section_permissions",
-            "label": "Permissions and Notifications",
+            "label": "권한 및 알림",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_role",
             "key": "role",
-            "label": "Role",
+            "label": "역할",
             "type": "core_role",
             "parent_id": "section_permissions"
         },
         {
             "id": "field_notification",
             "key": "send_user_notification",
-            "label": "User Notification",
+            "label": "사용자 알림",
             "type": "core_notification",
             "initial_enabled": true,
             "parent_id": "section_permissions"
@@ -201,9 +201,9 @@
         {
             "id": "field_submit_button",
             "key": "submit_button",
-            "label": "Add User / Save",
+            "label": "사용자 추가 / 저장",
             "type": "core_submit_button",
-            "description": "Used to add users and save profiles."
+            "description": "사용자를 추가하고 프로필을 저장하는 데 사용됩니다."
         }
     ],
     "settings": {

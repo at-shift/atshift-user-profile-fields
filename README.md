@@ -28,7 +28,7 @@ Remove unnecessary settings, arrange fields in a natural order, and configure la
 - Drag-and-drop ordering for fields and field sets
 - Support for both Add New User and Edit User screens
 - JSON export and import for reusable field sets
-- Bundled English and Japanese WordPress profile presets
+- Bundled interface translations and WordPress profile presets for 15 locales
 
 ## Requirements
 

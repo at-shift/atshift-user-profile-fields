@@ -10,8 +10,8 @@ msgstr ""
 "POT-Creation-Date: 2026-08-24 13:00+0900\n"
 "PO-Revision-Date: 2026-08-24 13:00+0900\n"
 "Last-Translator: atshift\n"
-"Language-Team: Japanese\n"
-"Language: ja_JP\n"
+"Language-Team: Chinese (Simplified)\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,232 +19,232 @@ msgstr ""
 
 #: includes/class-atshift-upf-admin.php:70
 msgid "Passkeys"
-msgstr "パスキー"
+msgstr "通行密钥"
 
 #: includes/class-atshift-upf-admin.php
 msgid "Full row"
-msgstr "1列表示"
+msgstr "整行"
 
 #: atshift-user-profile-fields.php
 msgid ""
 "Beautiful and practical WordPress user profiles with custom fields and "
 "flexible control over default profile items."
 msgstr ""
-"WordPressのユーザープロフィール画面を美しく、より実用的に。独自の項目を追加"
-"し、標準項目を柔軟に整理できます。"
+"美观实用的 WordPress 用户个人资料，支持自定义字段，并可灵活控制默认个人资料项"
+"目。"
 
 #: includes/class-atshift-upf-plugin.php
 msgid "View details"
-msgstr "詳細を表示"
+msgstr "查看详情"
 
 #: includes/class-atshift-upf-plugin.php
 msgid "Usage guide"
-msgstr "使用方法"
+msgstr "使用指南"
 
 msgid "Upgrade to Pro"
-msgstr "Pro版へアップグレード"
+msgstr "升级到 Pro"
 
 #: includes/class-atshift-upf-plugin.php
 msgid "Translate"
-msgstr "翻訳"
+msgstr "翻译"
 
 #: includes/class-atshift-upf-admin.php:28
 msgid "Text"
-msgstr "単一行テキスト"
+msgstr "文本"
 
 #: includes/class-atshift-upf-admin.php:29
 msgid "Textarea"
-msgstr "複数行テキスト"
+msgstr "多行文本"
 
 #: includes/class-atshift-upf-admin.php:30
 msgid "Email (Other)"
-msgstr "メールアドレス (その他)"
+msgstr "电子邮箱（其他）"
 
 #: includes/class-atshift-upf-admin.php:31
 msgid "URL (Other)"
-msgstr "URL (その他)"
+msgstr "URL（其他）"
 
 #: includes/class-atshift-upf-admin.php:32
 msgid "Phone"
-msgstr "電話番号"
+msgstr "电话"
 
 #: includes/class-atshift-upf-admin.php:33
 msgid "Number"
-msgstr "数値"
+msgstr "数字"
 
 #: includes/class-atshift-upf-admin.php:34
 msgid "Image"
-msgstr "画像"
+msgstr "图像"
 
 #: includes/class-atshift-upf-admin.php:35
 msgid "Checkbox"
-msgstr "チェックボックス"
+msgstr "复选框"
 
 #: includes/class-atshift-upf-admin.php:36
 #: includes/class-atshift-upf-admin.php:695
 msgid "Radio"
-msgstr "ラジオボタン"
+msgstr "单选按钮"
 
 #: includes/class-atshift-upf-admin.php:37
 #: includes/class-atshift-upf-admin.php:694
 msgid "Select"
-msgstr "選択"
+msgstr "下拉选择"
 
 #: includes/class-atshift-upf-admin.php:38
 msgid "Additional Name"
-msgstr "追加名"
+msgstr "其他姓名"
 
 #: includes/class-atshift-upf-admin.php:39
 msgid "Horizontal Group"
-msgstr "横並びグループ"
+msgstr "横向分组"
 
 #: includes/class-atshift-upf-admin.php:40
 msgid "Box Group"
-msgstr "ボックスグループ"
+msgstr "框式分组"
 
 #: includes/class-atshift-upf-admin.php:41
 msgid "Conditional Group"
-msgstr "条件分岐グループ"
+msgstr "条件分组"
 
 #: includes/class-atshift-upf-admin.php:42
 msgid "Accordion Group"
-msgstr "アコーディオングループ"
+msgstr "折叠分组"
 
 #: includes/class-atshift-upf-profile.php:2036
 msgid "Personal Options"
-msgstr "個人設定"
+msgstr "个人选项"
 
 #: includes/class-atshift-upf-admin.php:43
 #: includes/class-atshift-upf-profile.php:58
 msgid "Username"
-msgstr "ユーザー名"
+msgstr "用户名"
 
 #: includes/class-atshift-upf-admin.php:44
 #: includes/class-atshift-upf-profile.php:62
 msgid "Email"
-msgstr "メールアドレス"
+msgstr "电子邮箱"
 
 #: includes/class-atshift-upf-admin.php:45
 #: includes/class-atshift-upf-profile.php:42
 msgid "Admin color scheme"
-msgstr "管理画面の配色"
+msgstr "管理后台配色方案"
 
 #: includes/class-atshift-upf-admin.php:46
 #: includes/class-atshift-upf-profile.php:38
 msgid "Syntax highlighting"
-msgstr "シンタックスハイライト"
+msgstr "语法高亮"
 
 #: includes/class-atshift-upf-admin.php:47
 #: includes/class-atshift-upf-profile.php:46
 msgid "Keyboard shortcuts"
-msgstr "キーボードショートカット"
+msgstr "键盘快捷键"
 
 #: includes/class-atshift-upf-admin.php:48
 #: includes/class-atshift-upf-profile.php:50
 msgid "Toolbar"
-msgstr "ツールバー"
+msgstr "工具栏"
 
 #: includes/class-atshift-upf-admin.php:49
 #: includes/class-atshift-upf-profile.php:66
 msgid "First name"
-msgstr "名"
+msgstr "名字"
 
 #: includes/class-atshift-upf-admin.php:50
 #: includes/class-atshift-upf-profile.php:70
 msgid "Last name"
-msgstr "姓"
+msgstr "姓氏"
 
 #: includes/class-atshift-upf-admin.php:51
 #: includes/class-atshift-upf-profile.php:74
 msgid "Nickname"
-msgstr "ニックネーム"
+msgstr "昵称"
 
 #: includes/class-atshift-upf-admin.php:52
 #: includes/class-atshift-upf-profile.php:78
 msgid "Display name"
-msgstr "表示名"
+msgstr "显示名称"
 
 #: includes/class-atshift-upf-admin.php:53
 #: includes/class-atshift-upf-profile.php:54
 msgid "Language"
-msgstr "言語"
+msgstr "语言"
 
 #: includes/class-atshift-upf-admin.php:54
 #: includes/class-atshift-upf-profile.php:82
 msgid "Website"
-msgstr "サイト"
+msgstr "网站"
 
 #: includes/class-atshift-upf-admin.php:55
 #: includes/class-atshift-upf-profile.php:86
 msgid "Biographical info"
-msgstr "プロフィール情報"
+msgstr "个人说明"
 
 #: includes/class-atshift-upf-admin.php:56
 #: includes/class-atshift-upf-profile.php:106
 msgid "Profile picture"
-msgstr "プロフィール写真"
+msgstr "个人资料图片"
 
 #: includes/class-atshift-upf-admin.php:57
 #: includes/class-atshift-upf-profile.php:90
 msgid "Password"
-msgstr "パスワード"
+msgstr "密码"
 
 #: includes/class-atshift-upf-admin.php:58
 #: includes/class-atshift-upf-profile.php:94
 msgid "Sessions"
-msgstr "セッション"
+msgstr "会话"
 
 #: includes/class-atshift-upf-admin.php:59
 #: includes/class-atshift-upf-profile.php:110
 msgid "Application passwords"
-msgstr "アプリケーションパスワード"
+msgstr "应用程序密码"
 
 #: includes/class-atshift-upf-admin.php:60
 #: includes/class-atshift-upf-profile.php:98
 msgid "Email Notification"
-msgstr "メール通知"
+msgstr "电子邮件通知"
 
 #: includes/class-atshift-upf-admin.php:61
 #: includes/class-atshift-upf-profile.php:102
 msgid "Role"
-msgstr "権限グループ"
+msgstr "角色"
 
 #: includes/class-atshift-upf-admin.php:62
 #: includes/class-atshift-upf-profile.php:114
 msgid "Add / Save User button"
-msgstr "ユーザー追加・保存ボタン"
+msgstr "添加 / 保存用户按钮"
 
 #: includes/class-atshift-upf-profile.php:2048
 msgid "Name Display Format"
-msgstr "サイトに表示する名前"
+msgstr "姓名显示格式"
 
 #: includes/class-atshift-upf-profile.php:2049
 msgid "Name Shown on the Site"
-msgstr "サイトに表示する名前"
+msgstr "在站点上显示的名称"
 
 #: includes/class-atshift-upf-profile.php:2050
 msgid "Contact Info"
-msgstr "連絡先情報"
+msgstr "联系信息"
 
 #: includes/class-atshift-upf-profile.php:2054
 msgid "About Yourself"
-msgstr "プロフィール"
+msgstr "关于您自己"
 
 #: includes/class-atshift-upf-profile.php:2057
 msgid "Security"
-msgstr "セキュリティ"
+msgstr "安全"
 
 #: includes/class-atshift-upf-profile.php:2062
 msgid "Permissions and Notifications"
-msgstr "権限・通知"
+msgstr "权限和通知"
 
 #: includes/class-atshift-upf-profile.php:2064
 msgid "User Notification"
-msgstr "メール通知"
+msgstr "用户通知"
 
 #: includes/class-atshift-upf-profile.php:2065
 msgid "Add User / Save"
-msgstr "ユーザー追加・保存"
+msgstr "添加用户 / 保存"
 
 #: includes/class-atshift-upf-admin.php:81
 #: includes/class-atshift-upf-admin.php:82
@@ -255,174 +255,162 @@ msgstr "atshift User Profile Fields"
 #: includes/class-atshift-upf-admin.php:184
 #: includes/class-atshift-upf-admin.php:1212
 msgid "Automatically named when saved."
-msgstr "保存時に自動で名前が設定されます。"
+msgstr "保存时自动命名。"
 
 #: includes/class-atshift-upf-admin.php:185
 msgid "Always show"
-msgstr "常に表示"
+msgstr "始终显示"
 
 #: includes/class-atshift-upf-admin.php:186
 #: includes/class-atshift-upf-admin.php:519
 #: includes/class-atshift-upf-admin.php:572
 msgid "Close field settings"
-msgstr "フィールド設定を閉じる"
+msgstr "关闭字段设置"
 
 #: includes/class-atshift-upf-admin.php:187
 #: includes/class-atshift-upf-admin.php:519
 msgid "Open field settings"
-msgstr "フィールド設定を開く"
+msgstr "打开字段设置"
 
 #: includes/class-atshift-upf-admin.php:188
 #: includes/class-atshift-upf-admin.php:567
 msgid "New Field"
-msgstr "新規フィールド"
+msgstr "新字段"
 
 #: includes/class-atshift-upf-admin.php:189
 #: includes/class-atshift-upf-admin.php:762
 msgid "Add new field below"
-msgstr "この下に新規フィールドを追加"
+msgstr "在下方添加新字段"
 
 #: includes/class-atshift-upf-admin.php:190
 msgid "Add field inside group"
-msgstr "この中に新規フィールドを追加"
+msgstr "在分组内添加字段"
 
 #: includes/class-atshift-upf-admin.php:191
 msgid "Already added"
-msgstr "追加済み"
+msgstr "已添加"
 
 #: includes/class-atshift-upf-admin.php:192
 #, php-format
 msgid "Condition \"%s\""
-msgstr "条件「%s」"
+msgstr "条件“%s”"
 
 #: includes/class-atshift-upf-admin.php:193
 #, php-format
 msgid "Field \"%s\""
-msgstr "項目「%s」"
+msgstr "字段“%s”"
 
 #: includes/class-atshift-upf-admin.php:194
 msgid ", "
-msgstr "、"
+msgstr "，"
 
 #: includes/class-atshift-upf-admin.php:195
 #, php-format
 msgid ""
 "On the Add New User screen, %1$s are unavailable, so only %2$s are shown."
-msgstr ""
-"ユーザー追加画面では、%1$s は表示されないため、%2$s のみが表示されます。"
+msgstr "在“添加新用户”页面，%1$s 不可用，因此仅显示 %2$s。"
 
 #: includes/class-atshift-upf-admin.php:196
 #, php-format
 msgid ""
 "When editing an existing user, %1$s are unavailable, so only %2$s are shown."
-msgstr ""
-"保存済みユーザーの編集画面では、%1$s は表示されないため、%2$s のみが表示され"
-"ます。"
+msgstr "编辑现有用户时，%1$s 不可用，因此仅显示 %2$s。"
 
 #: includes/class-atshift-upf-admin.php:197
 msgid ""
 "This Conditional Group is not shown on the Add New User screen because none "
 "of its conditions contain fields available there."
 msgstr ""
-"ユーザー追加画面で表示できる項目がどの条件にもないため、この条件分岐全体は表"
-"示されません。"
+"此条件分组不会显示在“添加新用户”页面，因为它的条件中没有包含该页面可用的字"
+"段。"
 
 #: includes/class-atshift-upf-admin.php:198
 msgid ""
 "This Conditional Group is not shown when editing an existing user because "
 "none of its conditions contain fields available there."
 msgstr ""
-"保存済みユーザーの編集画面で表示できる項目がどの条件にもないため、この条件分"
-"岐全体は表示されません。"
+"编辑现有用户时不会显示此条件分组，因为它的条件中没有包含该页面可用的字段。"
 
 #: includes/class-atshift-upf-admin.php:199
 #, php-format
 msgid ""
 "On the Add New User screen, edit-only fields in this Accordion are omitted: "
 "%s."
-msgstr ""
-"ユーザー追加画面では、このアコーディオン内の編集時専用項目は表示されません: "
-"%s。"
+msgstr "在“添加新用户”页面，此折叠分组中的仅编辑字段会被省略：%s。"
 
 #: includes/class-atshift-upf-admin.php:200
 #, php-format
 msgid ""
 "When editing an existing user, registration-only fields in this Accordion "
 "are omitted: %s."
-msgstr ""
-"保存済みユーザーの編集画面では、このアコーディオン内の追加時専用項目は表示さ"
-"れません: %s。"
+msgstr "编辑现有用户时，此折叠分组中的仅注册字段会被省略：%s。"
 
 #: includes/class-atshift-upf-admin.php:201
 msgid ""
 "This Accordion is not shown on the Add New User screen because it contains "
 "no fields available there."
-msgstr ""
-"ユーザー追加画面で表示できる項目がないため、このアコーディオン全体は表示され"
-"ません。"
+msgstr "此折叠分组不会显示在“添加新用户”页面，因为其中不包含该页面可用的字段。"
 
 #: includes/class-atshift-upf-admin.php:202
 msgid ""
 "This Accordion is not shown when editing an existing user because it "
 "contains no fields available there."
-msgstr ""
-"保存済みユーザーの編集画面で表示できる項目がないため、このアコーディオン全体"
-"は表示されません。"
+msgstr "编辑现有用户时不会显示此折叠分组，因为其中不包含该页面可用的字段。"
 
 #: includes/class-atshift-upf-admin.php:224
 msgid ""
 "Emergency safe mode is active. WordPress native profile fields are being "
 "used and this plugin is not changing profile screens."
 msgstr ""
-"緊急セーフモードが有効です。WordPress 標準のプロフィールフィールドを使用し、"
-"このプラグインはプロフィール画面を変更していません。"
+"紧急安全模式已启用。当前使用 WordPress 原生个人资料字段，此插件不会更改个人资"
+"料页面。"
 
 #: includes/class-atshift-upf-admin.php:228
 msgid "Settings saved."
-msgstr "設定を保存しました。"
+msgstr "设置已保存。"
 
 #: includes/class-atshift-upf-admin.php:232
 msgid "Field deleted."
-msgstr "フィールドを削除しました。"
+msgstr "字段已删除。"
 
 #: includes/class-atshift-upf-admin.php:237
 msgid "The field could not be saved."
-msgstr "フィールドを保存できませんでした。"
+msgstr "无法保存字段。"
 
 #: includes/class-atshift-upf-admin.php:240
 msgid "Enter a field key before saving."
-msgstr "保存する前にフィールド名を入力してください。"
+msgstr "保存前请输入字段键。"
 
 #: includes/class-atshift-upf-admin.php:244
 msgid "That field key is already used by another field."
-msgstr "そのフィールド名はすでに別のフィールドで使用されています。"
+msgstr "该字段键已被其他字段使用。"
 
 #: includes/class-atshift-upf-admin.php:293
 msgid "Profile Field Settings"
-msgstr "プロフィールフィールドの設定"
+msgstr "个人资料字段设置"
 
 #: includes/class-atshift-upf-admin.php:103
 #: includes/class-atshift-upf-admin.php:357
 msgid "Field Management"
-msgstr "フィールド管理"
+msgstr "字段管理"
 
 #: includes/class-atshift-upf-admin.php:112
 #: includes/class-atshift-upf-admin.php:378
 #: includes/class-atshift-upf-admin.php:1476
 msgid "Display Settings"
-msgstr "表示設定"
+msgstr "显示设置"
 
 #: includes/class-atshift-upf-admin.php:387
 msgid "Save Display Settings"
-msgstr "表示設定を保存"
+msgstr "保存显示设置"
 
 #: includes/class-atshift-upf-admin.php:330
 msgid "Screen elements"
-msgstr "画面上の要素"
+msgstr "页面元素"
 
 #: includes/class-atshift-upf-admin.php:416
 msgid "Choose how the field editor is arranged on this screen."
-msgstr "この画面でのフィールドエディターの配置を選択します。"
+msgstr "选择字段编辑器在此页面上的排列方式。"
 
 #: includes/class-atshift-upf-admin.php:331
 msgid ""
@@ -430,99 +418,94 @@ msgid ""
 "or collapse the elements by clicking on their headings, and arrange them by "
 "dragging their headings or by clicking on the up and down arrows."
 msgstr ""
-"一部の画面上の要素は、チェックボックスを使って表示と非表示を切り替えることが"
-"できます。要素の見出しをクリックすると展開または折りたたみ、見出しをドラッグ"
-"するか上下の矢印をクリックすると並べ替えられます。"
+"可以使用复选框显示或隐藏部分页面元素。点击标题可展开或收起元素，拖动标题或点"
+"击上下箭头可调整排列顺序。"
 
 #: includes/class-atshift-upf-admin.php:333
 #: includes/class-atshift-upf-admin.php:365
 msgid "Fields"
-msgstr "フィールド"
+msgstr "字段"
 
 #: includes/class-atshift-upf-admin.php:334
 #: includes/class-atshift-upf-admin.php:1337
 msgid "Extras"
-msgstr "エクストラ"
+msgstr "附加项"
 
 #: includes/class-atshift-upf-admin.php:384
 msgid "Save Extras"
-msgstr "エクストラを保存"
+msgstr "保存附加设置"
 
 #: includes/class-atshift-upf-admin.php:337
 msgid "Layout"
-msgstr "レイアウト"
+msgstr "布局"
 
 #: includes/class-atshift-upf-admin.php:338
 msgid "1 column"
-msgstr "1列"
+msgstr "1 列"
 
 #: includes/class-atshift-upf-admin.php:339
 #: includes/class-atshift-upf-admin.php:683
 msgid "2 columns"
-msgstr "2列"
+msgstr "2 列"
 
 #: includes/class-atshift-upf-admin.php:371
 msgid "No fields yet"
-msgstr "フィールドはまだありません"
+msgstr "尚无字段"
 
 #: includes/class-atshift-upf-admin.php:392
 msgid ""
 "Use the buttons below to apply the plugin default field set, upload a field "
 "set, or add your first field."
-msgstr ""
-"下のボタンから、プラグインのデフォルトフィールドセットを適用するか、フィール"
-"ドセットをアップロードするか、最初のフィールドを追加してください。"
+msgstr "使用下方按钮应用插件默认字段集、上传字段集，或添加第一个字段。"
 
 msgid "Set the atshift User Profile Fields default field set"
-msgstr "atshift User Profile Fields のデフォルトフィールドセットを適用"
+msgstr "设置 atshift User Profile Fields 默认字段集"
 
 msgid "Loading the default field set..."
-msgstr "デフォルトフィールドセットを読み込み中..."
+msgstr "正在加载默认字段集..."
 
 msgid "The default field set could not be loaded."
-msgstr "デフォルトフィールドセットを読み込めませんでした。"
+msgstr "无法加载默认字段集。"
 
 msgid "Upload Field Set"
-msgstr "フィールドセットをアップロード"
+msgstr "上传字段集"
 
 msgid "Uploading field set..."
-msgstr "フィールドセットをアップロード中..."
+msgstr "正在上传字段集..."
 
 msgid "The selected field set could not be read."
-msgstr "選択したフィールドセットを読み込めませんでした。"
+msgstr "无法读取所选字段集。"
 
 msgid "The field set could not be uploaded."
-msgstr "フィールドセットをアップロードできませんでした。"
+msgstr "无法上传字段集。"
 
 msgid "Field set loaded."
-msgstr "フィールドセットを読み込みました。"
+msgstr "字段集已加载。"
 
 msgid "The field set is no longer empty. Reload the screen before importing."
-msgstr ""
-"フィールドセットはすでに空ではありません。画面を再読み込みしてからインポート"
-"してください。"
+msgstr "字段集已不再为空。请重新加载页面后再导入。"
 
 #: includes/class-atshift-upf-admin.php:381
 msgid "Add New Field"
-msgstr "新規フィールドを追加"
+msgstr "添加新字段"
 
 #: includes/class-atshift-upf-admin.php:393
 msgid "Publish"
-msgstr "公開"
+msgstr "发布"
 
 #: includes/class-atshift-upf-admin.php:396
 msgid "Field Set Status"
-msgstr "フィールドセットの状態"
+msgstr "字段集状态"
 
 #: includes/class-atshift-upf-admin.php:397
 #: includes/class-atshift-upf-admin.php:739
 #: includes/class-atshift-upf-profile.php:1211
 msgid "Enabled"
-msgstr "有効"
+msgstr "已启用"
 
 #: includes/class-atshift-upf-admin.php:398
 msgid "Disabled"
-msgstr "無効"
+msgstr "已禁用"
 
 #: includes/class-atshift-upf-admin.php:401
 msgid "Save"
@@ -530,90 +513,88 @@ msgstr "保存"
 
 #: includes/class-atshift-upf-admin.php:403
 msgid "Start Over"
-msgstr "最初から作り直す"
+msgstr "重新开始"
 
 msgid ""
 "Start over with this field set? All current fields, Extra settings, and "
 "editor settings will return to their initial state. Existing user profile "
 "values are not deleted. This cannot be undone."
 msgstr ""
-"このフィールドセットを最初から作り直しますか? 現在のすべてのフィールド、エク"
-"ストラ設定、編集画面設定が初期状態に戻ります。保存済みのユーザープロフィール"
-"値は削除されません。この操作は元に戻せません。"
+"要使用此字段集重新开始吗？所有当前字段、附加设置和编辑器设置都将恢复到初始状"
+"态。现有用户个人资料值不会被删除。此操作无法撤销。"
 
 msgid "The field set is ready to be created again from the beginning."
-msgstr "フィールドセットを最初から作り直せる状態にしました。"
+msgstr "字段集已准备好从头重新创建。"
 
 #: includes/class-atshift-upf-admin.php:485
 msgid "GROUP"
-msgstr "グループ"
+msgstr "分组"
 
 #: includes/class-atshift-upf-admin.php:486
 msgid "BOX"
-msgstr "ボックス"
+msgstr "框"
 
 #: includes/class-atshift-upf-admin.php:487
 msgid "CONDITION"
-msgstr "条件分岐"
+msgstr "条件"
 
 #: includes/class-atshift-upf-admin.php:488
 msgid "ACCORDION"
-msgstr "アコーディオン"
+msgstr "折叠"
 
 #: includes/class-atshift-upf-admin.php:499
 msgid "Drag to reorder"
-msgstr "ドラッグして並べ替え"
+msgstr "拖动以重新排序"
 
 #: includes/class-atshift-upf-admin.php:509
 #: includes/class-atshift-upf-admin.php:731
 #: includes/class-atshift-upf-profile.php:177
 #: includes/class-atshift-upf-profile.php:1726
 msgid "Required"
-msgstr "必須"
+msgstr "必填"
 
 #: includes/class-atshift-upf-admin.php:637
 msgid "Label"
-msgstr "ラベル"
+msgstr "标签"
 
 #: includes/class-atshift-upf-admin.php:638
 msgid "The field label shown on the user profile screen."
-msgstr "ユーザープロフィール画面に表示するフィールドのラベルです。"
+msgstr "显示在用户个人资料页面上的字段标签。"
 
 #: includes/class-atshift-upf-admin.php:644
 msgid "Name"
-msgstr "名前"
+msgstr "名称"
 
 #: includes/class-atshift-upf-admin.php:645
 msgid ""
 "This field name is generated automatically and is used as the saved field "
 "key."
-msgstr ""
-"このフィールド名は自動生成され、保存されるフィールドキーとして使われます。"
+msgstr "此字段名称会自动生成，并用作保存的字段键。"
 
 #: includes/class-atshift-upf-admin.php:651
 msgid "Field Type"
-msgstr "フィールドタイプ"
+msgstr "字段类型"
 
 #: includes/class-atshift-upf-admin.php:661
 #: includes/class-atshift-upf-admin.php:665
 msgid "Display for choice"
-msgstr "条件分岐の表示指定"
+msgstr "针对选项显示"
 
 #: includes/class-atshift-upf-admin.php:662
 msgid "Choose the parent Conditional Group value that displays this field."
-msgstr "このフィールドを表示する親の条件分岐の値を選択します。"
+msgstr "选择用于显示此字段的父条件分组值。"
 
 #: includes/class-atshift-upf-admin.php:670
 msgid "Choices"
-msgstr "選択肢"
+msgstr "选项"
 
 #: includes/class-atshift-upf-admin.php:671
 msgid "One choice per line."
-msgstr "1行につき1つの選択肢を入力します。"
+msgstr "每行一个选项。"
 
 #: includes/class-atshift-upf-admin.php:674
 msgid "One choice per line"
-msgstr "1行につき1つの選択肢"
+msgstr "每行一个选项"
 
 #: includes/class-atshift-upf-admin.php:679
 msgid "Columns"
@@ -621,55 +602,55 @@ msgstr "列"
 
 #: includes/class-atshift-upf-admin.php:684
 msgid "3 columns"
-msgstr "3列"
+msgstr "3 列"
 
 #: includes/class-atshift-upf-admin.php:690
 msgid "Display Control"
-msgstr "表示コントロール"
+msgstr "显示控制"
 
 #: includes/class-atshift-upf-admin.php:701
 msgid "Initial State"
-msgstr "初期状態"
+msgstr "初始状态"
 
 #: includes/class-atshift-upf-admin.php:704
 msgid "Open by default"
-msgstr "初期状態で開く"
+msgstr "默认展开"
 
 #: includes/class-atshift-upf-admin.php:709
 msgid "Placeholder"
-msgstr "プレースホルダー"
+msgstr "占位符"
 
 #: includes/class-atshift-upf-admin.php:718
 msgid "Notes"
-msgstr "概要"
+msgstr "备注"
 
 #: includes/class-atshift-upf-admin.php:719
 msgid "Notes for profile editors during data entry."
-msgstr "プロフィール入力時に編集者へ表示する説明です。"
+msgstr "供个人资料编辑者录入数据时参考的备注。"
 
 #: includes/class-atshift-upf-admin.php:728
 msgid "Validation"
-msgstr "入力チェック"
+msgstr "验证"
 
 #: includes/class-atshift-upf-admin.php:736
 msgid "Format Validation"
-msgstr "形式チェック"
+msgstr "格式验证"
 
 #: includes/class-atshift-upf-admin.php:745
 msgid "Allowed User Role Groups"
-msgstr "表示を許可する権限グループ"
+msgstr "允许的用户角色组"
 
 #: includes/class-atshift-upf-admin.php:746
 msgid "Leave blank to allow every user role."
-msgstr "空欄の場合は、すべての権限グループに表示します。"
+msgstr "留空则允许所有用户角色。"
 
 #: includes/class-atshift-upf-admin.php:750
 msgid "Leave blank to allow any role that can edit this post"
-msgstr "空欄の場合は、すべての権限グループに表示します"
+msgstr "留空则允许任何可编辑此文章的角色"
 
 #: includes/class-atshift-upf-admin.php:761
 msgid "Close"
-msgstr "閉じる"
+msgstr "关闭"
 
 #: includes/class-atshift-upf-admin.php:765
 msgid "Actions"
@@ -677,35 +658,35 @@ msgstr "操作"
 
 #: includes/class-atshift-upf-admin.php:769
 msgid "Duplicate"
-msgstr "複製"
+msgstr "复制"
 
 #: includes/class-atshift-upf-admin.php:770
 msgid "delete"
-msgstr "削除"
+msgstr "删除"
 
 #: includes/class-atshift-upf-admin.php:791
 msgid "Profile Fields"
-msgstr "プロフィールフィールド"
+msgstr "个人资料字段"
 
 #: includes/class-atshift-upf-admin.php:804
 msgid "Groups"
-msgstr "グループ"
+msgstr "分组"
 
 #: includes/class-atshift-upf-admin.php:810
 msgid "Default Profile Fields"
-msgstr "標準プロフィールフィールド"
+msgstr "默认个人资料字段"
 
 #: includes/class-atshift-upf-admin.php:985
 msgid "Registration only"
-msgstr "ユーザー追加時のみ"
+msgstr "仅注册"
 
 #: includes/class-atshift-upf-admin.php:989
 msgid "Edit only"
-msgstr "ユーザー編集時のみ"
+msgstr "仅编辑"
 
 #: includes/class-atshift-upf-admin.php:993
 msgid "Registration / Edit"
-msgstr "ユーザー追加・編集"
+msgstr "注册 / 编辑"
 
 #: includes/class-atshift-upf-admin.php:1105
 msgid ""
@@ -713,8 +694,8 @@ msgid ""
 "allowed symbols (_ . - @). Spaces cannot be used. This cannot be changed "
 "later."
 msgstr ""
-"ログインに必要なユーザー名を、半角英数字と使用可能な記号 (_ . - @) で入力して"
-"ください。スペースは使用できません。ユーザー名は後で変更できません。"
+"请输入登录所需的用户名，可使用半角字母、数字和允许的符号（_ . - @）。不能使用"
+"空格。之后无法更改。"
 
 #: includes/class-atshift-upf-admin.php:1106
 msgid ""
@@ -722,35 +703,31 @@ msgid ""
 "notifications. It can be changed at any time and can also be used instead of "
 "the user ID when logging in."
 msgstr ""
-"パスワードリセットとアカウント通知に使用します。メールアドレスはいつでも変更"
-"でき、ログイン時にユーザー名の代わりにも使用できます。"
+"此电子邮箱地址用于重置密码和其他账户通知。可随时更改，登录时也可用来代替用户 "
+"ID。"
 
 #: includes/class-atshift-upf-admin.php:1107
 msgid ""
 "Use a password that is difficult to guess, combines letters, numbers, and "
 "symbols, and is at least 8 characters long."
-msgstr ""
-"推測されにくい、英字・数字・記号を組み合わせた8文字以上のパスワードを使用して"
-"ください。"
+msgstr "请使用难以猜测的密码，组合字母、数字和符号，且长度至少为 8 个字符。"
 
 #: includes/class-atshift-upf-profile.php:2080
 msgid "Used to add users and save profiles."
-msgstr "ユーザーの追加とプロフィールの保存に使用します。"
+msgstr "用于添加用户和保存个人资料。"
 
 #: includes/class-atshift-upf-admin.php:1108
 msgid ""
 "Place the user creation and profile save button inside this field group."
-msgstr ""
-"ユーザーの追加ボタンとプロフィールの保存ボタンを、このフィールドグループ内に"
-"配置します。"
+msgstr "将用户创建和个人资料保存按钮放在此字段分组内。"
 
 #: includes/class-atshift-upf-admin.php:1109
 msgid ""
 "Use this field for middle, full, phonetic, preferred, or other name details "
 "that do not fit first and last name."
 msgstr ""
-"姓・名に収まらないミドルネーム、フルネーム、フリガナ、通称、その他の名前情報"
-"に使用します。"
+"此字段用于填写不适合放入名字和姓氏字段的中间名、全名、注音名、偏好称呼或其他"
+"姓名详情。"
 
 #: includes/class-atshift-upf-admin.php:1145
 msgid ""
@@ -758,265 +735,258 @@ msgid ""
 "The email address can be changed whenever needed. It can also be used "
 "instead of the user ID when logging in."
 msgstr ""
-"パスワードリセットなどのアカウント操作に必要な情報です。メールアドレスはいつ"
-"でも変更でき、ログイン時にユーザー名の代わりにも使用できます。"
+"此信息用于重置密码和类似账户操作。电子邮箱地址可按需更改，登录时也可用来代替"
+"用户 ID。"
 
 #: includes/class-atshift-upf-admin.php:1148
 msgid ""
 "The password must be difficult to guess, use a combination of letters, "
 "numbers, and symbols, and be at least 8 characters long."
-msgstr ""
-"推測されにくい、英字・数字・記号を組み合わせた8文字以上のパスワードを使用して"
-"ください。"
+msgstr "密码必须难以猜测，使用字母、数字和符号组合，且长度至少为 8 个字符。"
 
 #: includes/class-atshift-upf-admin.php:1340
 msgid ""
 "Hide WordPress and supported plugin profile items that are not needed for "
 "this site."
-msgstr ""
-"このサイトで不要な WordPress と対応プラグインのプロフィール項目を非表示にしま"
-"す。"
+msgstr "隐藏此站点不需要的 WordPress 及受支持插件的个人资料项目。"
 
 msgid "Other plugin profile items"
-msgstr "他プラグインのプロフィール項目"
+msgstr "其他插件个人资料项目"
 
 msgid "Profile items added by supported plugins."
-msgstr "対応プラグインが追加するプロフィール項目です。"
+msgstr "由受支持插件添加的个人资料项目。"
 
 msgid "User Role Editor: Additional Capabilities"
-msgstr "User Role Editor: 追加機能"
+msgstr "User Role Editor：附加权限"
 
 msgid ""
 "Hides the Other Roles and Capabilities section added by User Role Editor."
-msgstr ""
-"User Role Editor が追加する「その他の権限グループ」と「権限」のセクションを非"
-"表示にします。"
+msgstr "隐藏由 User Role Editor 添加的“其他角色和权限”部分。"
 
 #: includes/class-atshift-upf-admin.php:1373
 msgid "Apply these display settings to my own profile screen too."
-msgstr "自分のプロフィール画面にもこの表示設定を適用する"
+msgstr "也将这些显示设置应用到我自己的个人资料页面。"
 
 #: includes/class-atshift-upf-admin.php:1388
 msgid "Required fields during account creation"
-msgstr "アカウント作成時の必須の項目"
+msgstr "创建账户时的必填字段"
 
 #: includes/class-atshift-upf-admin.php:1389
 msgid "Fields needed to create a WordPress account."
-msgstr "WordPress アカウントの作成に必要な項目です。"
+msgstr "创建 WordPress 账户所需的字段。"
 
 #: includes/class-atshift-upf-admin.php:1398
 msgid "Feature items during account creation"
-msgstr "アカウント作成時の機能の項目"
+msgstr "创建账户时的功能项目"
 
 #: includes/class-atshift-upf-admin.php:1399
 msgid "Settings often checked when adding or inviting a user."
-msgstr "ユーザー追加や招待時によく確認する設定です。"
+msgstr "添加或邀请用户时通常会检查的设置。"
 
 #: includes/class-atshift-upf-admin.php:1407
 msgid "Field items after account creation"
-msgstr "アカウント作成後のフィールド項目"
+msgstr "创建账户后的字段项目"
 
 #: includes/class-atshift-upf-admin.php:1408
 msgid "Profile fields used after the account exists."
-msgstr "アカウント作成後に使うプロフィールフィールドです。"
+msgstr "账户创建后使用的个人资料字段。"
 
 #: includes/class-atshift-upf-admin.php:1420
 msgid "Feature items after account creation"
-msgstr "アカウント作成後の機能の項目"
+msgstr "创建账户后的功能项目"
 
 #: includes/class-atshift-upf-admin.php:1421
 msgid ""
 "Profile screen features and account management items used after the account "
 "exists."
-msgstr "アカウント作成後に使うプロフィール画面機能とアカウント管理項目です。"
+msgstr "账户创建后使用的个人资料页面功能和账户管理项目。"
 
 #: includes/class-atshift-upf-admin.php:1929
 msgid "You do not have permission to save these settings."
-msgstr "この設定を保存する権限がありません。"
+msgstr "您没有保存这些设置的权限。"
 
 #: includes/class-atshift-upf-profile.php:39
 msgid "Code editor syntax highlighting preference."
-msgstr "コード編集時のシンタックスハイライト設定です。"
+msgstr "代码编辑器语法高亮偏好设置。"
 
 #: includes/class-atshift-upf-profile.php:43
 msgid "Color palette selector."
-msgstr "管理画面のカラーパレット選択です。"
+msgstr "调色板选择器。"
 
 #: includes/class-atshift-upf-profile.php:47
 msgid "Comment moderation shortcut preference."
-msgstr "コメントモデレーション用ショートカットの設定です。"
+msgstr "评论审核快捷键偏好设置。"
 
 #: includes/class-atshift-upf-profile.php:51
 msgid "Frontend toolbar preference."
-msgstr "サイト表示時のツールバー表示設定です。"
+msgstr "前台工具栏偏好设置。"
 
 #: includes/class-atshift-upf-profile.php:55
 msgid "Admin language selector."
-msgstr "管理画面の言語選択です。"
+msgstr "管理后台语言选择器。"
 
 #: includes/class-atshift-upf-profile.php:59
 msgid "Required login name on the add user screen."
-msgstr "ユーザー追加画面で必須になるログイン名です。"
+msgstr "添加用户页面上的必填登录名。"
 
 #: includes/class-atshift-upf-profile.php:63
 msgid "Default WordPress account email row."
-msgstr "WordPress 標準のアカウントメール行です。"
+msgstr "默认 WordPress 账户电子邮箱行。"
 
 #: includes/class-atshift-upf-profile.php:67
 msgid "Default first name row."
-msgstr "WordPress 標準の名の行です。"
+msgstr "默认名字行。"
 
 #: includes/class-atshift-upf-profile.php:71
 msgid "Default last name row."
-msgstr "WordPress 標準の姓の行です。"
+msgstr "默认姓氏行。"
 
 #: includes/class-atshift-upf-profile.php:75
 msgid "Default nickname row."
-msgstr "WordPress 標準のニックネーム行です。"
+msgstr "默认昵称行。"
 
 #: includes/class-atshift-upf-profile.php:79
 msgid "Public display name selector."
-msgstr "ブログ上の表示名を選択する項目です。"
+msgstr "公开显示名称选择器。"
 
 #: includes/class-atshift-upf-profile.php:83
 msgid "Default website URL row."
-msgstr "WordPress 標準のサイト URL 行です。"
+msgstr "默认网站 URL 行。"
 
 #: includes/class-atshift-upf-profile.php:87
 msgid "Default description textarea."
-msgstr "WordPress 標準のプロフィール情報入力欄です。"
+msgstr "默认说明多行文本框。"
 
 #: includes/class-atshift-upf-profile.php:91
 msgid "Password controls on user screens."
-msgstr "ユーザー画面のパスワード操作です。"
+msgstr "用户页面上的密码控制项。"
 
 #: includes/class-atshift-upf-profile.php:95
 msgid "Log out everywhere else controls."
-msgstr "他の場所でのログアウト操作です。"
+msgstr "从其他所有位置注销的控制项。"
 
 #: includes/class-atshift-upf-profile.php:99
 msgid "New user notification checkbox."
-msgstr "新規ユーザーへの通知メール設定です。"
+msgstr "新用户通知复选框。"
 
 #: includes/class-atshift-upf-profile.php:103
 msgid "WordPress user role selector."
-msgstr "WordPress の権限グループを選択します。"
+msgstr "WordPress 用户角色选择器。"
 
 #: includes/class-atshift-upf-profile.php:107
 msgid "WordPress Gravatar profile picture row."
-msgstr "WordPress 標準の Gravatar プロフィール写真行です。"
+msgstr "WordPress Gravatar 个人资料图片行。"
 
 #: includes/class-atshift-upf-profile.php:111
 msgid "Application password management section."
-msgstr "アプリケーションパスワードの管理セクションです。"
+msgstr "应用程序密码管理部分。"
 
 #: includes/class-atshift-upf-profile.php:115
 msgid "Default user creation and profile save button."
-msgstr "WordPress 標準のユーザー追加ボタンとプロフィール保存ボタンです。"
+msgstr "默认用户创建和个人资料保存按钮。"
 
 #: includes/class-atshift-upf-profile.php:170
 #: includes/class-atshift-upf-profile.php:1109
 msgid "Select Image"
-msgstr "画像を選択"
+msgstr "选择图像"
 
 #: includes/class-atshift-upf-profile.php:171
 msgid "Use this image"
-msgstr "この画像を使用"
+msgstr "使用此图像"
 
 #: includes/class-atshift-upf-profile.php:172
 #: includes/class-atshift-upf-profile.php:1045
 msgid "Generate Password"
-msgstr "パスワードを生成"
+msgstr "生成密码"
 
 #: includes/class-atshift-upf-profile.php:1143
 msgid "Set New Password"
-msgstr "新しいパスワードを設定"
+msgstr "设置新密码"
 
 #: includes/class-atshift-upf-profile.php:1158
 msgid "Cancel"
-msgstr "キャンセル"
+msgstr "取消"
 
 #: includes/class-atshift-upf-profile.php:173
 #: includes/class-atshift-upf-profile.php:1053
 msgid "Show"
-msgstr "表示"
+msgstr "显示"
 
 #: includes/class-atshift-upf-profile.php:174
 msgid "Hide"
-msgstr "非表示"
+msgstr "隐藏"
 
 #: includes/class-atshift-upf-profile.php:175
 msgid "Strong"
-msgstr "強力"
+msgstr "强"
 
 #: includes/class-atshift-upf-profile.php:176
 msgid "Weak"
-msgstr "弱い"
+msgstr "弱"
 
 #: includes/class-atshift-upf-profile.php:178
 msgid "Use only letters, numbers, and these symbols: _ . - @"
-msgstr "半角英数字と記号 (_ . - @) のみ使用できます。"
+msgstr "仅使用字母、数字和以下符号：_ . - @"
 
 #: includes/class-atshift-upf-profile.php:179
 #: includes/class-atshift-upf-profile.php:300
 msgid "Use at least 8 characters and combine letters, numbers, or symbols."
-msgstr "8文字以上で、英字・数字・記号を組み合わせてください。"
+msgstr "至少使用 8 个字符，并组合使用字母、数字或符号。"
 
 #: includes/class-atshift-upf-profile.php:286
 #: includes/class-atshift-upf-profile.php:307
 #: includes/class-atshift-upf-profile.php:313
 msgid "This field is required."
-msgstr "この項目は必須です。"
+msgstr "此字段为必填项。"
 
 msgid "Please correct the highlighted fields."
-msgstr "入力内容を確認してください。"
+msgstr "请更正突出显示的字段。"
 
 msgid "Please enter a valid value."
-msgstr "正しい値を入力してください。"
+msgstr "请输入有效值。"
 
 msgid "This field cannot be left blank."
-msgstr "この項目を空欄にはできません。"
+msgstr "此字段不能为空。"
 
 #: includes/class-atshift-upf-profile.php:295
 msgid "Spaces cannot be used."
-msgstr "スペースは使用できません。"
+msgstr "不能使用空格。"
 
 #: includes/class-atshift-upf-profile.php:338
 #, php-format
 msgid "%1$s: %2$s"
-msgstr "%1$s：%2$s"
+msgstr "%1$s: %2$s"
 
 #: includes/class-atshift-upf-profile.php:983
 #: includes/class-atshift-upf-profile.php:2245
 msgid ""
 "Use only letters, numbers, and these symbols: _ . - @. Spaces cannot be used."
-msgstr ""
-"半角英数字と記号 (_ . - @) のみ使用できます。スペースは使用できません。"
+msgstr "仅使用字母、数字和以下符号：_ . - @。不能使用空格。"
 
 #: includes/class-atshift-upf-profile.php:1012
 msgid "Enable syntax highlighting when editing code."
-msgstr "コード編集時にシンタックスハイライトを有効にします。"
+msgstr "编辑代码时启用语法高亮。"
 
 #: includes/class-atshift-upf-profile.php:1017
 msgid "Enable keyboard shortcuts for comment moderation."
-msgstr "コメントモデレーション用のキーボードショートカットを有効にします。"
+msgstr "启用评论审核键盘快捷键。"
 
 #: includes/class-atshift-upf-profile.php:1022
 msgid "Show Toolbar when viewing site."
-msgstr "サイト表示時にツールバーを表示します。"
+msgstr "浏览站点时显示工具栏。"
 
 #: includes/class-atshift-upf-profile.php:1062
 msgid "Send the new user an email about their account."
-msgstr "新規ユーザーにアカウントに関するメールを送信します。"
+msgstr "向新用户发送有关其账户的电子邮件。"
 
 #: includes/class-atshift-upf-profile.php:1085
 msgid "Session controls are managed by WordPress after the user is saved."
-msgstr "セッション操作は、ユーザー保存後に WordPress で管理されます。"
+msgstr "保存用户后，会话控制由 WordPress 管理。"
 
 #: includes/class-atshift-upf-profile.php:1337
 #, php-format
 msgid "<a href=\"%s\">You can change your profile picture on Gravatar</a>."
-msgstr "<a href=\"%s\">プロフィール写真は Gravatar で変更できます</a>。"
+msgstr "<a href=\"%s\">您可以在 Gravatar 上更改个人资料图片</a>。"
 
 #: includes/class-atshift-upf-profile.php:1339
 msgid "https://gravatar.com/"
@@ -1024,61 +994,59 @@ msgstr "https://gravatar.com/"
 
 #: includes/class-atshift-upf-profile.php:1369
 msgid "Log Out Everywhere Else"
-msgstr "他のすべての場所でログアウト"
+msgstr "从其他所有位置注销"
 
 #: includes/class-atshift-upf-profile.php:1373
 msgid "You are only logged in at this location."
-msgstr "この場所でのみログインしています。"
+msgstr "您仅在此位置登录。"
 
 #: includes/class-atshift-upf-profile.php:1375
 msgid ""
 "Did you lose your phone or leave your account logged in at a public "
 "computer? You can log out everywhere else, and stay logged in here."
 msgstr ""
-"携帯電話を紛失したり、公共のコンピューターでログインしたままにしたりした場合"
-"は、この場所でのログインを維持したまま、他のすべての場所からログアウトできま"
-"す。"
+"手机丢失或忘记在公共计算机上注销账户了吗？您可以从其他所有位置注销，同时保持"
+"在此处登录。"
 
 #: includes/class-atshift-upf-profile.php:1378
 msgid "Log Out Everywhere"
-msgstr "すべての場所でログアウト"
+msgstr "从所有位置注销"
 
 #: includes/class-atshift-upf-profile.php:1384
 #, php-format
 msgid "Log %s out of all locations."
-msgstr "%s をすべての場所からログアウトします。"
+msgstr "将 %s 从所有位置注销。"
 
 #: includes/class-atshift-upf-profile.php:1245
 msgid "There are no active sessions for this user."
-msgstr "このユーザーに有効なセッションはありません。"
+msgstr "此用户没有活动会话。"
 
 #: includes/class-atshift-upf-profile.php:1090
 msgid ""
 "Application password controls are managed by WordPress after the user is "
 "saved."
-msgstr ""
-"アプリケーションパスワードは、ユーザー保存後に WordPress で管理されます。"
+msgstr "保存用户后，应用程序密码控制由 WordPress 管理。"
 
 #: includes/class-atshift-upf-profile.php:1095
 msgid "Update User"
-msgstr "ユーザーを更新"
+msgstr "更新用户"
 
 #: includes/class-atshift-upf-profile.php:1095
 msgid "Add New User"
-msgstr "新規ユーザーを追加"
+msgstr "添加新用户"
 
 #: includes/class-atshift-upf-profile.php:1110
 msgid "Remove"
-msgstr "削除"
+msgstr "移除"
 
 #: includes/class-atshift-upf-profile.php:1129
 #: includes/class-atshift-upf-profile.php:1193
 msgid "Please select..."
-msgstr "選択してください..."
+msgstr "请选择..."
 
 #: includes/class-atshift-upf-profile.php:1164
 msgid "Name Type"
-msgstr "名前の種類"
+msgstr "姓名类型"
 
 #: includes/class-atshift-upf-profile.php:1248
 msgid "example_user"
@@ -1091,7 +1059,7 @@ msgstr "name@example.com"
 
 #: includes/class-atshift-upf-profile.php:1250
 msgid "8+ characters, not letters-only or numbers-only"
-msgstr "8文字以上 (英字のみ・数字のみは不可)"
+msgstr "8+ 个字符，不能仅包含字母或数字"
 
 #: includes/class-atshift-upf-profile.php:1252
 msgid "090-1234-5678"
@@ -1108,407 +1076,384 @@ msgstr "123"
 
 #: includes/class-atshift-upf-profile.php:1471
 msgid "Middle Name"
-msgstr "ミドルネーム"
+msgstr "中间名"
 
 #: includes/class-atshift-upf-profile.php:1472
 msgid "Full Name"
-msgstr "フルネーム"
+msgstr "全名"
 
 #: includes/class-atshift-upf-profile.php:1473
 msgid "Phonetic Name"
-msgstr "フリガナ"
+msgstr "姓名读音"
 
 #: includes/class-atshift-upf-profile.php:1474
 msgid "Preferred Name"
-msgstr "通称"
+msgstr "偏好称呼"
 
 #: includes/class-atshift-upf-profile.php:1475
 msgid "Other Name"
-msgstr "その他の名前"
+msgstr "其他姓名"
 
 #: includes/class-atshift-upf-profile.php:1742
 msgid "Additional Settings"
-msgstr "追加の設定"
+msgstr "附加设置"
 
 #: includes/class-atshift-upf-profile.php:2249
 msgid "Enter a valid email address."
-msgstr "有効なメールアドレスを入力してください。"
+msgstr "请输入有效的电子邮箱地址。"
 
 #: includes/class-atshift-upf-profile.php:2253
 msgid "Enter a valid URL."
-msgstr "有効な URL を入力してください。"
+msgstr "请输入有效的 URL。"
 
 #: includes/class-atshift-upf-profile.php:2257
 msgid "Enter a valid phone number."
-msgstr "有効な電話番号を入力してください。"
+msgstr "请输入有效的电话号码。"
 
 #: includes/class-atshift-upf-profile.php:2261
 msgid "Enter a valid number."
-msgstr "有効な数値を入力してください。"
+msgstr "请输入有效的数字。"
 
 #: includes/class-atshift-upf-profile.php:2264
 msgid "Enter a valid value."
-msgstr "有効な値を入力してください。"
+msgstr "请输入有效值。"
 
 #: includes/class-atshift-upf-tools.php:37
 #: includes/class-atshift-upf-tools.php:109
 msgid "atshift User Profile Fields Tools"
-msgstr "atshift User Profile Fields ツール"
+msgstr "atshift User Profile Fields 工具"
 
 #: includes/class-atshift-upf-tools.php:80
 msgid ""
 "Importing will replace the current field configuration and display settings. "
 "Continue?"
-msgstr ""
-"インポートすると、現在のフィールド構成と表示設定が置き換えられます。続行しま"
-"すか?"
+msgstr "导入将替换当前字段配置和显示设置。是否继续？"
 
 #: includes/class-atshift-upf-tools.php:81
 msgid ""
 "Delete the selected atshift User Profile Fields data? This cannot be undone."
-msgstr ""
-"選択した atshift User Profile Fields のデータを削除しますか? この操作は取り消"
-"せません。"
+msgstr "要删除所选的 atshift User Profile Fields 数据吗？此操作无法撤销。"
 
 #: includes/class-atshift-upf-tools.php:83
 msgid "Processing..."
-msgstr "処理中..."
+msgstr "正在处理..."
 
 #: includes/class-atshift-upf-tools.php:84
 msgid "The request could not be completed."
-msgstr "処理を完了できませんでした。"
+msgstr "无法完成请求。"
 
 #: includes/class-atshift-upf-tools.php:85
 msgid "Export code copied."
-msgstr "エクスポートコードをコピーしました。"
+msgstr "导出代码已复制。"
 
 #: includes/class-atshift-upf-tools.php:86
 msgid "The export code could not be copied."
-msgstr "エクスポートコードをコピーできませんでした。"
+msgstr "无法复制导出代码。"
 
 #: includes/class-atshift-upf-tools.php:87
 msgid "The distribution set could not be downloaded."
-msgstr "配布セットをダウンロードできませんでした。"
+msgstr "无法下载分发集。"
 
 #: includes/class-atshift-upf-tools.php:88
 msgid "The selected distribution set could not be read."
-msgstr "選択した配布セットを読み込めませんでした。"
+msgstr "无法读取所选分发集。"
 
 #: includes/class-atshift-upf-tools.php:89
 #, php-format
 msgid "Selected file: %s"
-msgstr "選択中のファイル: %s"
+msgstr "所选文件：%s"
 
 #: includes/class-atshift-upf-tools.php:102
 #: includes/class-atshift-upf-tools.php:208
 msgid "You do not have permission to use these tools."
-msgstr "このツールを使用する権限がありません。"
+msgstr "您没有使用这些工具的权限。"
 
 #: includes/class-atshift-upf-tools.php:112
 msgid "Tools"
-msgstr "ツール"
+msgstr "工具"
 
 #: includes/class-atshift-upf-tools.php:113
 msgid "Export"
-msgstr "エクスポート"
+msgstr "导出"
 
 #: includes/class-atshift-upf-tools.php:114
 msgid "Import"
-msgstr "インポート"
+msgstr "导入"
 
 #: includes/class-atshift-upf-tools.php:115
 msgid "Delete"
-msgstr "削除"
+msgstr "删除"
 
 #: includes/class-atshift-upf-tools.php:120
 msgid ""
 "Create an importable file containing the complete field configuration and "
 "display settings. Profile values saved by individual users are not included."
 msgstr ""
-"フィールド構成と表示設定一式を、読み込み可能なファイルとして作成します。ユー"
-"ザーそれぞれが保存したプロフィールの値は含まれません。"
+"创建一个可导入的文件，其中包含完整的字段配置和显示设置。不包括各用户保存的个"
+"人资料值。"
 
 #: includes/class-atshift-upf-tools.php:122
 msgid "Current configuration"
-msgstr "現在の構成"
+msgstr "当前配置"
 
 #. translators: %d: number of field definitions.
 #: includes/class-atshift-upf-tools.php:127
 #, php-format
 msgid "%d field"
 msgid_plural "%d fields"
-msgstr[0] "%d件のフィールド"
+msgstr[0] "%d 个字段"
 
 #: includes/class-atshift-upf-tools.php:134
 msgid "Field Set Name"
-msgstr "フィールドセットの名称"
+msgstr "字段集名称"
 
 #: includes/class-atshift-upf-tools.php:135
 #: includes/class-atshift-upf-tools.php:237
 msgid "Profile Fields Set"
-msgstr "プロフィールフィールドセット"
+msgstr "个人资料字段集"
 
 #: includes/class-atshift-upf-tools.php:138
 msgid "Download Field Set"
-msgstr "フィールドセットを書き出す"
+msgstr "下载字段集"
 
 #: includes/class-atshift-upf-tools.php:141
 msgid "Show Export Code"
-msgstr "エクスポートコードを表示"
+msgstr "显示导出代码"
 
 #: includes/class-atshift-upf-tools.php:143
 msgid "Export Code"
-msgstr "エクスポートコード"
+msgstr "导出代码"
 
 #: includes/class-atshift-upf-tools.php:146
 msgid "Copy"
-msgstr "コピー"
+msgstr "复制"
 
 #: includes/class-atshift-upf-tools.php:154
 msgid ""
 "Select a field set created by this plugin. Importing replaces the current "
 "field configuration and display settings."
-msgstr ""
-"このプラグインで作成したフィールドセットを選択します。インポートすると、現在"
-"のフィールド構成と表示設定が置き換えられます。"
+msgstr "请选择由此插件创建的字段集。导入会替换当前字段配置和显示设置。"
 
 #: includes/class-atshift-upf-tools.php:156
 msgid "Before importing"
-msgstr "インポートの前に"
+msgstr "导入前"
 
 #: includes/class-atshift-upf-tools.php:157
 msgid "Download the current field set first if you may need to restore it."
-msgstr ""
-"元に戻す可能性がある場合は、先に現在のフィールドセットを書き出してください。"
+msgstr "如果以后可能需要恢复，请先下载当前字段集。"
 
 #: includes/class-atshift-upf-tools.php:160
 msgid "Field Set File"
-msgstr "フィールドセットのファイル"
+msgstr "字段集文件"
 
 #: includes/class-atshift-upf-tools.php:165
 msgid "Paste Export Code Instead"
-msgstr "エクスポートコードを貼り付ける"
+msgstr "改为粘贴导出代码"
 
 #: includes/class-atshift-upf-tools.php:167
 msgid "Import Code"
-msgstr "インポートコード"
+msgstr "导入代码"
 
 #: includes/class-atshift-upf-tools.php:168
 msgid "Paste the import code here"
-msgstr "ここにインポートコードを貼り付け"
+msgstr "在此粘贴导入代码"
 
 #: includes/class-atshift-upf-tools.php:172
 msgid "Import and Replace"
-msgstr "インポートして置き換え"
+msgstr "导入并替换"
 
 #: includes/class-atshift-upf-tools.php:178
 msgid "Delete plugin data"
-msgstr "プラグインデータを削除"
+msgstr "删除插件数据"
 
 #: includes/class-atshift-upf-tools.php:179
 msgid ""
 "Field configuration and display settings will be deleted. WordPress standard "
 "profile data is never deleted."
-msgstr ""
-"フィールド構成と表示設定を削除します。WordPress 標準のプロフィールデータは削"
-"除されません。"
+msgstr "字段配置和显示设置将被删除。WordPress 标准个人资料数据绝不会被删除。"
 
 #: includes/class-atshift-upf-tools.php:183
 msgid "Also delete custom profile values"
-msgstr "カスタムプロフィール値も削除する"
+msgstr "同时删除自定义个人资料值"
 
 #: includes/class-atshift-upf-tools.php:184
 msgid ""
 "Deletes user metadata created by this plugin, including values left by "
 "fields that were removed earlier."
-msgstr ""
-"このプラグインが作成したユーザーメタを削除します。以前に削除したフィールドの"
-"値も対象です。"
+msgstr "删除由此插件创建的用户元数据，包括先前已移除字段所留下的值。"
 
 #: includes/class-atshift-upf-tools.php:189
 msgid "I understand that deleted data cannot be restored."
-msgstr "削除したデータを復元できないことを理解しました。"
+msgstr "我了解已删除的数据无法恢复。"
 
 #: includes/class-atshift-upf-tools.php:192
 msgid "Delete Selected Data"
-msgstr "選択したデータを削除"
+msgstr "删除所选数据"
 
 #: includes/class-atshift-upf-tools.php:403
 msgid "Confirm that deleted data cannot be restored before continuing."
-msgstr "続行する前に、削除したデータを復元できないことを確認してください。"
+msgstr "继续前，请确认已删除的数据无法恢复。"
 
 #: includes/class-atshift-upf-tools.php:227
 msgid "Unknown tools action."
-msgstr "不明なツール操作です。"
+msgstr "未知的工具操作。"
 
 #: includes/class-atshift-upf-tools.php:258
 msgid "The configuration could not be encoded."
-msgstr "構成をエンコードできませんでした。"
+msgstr "无法对配置进行编码。"
 
 #: includes/class-atshift-upf-tools.php:265
 msgid "Distribution set downloaded."
-msgstr "配布セットを書き出しました。"
+msgstr "分发集已下载。"
 
 #: includes/class-atshift-upf-tools.php:279
 msgid "Paste an import code."
-msgstr "インポートコードを貼り付けてください。"
+msgstr "请粘贴导入代码。"
 
 #: includes/class-atshift-upf-tools.php:283
 msgid "The import code is too large."
-msgstr "インポートコードが大きすぎます。"
+msgstr "导入代码过大。"
 
 #: includes/class-atshift-upf-tools.php:289
 msgid "The import code is not valid JSON."
-msgstr "インポートコードが有効な JSON ではありません。"
+msgstr "导入代码不是有效的 JSON。"
 
 #: includes/class-atshift-upf-tools.php:293
 msgid "This export code was not created by atshift User Profile Fields."
-msgstr ""
-"このエクスポートコードは atshift User Profile Fields で作成されたものではあり"
-"ません。"
+msgstr "此导出代码并非由 atshift User Profile Fields 创建。"
 
 #: includes/class-atshift-upf-tools.php:297
 msgid "This export format is not supported by the installed plugin version."
-msgstr ""
-"このエクスポート形式は、インストール中のプラグインバージョンでは対応していま"
-"せん。"
+msgstr "已安装的插件版本不支持此导出格式。"
 
 #. translators: %d: number of imported fields.
 #: includes/class-atshift-upf-tools.php:321
 #, php-format
 msgid "%d field imported. Current settings were replaced."
 msgid_plural "%d fields imported. Current settings were replaced."
-msgstr[0] "%d件のフィールドを読み込みました。現在の設定は置き換えられました。"
+msgstr[0] "已导入 %d 个字段。当前设置已被替换。"
 
 #: includes/class-atshift-upf-tools.php:345
 msgid ""
 "Plugin settings and custom profile values were deleted. WordPress standard "
 "profile data was preserved."
-msgstr ""
-"プラグイン設定とカスタムプロフィール値を削除しました。WordPress 標準のプロ"
-"フィールデータは保持されています。"
+msgstr "插件设置和自定义个人资料值已删除。WordPress 标准个人资料数据已保留。"
 
 #: includes/class-atshift-upf-tools.php:346
 msgid ""
 "Plugin settings were deleted. Existing custom profile values were preserved."
-msgstr ""
-"プラグイン設定を削除しました。既存のカスタムプロフィール値は保持されていま"
-"す。"
+msgstr "插件设置已删除。现有自定义个人资料值已保留。"
 
 #: includes/class-atshift-upf-tools.php:359
 msgid "The import code does not contain a valid fields list."
-msgstr "インポートコードに有効なフィールド一覧が含まれていません。"
+msgstr "导入代码不包含有效的字段列表。"
 
 #: includes/class-atshift-upf-tools.php:363
 msgid "The import contains too many fields."
-msgstr "インポートするフィールド数が多すぎます。"
+msgstr "导入内容包含过多字段。"
 
 #: includes/class-atshift-upf-tools.php:377
 msgid "The import contains an invalid field definition."
-msgstr "インポートに無効なフィールド定義が含まれています。"
+msgstr "导入内容包含无效的字段定义。"
 
 #: includes/class-atshift-upf-tools.php:385
 msgid "Every imported field must have a unique field ID."
-msgstr "インポートする各フィールドには一意のフィールド ID が必要です。"
+msgstr "每个导入字段都必须具有唯一的字段 ID。"
 
 #: includes/class-atshift-upf-tools.php:389
 msgid "The import contains an unsupported field type."
-msgstr "インポートに対応していないフィールドタイプが含まれています。"
+msgstr "导入内容包含不受支持的字段类型。"
 
 #: includes/class-atshift-upf-tools.php:394
 msgid "A standard WordPress field is included more than once."
-msgstr "同じ WordPress 標準フィールドが複数含まれています。"
+msgstr "某个 WordPress 标准字段被包含多次。"
 
 #: includes/class-atshift-upf-tools.php:401
 msgid "Every imported field must have a unique field key."
-msgstr "インポートする各フィールドには一意のフィールドキーが必要です。"
+msgstr "每个导入字段都必须具有唯一的字段键。"
 
 #: includes/class-atshift-upf-tools.php:459
 msgid "The import contains an invalid field parent relationship."
-msgstr "インポートに無効なフィールドの親子関係が含まれています。"
+msgstr "导入内容包含无效的字段父级关系。"
 
 #: includes/class-atshift-upf-tools.php:468
 msgid "The import contains a circular field parent relationship."
-msgstr "インポートに循環するフィールドの親子関係が含まれています。"
+msgstr "导入内容包含循环的字段父级关系。"
 
 #: includes/class-atshift-upf-tools.php:482
 msgid "The import code does not contain valid display settings."
-msgstr "インポートコードに有効な表示設定が含まれていません。"
+msgstr "导入代码不包含有效的显示设置。"
 
 #: includes/class-atshift-upf-profile.php
 msgid "Visual editor"
-msgstr "ビジュアルエディター"
+msgstr "可视化编辑器"
 
 #: includes/class-atshift-upf-profile.php
 msgid "Rich text editor preference."
-msgstr "リッチテキストエディターの設定です。"
+msgstr "富文本编辑器偏好设置。"
 
 #: includes/class-atshift-upf-profile.php
 msgid "Disable the visual editor"
-msgstr "ビジュアルエディターを無効にする"
+msgstr "禁用可视化编辑器"
 
 #: includes/class-atshift-upf-profile.php
 msgid "Enable the visual editor when writing."
-msgstr "投稿作成時にビジュアルエディターを有効にする"
+msgstr "写作时启用可视化编辑器。"
 
 #: includes/class-atshift-upf-profile.php
 msgid "Disable syntax highlighting"
-msgstr "シンタックスハイライトを無効にする"
+msgstr "禁用语法高亮"
 
 #: includes/class-atshift-upf-profile.php
 msgid "Disable keyboard shortcuts"
-msgstr "キーボードショートカットを無効にする"
+msgstr "禁用键盘快捷键"
 
 #: includes/class-atshift-upf-profile.php
 msgid "Do not show the Toolbar while viewing the site"
-msgstr "サイト表示時にツールバーを表示しない"
+msgstr "浏览站点时不显示工具栏"
 
 #: includes/class-atshift-upf-profile.php
 msgid "Do not send an account email to the new user"
-msgstr "新規ユーザーにアカウントメールを送信しない"
+msgstr "不向新用户发送账户电子邮件"
 
 #. translators: %s: WordPress profile item label.
 #: includes/class-atshift-upf-admin.php
 #, php-format
 msgid "Hide %s"
-msgstr "%sを非表示にする"
+msgstr "隐藏 %s"
 
 #: includes/class-atshift-upf-admin.php
 msgid "Applied when a new user is added."
-msgstr "新規ユーザーの追加時に適用されます。"
+msgstr "添加新用户时应用。"
 
 #: includes/class-atshift-upf-admin.php
 msgid "Applied when the profile is next saved."
-msgstr "次回プロフィールを保存したときに適用されます。"
+msgstr "下次保存个人资料时应用。"
 
 #: includes/class-atshift-upf-admin.php
 msgid ""
 "Hiding an item does not change its current setting. For supported checkbox "
 "features, use the additional option to turn the feature off."
 msgstr ""
-"項目を非表示にするだけでは、現在の設定値は変わりません。対応するチェックボッ"
-"クス機能を停止するときは、追加の項目を選択してください。"
+"隐藏项目不会更改其当前设置。对于受支持的复选框功能，请使用附加选项关闭该功"
+"能。"
 
 #: includes/class-atshift-upf-admin.php
 msgid ""
 "Items with locked checkboxes are managed in Fields. Remove the field before "
 "configuring the item here."
-msgstr ""
-"チェックが固定されている項目は「フィールド」で使用中です。ここで設定するに"
-"は、先に該当するフィールドを削除してください。"
+msgstr "带锁定复选框的项目在“字段”中管理。请先移除该字段，再在此处配置此项目。"
 
 #: includes/class-atshift-upf-admin.php
 msgid "Send account email"
-msgstr "アカウントメールを送信"
+msgstr "发送账户电子邮件"
 
 #: includes/class-atshift-upf-admin.php
 msgid ""
 "Applied only when creating a new user. Existing users keep their saved "
 "setting."
-msgstr ""
-"新規ユーザーの作成時にのみ適用されます。既存ユーザーの保存済み設定は変更され"
-"ません。"
+msgstr "仅在创建新用户时应用。现有用户保留其已保存的设置。"
 
 #: includes/class-atshift-upf-profile.php:910
 msgid "You are not allowed to assign this role."
-msgstr "この権限グループを割り当てる権限がありません。"
+msgstr "您无权分配此角色。"

@@ -4,20 +4,20 @@
     "plugin_version": "1.1",
     "exported_at": "2026-08-24T04:00:00Z",
     "distribution_set": {
-        "name": "WordPress Default Profile (Add and Edit Users)"
+        "name": "Domyślny profil WordPress (dodawanie i edycja użytkowników)"
     },
     "fields": [
         {
             "id": "section_personal_settings",
             "key": "section_personal_settings",
-            "label": "Personal Options",
+            "label": "Opcje osobiste",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_visual_editor",
             "key": "rich_editing",
-            "label": "Visual Editor",
+            "label": "Edytor wizualny",
             "type": "core_visual_editor",
             "initial_enabled": true,
             "parent_id": "section_personal_settings"
@@ -25,7 +25,7 @@
         {
             "id": "field_syntax_highlighting",
             "key": "syntax_highlighting",
-            "label": "Syntax Highlighting",
+            "label": "Podświetlanie składni",
             "type": "core_syntax_highlighting",
             "initial_enabled": true,
             "parent_id": "section_personal_settings"
@@ -33,14 +33,14 @@
         {
             "id": "field_admin_color",
             "key": "admin_color",
-            "label": "Admin Color Scheme",
+            "label": "Schemat kolorów panelu administracyjnego",
             "type": "core_admin_color",
             "parent_id": "section_personal_settings"
         },
         {
             "id": "field_keyboard_shortcuts",
             "key": "comment_shortcuts",
-            "label": "Keyboard Shortcuts",
+            "label": "Skróty klawiaturowe",
             "type": "core_keyboard_shortcuts",
             "initial_enabled": false,
             "parent_id": "section_personal_settings"
@@ -48,7 +48,7 @@
         {
             "id": "field_toolbar",
             "key": "show_admin_bar_front",
-            "label": "Toolbar",
+            "label": "Pasek narzędzi",
             "type": "core_toolbar",
             "initial_enabled": true,
             "parent_id": "section_personal_settings"
@@ -56,28 +56,28 @@
         {
             "id": "field_language",
             "key": "locale",
-            "label": "Language",
+            "label": "Język",
             "type": "core_language",
             "parent_id": "section_personal_settings"
         },
         {
             "id": "field_username",
             "key": "user_login",
-            "label": "Username",
+            "label": "Nazwa użytkownika",
             "type": "core_username",
-            "description": "Enter the username required for login using letters, numbers, and the supported symbols (_ . - @). Spaces are not allowed. The username cannot be changed later."
+            "description": "Wpisz nazwę użytkownika wymaganą do logowania, używając liter, cyfr i obsługiwanych symboli (_ . - @). Spacje nie są dozwolone. Nazwy użytkownika nie będzie można później zmienić."
         },
         {
             "id": "section_name",
             "key": "section_name",
-            "label": "Name",
+            "label": "Nazwa",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_first_name",
             "key": "first_name",
-            "label": "First Name",
+            "label": "Imię",
             "type": "core_first_name",
             "parent_id": "section_name",
             "required": true
@@ -85,7 +85,7 @@
         {
             "id": "field_last_name",
             "key": "last_name",
-            "label": "Last Name",
+            "label": "Nazwisko",
             "type": "core_last_name",
             "parent_id": "section_name",
             "required": true
@@ -93,107 +93,107 @@
         {
             "id": "field_nickname",
             "key": "nickname",
-            "label": "Nickname",
+            "label": "Pseudonim",
             "type": "core_nickname",
             "parent_id": "section_name"
         },
         {
             "id": "field_display_name",
             "key": "display_name",
-            "label": "Name Shown on the Site",
+            "label": "Nazwa wyświetlana w witrynie",
             "type": "core_display_name",
             "parent_id": "section_name"
         },
         {
             "id": "section_contact",
             "key": "section_contact",
-            "label": "Contact Info",
+            "label": "Informacje kontaktowe",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_email",
             "key": "user_email",
-            "label": "Email",
+            "label": "E-mail",
             "type": "core_email",
-            "description": "Used for password resets and account notifications. It can be changed later and can also be used instead of the username when logging in.",
+            "description": "Używane do resetowania hasła i powiadomień konta. Można to zmienić później i może być też używane zamiast nazwy użytkownika podczas logowania.",
             "parent_id": "section_contact"
         },
         {
             "id": "field_website",
             "key": "user_url",
-            "label": "Website",
+            "label": "Witryna internetowa",
             "type": "core_website",
             "parent_id": "section_contact"
         },
         {
             "id": "section_about",
             "key": "section_about",
-            "label": "About Yourself",
+            "label": "O sobie",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_bio",
             "key": "description",
-            "label": "Biographical Info",
+            "label": "Informacje biograficzne",
             "type": "core_bio",
             "parent_id": "section_about"
         },
         {
             "id": "field_profile_picture",
             "key": "profile_picture",
-            "label": "Profile Picture",
+            "label": "Obrazek profilowy",
             "type": "core_profile_picture",
             "parent_id": "section_about"
         },
         {
             "id": "section_account_management",
             "key": "section_account_management",
-            "label": "Security",
+            "label": "Bezpieczeństwo",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_password",
             "key": "password",
-            "label": "Password",
+            "label": "Hasło",
             "type": "core_password",
-            "description": "Use a hard-to-guess password of at least 8 characters that combines letters, numbers, and symbols.",
+            "description": "Użyj trudnego do odgadnięcia hasła o długości co najmniej 8 znaków, które łączy litery, cyfry i symbole.",
             "parent_id": "section_account_management"
         },
         {
             "id": "field_sessions",
             "key": "sessions",
-            "label": "Sessions",
+            "label": "Sesje",
             "type": "core_sessions",
             "parent_id": "section_account_management"
         },
         {
             "id": "field_application_passwords",
             "key": "application_passwords",
-            "label": "Application Passwords",
+            "label": "Hasła aplikacji",
             "type": "core_application_passwords",
             "parent_id": "section_account_management"
         },
         {
             "id": "section_permissions",
             "key": "section_permissions",
-            "label": "Permissions and Notifications",
+            "label": "Uprawnienia i powiadomienia",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_role",
             "key": "role",
-            "label": "Role",
+            "label": "Rola",
             "type": "core_role",
             "parent_id": "section_permissions"
         },
         {
             "id": "field_notification",
             "key": "send_user_notification",
-            "label": "User Notification",
+            "label": "Powiadomienie użytkownika",
             "type": "core_notification",
             "initial_enabled": true,
             "parent_id": "section_permissions"
@@ -201,9 +201,9 @@
         {
             "id": "field_submit_button",
             "key": "submit_button",
-            "label": "Add User / Save",
+            "label": "Dodaj użytkownika / Zapisz",
             "type": "core_submit_button",
-            "description": "Used to add users and save profiles."
+            "description": "Służy do dodawania użytkowników i zapisywania profili."
         }
     ],
     "settings": {

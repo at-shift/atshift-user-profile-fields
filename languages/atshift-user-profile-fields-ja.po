@@ -1,9 +1,14 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the atshift User Profile Fields package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: atshift User Profile Fields 1.0.3\n"
+"Project-Id-Version: atshift User Profile Fields 1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-29 12:59+0900\n"
-"PO-Revision-Date: 2026-07-29 02:45+0900\n"
+"POT-Creation-Date: 2026-08-24 13:00+0900\n"
+"PO-Revision-Date: 2026-08-24 13:00+0900\n"
 "Last-Translator: atshift\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,8 +26,12 @@ msgid "Full row"
 msgstr "1列表示"
 
 #: atshift-user-profile-fields.php
-msgid "Beautiful and practical WordPress user profiles with custom fields and flexible control over default profile items."
-msgstr "WordPressのユーザープロフィール画面を美しく、より実用的に。独自の項目を追加し、標準項目を柔軟に整理できます。"
+msgid ""
+"Beautiful and practical WordPress user profiles with custom fields and "
+"flexible control over default profile items."
+msgstr ""
+"WordPressのユーザープロフィール画面を美しく、より実用的に。独自の項目を追加"
+"し、標準項目を柔軟に整理できます。"
 
 #: includes/class-atshift-upf-plugin.php
 msgid "View details"
@@ -299,15 +308,16 @@ msgstr "、"
 #, php-format
 msgid ""
 "On the Add New User screen, %1$s are unavailable, so only %2$s are shown."
-msgstr "ユーザー追加画面では、%1$s は表示されないため、%2$s のみが表示されます。"
+msgstr ""
+"ユーザー追加画面では、%1$s は表示されないため、%2$s のみが表示されます。"
 
 #: includes/class-atshift-upf-admin.php:196
 #, php-format
 msgid ""
 "When editing an existing user, %1$s are unavailable, so only %2$s are shown."
 msgstr ""
-"保存済みユーザーの編集画面では、%1$s は表示されないため、%2$s のみが表示されま"
-"す。"
+"保存済みユーザーの編集画面では、%1$s は表示されないため、%2$s のみが表示され"
+"ます。"
 
 #: includes/class-atshift-upf-admin.php:197
 msgid ""
@@ -764,8 +774,8 @@ msgid ""
 "Hide WordPress and supported plugin profile items that are not needed for "
 "this site."
 msgstr ""
-"このサイトで不要な WordPress と対応プラグインのプロフィール項目を非表示にし"
-"ます。"
+"このサイトで不要な WordPress と対応プラグインのプロフィール項目を非表示にしま"
+"す。"
 
 msgid "Other plugin profile items"
 msgstr "他プラグインのプロフィール項目"
@@ -1022,8 +1032,8 @@ msgstr "この場所でのみログインしています。"
 
 #: includes/class-atshift-upf-profile.php:1375
 msgid ""
-"Did you lose your phone or leave your account logged in at a public computer? "
-"You can log out everywhere else, and stay logged in here."
+"Did you lose your phone or leave your account logged in at a public "
+"computer? You can log out everywhere else, and stay logged in here."
 msgstr ""
 "携帯電話を紛失したり、公共のコンピューターでログインしたままにしたりした場合"
 "は、この場所でのログインを維持したまま、他のすべての場所からログアウトできま"
@@ -1259,8 +1269,8 @@ msgid ""
 "Select a field set created by this plugin. Importing replaces the current "
 "field configuration and display settings."
 msgstr ""
-"このプラグインで作成したフィールドセットを選択します。インポートすると、現在の"
-"フィールド構成と表示設定が置き換えられます。"
+"このプラグインで作成したフィールドセットを選択します。インポートすると、現在"
+"のフィールド構成と表示設定が置き換えられます。"
 
 #: includes/class-atshift-upf-tools.php:156
 msgid "Before importing"
@@ -1268,7 +1278,8 @@ msgstr "インポートの前に"
 
 #: includes/class-atshift-upf-tools.php:157
 msgid "Download the current field set first if you may need to restore it."
-msgstr "元に戻す可能性がある場合は、先に現在のフィールドセットを書き出してください。"
+msgstr ""
+"元に戻す可能性がある場合は、先に現在のフィールドセットを書き出してください。"
 
 #: includes/class-atshift-upf-tools.php:160
 msgid "Field Set File"
@@ -1299,8 +1310,8 @@ msgid ""
 "Field configuration and display settings will be deleted. WordPress standard "
 "profile data is never deleted."
 msgstr ""
-"フィールド構成と表示設定を削除します。WordPress 標準のプロフィールデータは削除"
-"されません。"
+"フィールド構成と表示設定を削除します。WordPress 標準のプロフィールデータは削"
+"除されません。"
 
 #: includes/class-atshift-upf-tools.php:183
 msgid "Also delete custom profile values"
@@ -1367,7 +1378,7 @@ msgstr ""
 #, php-format
 msgid "%d field imported. Current settings were replaced."
 msgid_plural "%d fields imported. Current settings were replaced."
-msgstr[0] "%d件のフィールドをインポートし、現在の設定を置き換えました。"
+msgstr[0] "%d件のフィールドを読み込みました。現在の設定は置き換えられました。"
 
 #: includes/class-atshift-upf-tools.php:345
 msgid ""
@@ -1501,19 +1512,3 @@ msgstr ""
 #: includes/class-atshift-upf-profile.php:910
 msgid "You are not allowed to assign this role."
 msgstr "この権限グループを割り当てる権限がありません。"
-
-#~ msgid "Configuration exported."
-#~ msgstr "構成をエクスポートしました。"
-
-#~ msgid "Field Status"
-#~ msgstr "フィールドの状態"
-
-#~ msgid "Additional Profile Fields"
-#~ msgstr "追加プロフィールフィールド"
-
-#, php-format
-#~ msgid "%s has an invalid format."
-#~ msgstr "%s の形式が正しくありません。"
-
-#~ msgid "(required)"
-#~ msgstr "(必須)"

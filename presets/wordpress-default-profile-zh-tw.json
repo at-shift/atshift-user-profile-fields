@@ -4,20 +4,20 @@
     "plugin_version": "1.1",
     "exported_at": "2026-08-24T04:00:00Z",
     "distribution_set": {
-        "name": "WordPress Default Profile (Add and Edit Users)"
+        "name": "WordPress 預設個人資料（新增與編輯使用者）"
     },
     "fields": [
         {
             "id": "section_personal_settings",
             "key": "section_personal_settings",
-            "label": "Personal Options",
+            "label": "個人選項",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_visual_editor",
             "key": "rich_editing",
-            "label": "Visual Editor",
+            "label": "視覺化編輯器",
             "type": "core_visual_editor",
             "initial_enabled": true,
             "parent_id": "section_personal_settings"
@@ -25,7 +25,7 @@
         {
             "id": "field_syntax_highlighting",
             "key": "syntax_highlighting",
-            "label": "Syntax Highlighting",
+            "label": "語法醒目提示",
             "type": "core_syntax_highlighting",
             "initial_enabled": true,
             "parent_id": "section_personal_settings"
@@ -33,14 +33,14 @@
         {
             "id": "field_admin_color",
             "key": "admin_color",
-            "label": "Admin Color Scheme",
+            "label": "管理後台配色方案",
             "type": "core_admin_color",
             "parent_id": "section_personal_settings"
         },
         {
             "id": "field_keyboard_shortcuts",
             "key": "comment_shortcuts",
-            "label": "Keyboard Shortcuts",
+            "label": "鍵盤快速鍵",
             "type": "core_keyboard_shortcuts",
             "initial_enabled": false,
             "parent_id": "section_personal_settings"
@@ -48,7 +48,7 @@
         {
             "id": "field_toolbar",
             "key": "show_admin_bar_front",
-            "label": "Toolbar",
+            "label": "工具列",
             "type": "core_toolbar",
             "initial_enabled": true,
             "parent_id": "section_personal_settings"
@@ -56,28 +56,28 @@
         {
             "id": "field_language",
             "key": "locale",
-            "label": "Language",
+            "label": "語言",
             "type": "core_language",
             "parent_id": "section_personal_settings"
         },
         {
             "id": "field_username",
             "key": "user_login",
-            "label": "Username",
+            "label": "使用者名稱",
             "type": "core_username",
-            "description": "Enter the username required for login using letters, numbers, and the supported symbols (_ . - @). Spaces are not allowed. The username cannot be changed later."
+            "description": "請輸入登入所需的使用者名稱，可使用字母、數字和支援的符號（_ . - @）。不允許使用空格。使用者名稱之後無法變更。"
         },
         {
             "id": "section_name",
             "key": "section_name",
-            "label": "Name",
+            "label": "名稱",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_first_name",
             "key": "first_name",
-            "label": "First Name",
+            "label": "名字",
             "type": "core_first_name",
             "parent_id": "section_name",
             "required": true
@@ -85,7 +85,7 @@
         {
             "id": "field_last_name",
             "key": "last_name",
-            "label": "Last Name",
+            "label": "姓氏",
             "type": "core_last_name",
             "parent_id": "section_name",
             "required": true
@@ -93,107 +93,107 @@
         {
             "id": "field_nickname",
             "key": "nickname",
-            "label": "Nickname",
+            "label": "暱稱",
             "type": "core_nickname",
             "parent_id": "section_name"
         },
         {
             "id": "field_display_name",
             "key": "display_name",
-            "label": "Name Shown on the Site",
+            "label": "網站上顯示的名稱",
             "type": "core_display_name",
             "parent_id": "section_name"
         },
         {
             "id": "section_contact",
             "key": "section_contact",
-            "label": "Contact Info",
+            "label": "聯絡資訊",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_email",
             "key": "user_email",
-            "label": "Email",
+            "label": "電子郵件",
             "type": "core_email",
-            "description": "Used for password resets and account notifications. It can be changed later and can also be used instead of the username when logging in.",
+            "description": "用於重設密碼和帳號通知。之後可以變更，登入時也可用來代替使用者名稱。",
             "parent_id": "section_contact"
         },
         {
             "id": "field_website",
             "key": "user_url",
-            "label": "Website",
+            "label": "網站",
             "type": "core_website",
             "parent_id": "section_contact"
         },
         {
             "id": "section_about",
             "key": "section_about",
-            "label": "About Yourself",
+            "label": "關於你自己",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_bio",
             "key": "description",
-            "label": "Biographical Info",
+            "label": "個人簡介",
             "type": "core_bio",
             "parent_id": "section_about"
         },
         {
             "id": "field_profile_picture",
             "key": "profile_picture",
-            "label": "Profile Picture",
+            "label": "個人資料圖片",
             "type": "core_profile_picture",
             "parent_id": "section_about"
         },
         {
             "id": "section_account_management",
             "key": "section_account_management",
-            "label": "Security",
+            "label": "安全性",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_password",
             "key": "password",
-            "label": "Password",
+            "label": "密碼",
             "type": "core_password",
-            "description": "Use a hard-to-guess password of at least 8 characters that combines letters, numbers, and symbols.",
+            "description": "請使用難以猜測、至少 8 個字元且組合字母、數字和符號的密碼。",
             "parent_id": "section_account_management"
         },
         {
             "id": "field_sessions",
             "key": "sessions",
-            "label": "Sessions",
+            "label": "工作階段",
             "type": "core_sessions",
             "parent_id": "section_account_management"
         },
         {
             "id": "field_application_passwords",
             "key": "application_passwords",
-            "label": "Application Passwords",
+            "label": "應用程式密碼",
             "type": "core_application_passwords",
             "parent_id": "section_account_management"
         },
         {
             "id": "section_permissions",
             "key": "section_permissions",
-            "label": "Permissions and Notifications",
+            "label": "權限與通知",
             "type": "group",
             "group_columns": 2
         },
         {
             "id": "field_role",
             "key": "role",
-            "label": "Role",
+            "label": "角色",
             "type": "core_role",
             "parent_id": "section_permissions"
         },
         {
             "id": "field_notification",
             "key": "send_user_notification",
-            "label": "User Notification",
+            "label": "使用者通知",
             "type": "core_notification",
             "initial_enabled": true,
             "parent_id": "section_permissions"
@@ -201,9 +201,9 @@
         {
             "id": "field_submit_button",
             "key": "submit_button",
-            "label": "Add User / Save",
+            "label": "新增使用者 / 儲存",
             "type": "core_submit_button",
-            "description": "Used to add users and save profiles."
+            "description": "用於新增使用者和儲存個人資料。"
         }
     ],
     "settings": {
