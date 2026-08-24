@@ -37,10 +37,6 @@ final class Atshift_UPF_Plugin {
 	 * Constructor.
 	 */
 	private function __construct() {
-		if ( class_exists( 'Atshift_UPF_GitHub_Updater' ) ) {
-			new Atshift_UPF_GitHub_Updater();
-		}
-
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_action( 'plugins_loaded', array( $this, 'announce_loaded' ), 20 );
 		add_action( 'init', array( $this, 'boot' ) );

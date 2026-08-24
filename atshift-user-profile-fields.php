@@ -6,7 +6,6 @@
  * Version: 1.1
  * Author: @shift
  * Author URI: https://cfs.at-shift.net/
- * Update URI: https://github.com/at-shift/atshift-user-profile-fields
  * License: GPLv2 or later
  * Text Domain: atshift-user-profile-fields
  * Domain Path: /languages
@@ -58,7 +57,6 @@ if ( ! function_exists( 'atshift_upf_get_user_field' ) ) {
 }
 
 require_once ATSHIFT_UPF_DIR . 'includes/class-atshift-upf-plugin.php';
-require_once ATSHIFT_UPF_DIR . 'includes/class-atshift-upf-github-updater.php';
 require_once ATSHIFT_UPF_DIR . 'includes/class-atshift-upf-admin.php';
 require_once ATSHIFT_UPF_DIR . 'includes/class-atshift-upf-profile.php';
 require_once ATSHIFT_UPF_DIR . 'includes/class-atshift-upf-tools.php';

@@ -157,7 +157,6 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 
 = 0.1.108 =
 * Show @shift as the plugin author.
-* Add WordPress update notifications and standard automatic-update support for packaged GitHub releases.
 
 = 0.1.107 =
 * Select the site default language when the Add New User screen first opens.
