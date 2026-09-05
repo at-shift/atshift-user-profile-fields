@@ -3,12 +3,12 @@
   <h1>atshift User Profile Fields</h1>
   <p><strong>Turn the WordPress user profile screen into a clean, practical editing experience.</strong></p>
   <p>
-    <a href="https://upf.at-shift.net/en/">Official Website</a> ·
-    <a href="https://upf.at-shift.net/en/guide/">Setup Guide</a> ·
-    <a href="https://upf.at-shift.net/en/output/">Reference</a> ·
-    <a href="https://upf.at-shift.net/en/pro/">Pro Add-on</a> ·
+    <a href="https://plugins.at-shift.net/en/user-profile-fields/">Official Website</a> ·
+    <a href="https://plugins.at-shift.net/en/guide/">Setup Guide</a> ·
+    <a href="https://plugins.at-shift.net/en/output/">Reference</a> ·
+    <a href="https://plugins.at-shift.net/en/pro/">Pro Add-on</a> ·
     <a href="https://wordpress.org/plugins/atshift-user-profile-fields/">WordPress.org</a> ·
-    <a href="https://upf.at-shift.net/">日本語</a>
+    <a href="https://plugins.at-shift.net/user-profile-fields/">日本語</a>
   </p>
 </div>
 
@@ -42,7 +42,7 @@ Remove unnecessary settings, arrange fields in a natural order, and configure la
 3. Activate the plugin.
 4. Open **atshift User Profile Fields > Field Management** in the WordPress admin menu.
 
-See the [setup guide](https://upf.at-shift.net/en/guide/) for the complete workflow.
+See the [setup guide](https://plugins.at-shift.net/en/guide/) for the complete workflow.
 
 ## Getting Started
 
@@ -72,7 +72,7 @@ Values added by the plugin can be retrieved with the provided helper or the stan
 $value = atshift_upf_get_user_field( 'company', $user_id );
 ```
 
-Most admin-only workflows do not require any custom output code. When displaying user information in a directory, public profile, or another frontend view, see the [display and output reference](https://upf.at-shift.net/en/output/).
+Most admin-only workflows do not require any custom output code. When displaying user information in a directory, public profile, or another frontend view, see the [display and output reference](https://plugins.at-shift.net/en/output/).
 
 ## Pro Add-on
 
@@ -80,19 +80,19 @@ The optional Pro add-on extends the field sets created with the free plugin. It 
 
 Pro adds user classifications, visibility and editing permissions, public profiles, user directories, and CSV workflows.
 
-- [Pro add-on features](https://upf.at-shift.net/en/pro/)
-- [Pro add-on pricing](https://upf.at-shift.net/en/price/)
-- [Pro shortcode reference](https://upf.at-shift.net/en/shortcodes/)
+- [Pro add-on features](https://plugins.at-shift.net/en/pro/)
+- [Pro add-on pricing](https://plugins.at-shift.net/en/price/)
+- [Pro shortcode reference](https://plugins.at-shift.net/en/shortcodes/)
 
 ## Documentation
 
 | Topic | English | 日本語 |
 | --- | --- | --- |
-| Official website | [upf.at-shift.net/en](https://upf.at-shift.net/en/) | [upf.at-shift.net](https://upf.at-shift.net/) |
-| Adding and arranging fields | [Setup guide](https://upf.at-shift.net/en/guide/) | [導入ガイド](https://upf.at-shift.net/guide/) |
-| Retrieving and displaying values | [Display and output](https://upf.at-shift.net/en/output/) | [表示・出力](https://upf.at-shift.net/output/) |
-| Pro Upgrade | [Upgrade to Pro](https://upf.at-shift.net/en/pro/) | [Proへアップグレード](https://upf.at-shift.net/pro/) |
-| Pro shortcodes | [Shortcode reference](https://upf.at-shift.net/en/shortcodes/) | [リファレンス](https://upf.at-shift.net/shortcodes/) |
+| Official website | [plugins.at-shift.net/en/user-profile-fields](https://plugins.at-shift.net/en/user-profile-fields/) | [plugins.at-shift.net/user-profile-fields](https://plugins.at-shift.net/user-profile-fields/) |
+| Adding and arranging fields | [Setup guide](https://plugins.at-shift.net/en/guide/) | [導入ガイド](https://plugins.at-shift.net/guide/) |
+| Retrieving and displaying values | [Display and output](https://plugins.at-shift.net/en/output/) | [表示・出力](https://plugins.at-shift.net/output/) |
+| Pro Upgrade | [Upgrade to Pro](https://plugins.at-shift.net/en/pro/) | [Proへアップグレード](https://plugins.at-shift.net/pro/) |
+| Pro shortcodes | [Shortcode reference](https://plugins.at-shift.net/en/shortcodes/) | [リファレンス](https://plugins.at-shift.net/shortcodes/) |
 
 ## Related Projects
 

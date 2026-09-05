@@ -28,13 +28,13 @@ The basic version includes:
 
 == Links ==
 
-* Official website: [upf.at-shift.net/en](https://upf.at-shift.net/en/)
+* Official website: [plugins.at-shift.net/en/user-profile-fields](https://plugins.at-shift.net/en/user-profile-fields/)
 
 == Pro Add-on ==
 
 The optional Pro add-on extends the field sets created with the free plugin. It is installed alongside this free base plugin.
 
-[Upgrade to Pro](https://upf.at-shift.net/en/pro/)
+[Upgrade to Pro](https://plugins.at-shift.net/en/pro/)
 
 Pro adds user classifications, visibility and editing permissions, public profiles, user directories, shortcodes, and CSV workflows for sites that need to publish or manage profile data beyond the WordPress admin screens.
 
