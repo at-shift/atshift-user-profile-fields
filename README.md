@@ -91,7 +91,7 @@ Pro adds user classifications, visibility and editing permissions, public profil
 | Official website | [plugins.at-shift.net/en/user-profile-fields](https://plugins.at-shift.net/en/user-profile-fields/) | [plugins.at-shift.net/user-profile-fields](https://plugins.at-shift.net/user-profile-fields/) |
 | Adding and arranging fields | [Setup guide](https://plugins.at-shift.net/en/guide/) | [導入ガイド](https://plugins.at-shift.net/guide/) |
 | Retrieving and displaying values | [Display and output](https://plugins.at-shift.net/en/output/) | [表示・出力](https://plugins.at-shift.net/output/) |
-| Pro Upgrade | [Upgrade to Pro](https://plugins.at-shift.net/en/pro/) | [Proへアップグレード](https://plugins.at-shift.net/pro/) |
+| Pro Add-on | [Purchase Pro Add-on](https://plugins.at-shift.net/en/pro/) | [Proアドオンを購入](https://plugins.at-shift.net/pro/) |
 | Pro shortcodes | [Shortcode reference](https://plugins.at-shift.net/en/shortcodes/) | [リファレンス](https://plugins.at-shift.net/shortcodes/) |
 
 ## Related Projects

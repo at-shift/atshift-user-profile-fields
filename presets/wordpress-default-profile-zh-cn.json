@@ -1,7 +1,7 @@
 {
     "plugin": "atshift-user-profile-fields",
     "format_version": 1,
-    "plugin_version": "1.1.1",
+    "plugin_version": "1.1.2",
     "exported_at": "2026-08-24T04:00:00Z",
     "distribution_set": {
         "name": "WordPress 默认个人资料（添加和编辑用户）"

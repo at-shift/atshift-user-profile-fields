@@ -63,11 +63,11 @@ final class Atshift_UPF_Plugin {
 			return $links;
 		}
 
-		$price_url = 0 === strpos( determine_locale(), 'ja' ) ? 'https://upf.at-shift.net/price/' : 'https://upf.at-shift.net/en/price/';
+		$price_url = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/price/' : 'https://plugins.at-shift.net/en/price/';
 		$pro_link  = sprintf(
 			'<a href="%1$s" target="_blank" rel="noopener noreferrer"><strong>%2$s</strong></a>',
 			esc_url( $price_url ),
-			esc_html__( 'Upgrade to Pro', 'atshift-user-profile-fields' )
+			esc_html__( 'Purchase Pro Add-on', 'atshift-user-profile-fields' )
 		);
 
 		array_splice( $links, 1, 0, array( $pro_link ) );
@@ -115,10 +115,9 @@ final class Atshift_UPF_Plugin {
 			return $original_links;
 		}
 
-		$details_url   = 'https://wordpress.org/plugins/atshift-user-profile-fields/';
-		$translate_url = 'https://translate.wordpress.org/projects/wp-plugins/atshift-user-profile-fields/';
-		$price_url     = 0 === strpos( determine_locale(), 'ja' ) ? 'https://upf.at-shift.net/price/' : 'https://upf.at-shift.net/en/price/';
-		$links         = array(
+		$details_url = 'https://wordpress.org/plugins/atshift-user-profile-fields/';
+		$price_url   = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/price/' : 'https://plugins.at-shift.net/en/price/';
+		$links       = array(
 			sprintf(
 				/* translators: %s: Plugin version. */
 				esc_html__( 'Version %s' ),
@@ -127,17 +126,12 @@ final class Atshift_UPF_Plugin {
 			sprintf(
 				/* translators: %s: Plugin author. */
 				__( 'By %s' ),
-				'<a href="' . esc_url( 'https://cfs.at-shift.net/' ) . '" target="_blank" rel="noopener noreferrer">@shift</a>'
+				'<a href="' . esc_url( 'https://plugins.at-shift.net/' ) . '" target="_blank" rel="noopener noreferrer">@shift</a>'
 			),
 			sprintf(
 				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
 				esc_url( $details_url ),
 				esc_html__( 'View details' )
-			),
-			sprintf(
-				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
-				esc_url( $translate_url ),
-				esc_html__( 'Translate', 'atshift-user-profile-fields' )
 			),
 		);
 
@@ -145,7 +139,7 @@ final class Atshift_UPF_Plugin {
 			$links[] = sprintf(
 				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
 				esc_url( $price_url ),
-				esc_html__( 'Upgrade to Pro', 'atshift-user-profile-fields' )
+				esc_html__( 'Purchase Pro Add-on', 'atshift-user-profile-fields' )
 			);
 		}
 

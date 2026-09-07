@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: atshift User Profile Fields 1.1\n"
+"Project-Id-Version: atshift User Profile Fields 1.1.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 13:00+0900\n"
 "PO-Revision-Date: 2026-08-24 13:00+0900\n"
@@ -41,12 +41,16 @@ msgstr "Visualizza dettagli"
 msgid "Usage guide"
 msgstr "Guida all'uso"
 
-msgid "Upgrade to Pro"
-msgstr "Passa a Pro"
-
 #: includes/class-atshift-upf-plugin.php
-msgid "Translate"
-msgstr "Traduci"
+msgid "Settings"
+msgstr "Impostazioni"
+
+msgid "Purchase Pro Add-on"
+msgstr "Acquista il componente aggiuntivo Pro"
+
+#: includes/class-atshift-upf-admin.php
+msgid "Purchase Pro Add-on / View Features"
+msgstr "Acquista il componente aggiuntivo Pro / Visualizza le funzionalità"
 
 #: includes/class-atshift-upf-admin.php:28
 msgid "Text"
