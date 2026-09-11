@@ -12,11 +12,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Renders custom fields and hides selected core rows.
  */
+require_once __DIR__ . '/trait-atshift-upf-public-profile.php';
+require_once __DIR__ . '/trait-atshift-upf-owner-form.php';
+
 class Atshift_UPF_Profile {
+	use Atshift_UPF_Public_Profile;
+	use Atshift_UPF_Owner_Form;
 	/**
 	 * Constructor.
+	 *
+	 * @param bool $register_admin_hooks Whether to register wp-admin profile hooks.
 	 */
-	public function __construct() {
+	public function __construct( $register_admin_hooks = true ) {
+		add_filter( 'atshift_upf_public_profile_api', array( $this, 'public_profile_api' ) );
+
+		if ( ! $register_admin_hooks ) {
+			return;
+		}
+
 		add_action( 'show_user_profile', array( $this, 'render_fields' ) );
 		add_action( 'edit_user_profile', array( $this, 'render_fields' ) );
 		add_action( 'user_new_form', array( $this, 'render_new_user_fields' ) );

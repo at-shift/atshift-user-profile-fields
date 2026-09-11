@@ -3,7 +3,7 @@
  * Plugin Name: atshift User Profile Fields
  * Plugin URI: https://plugins.at-shift.net/en/user-profile-fields/
  * Description: Beautiful and practical WordPress user profiles with custom fields and flexible control over default profile items.
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: @shift
  * Author URI: https://plugins.at-shift.net/
  * License: GPLv2 or later
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ATSHIFT_UPF_VERSION', '1.1.2' );
+define( 'ATSHIFT_UPF_VERSION', '1.1.3' );
 define( 'ATSHIFT_UPF_FILE', __FILE__ );
 define( 'ATSHIFT_UPF_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ATSHIFT_UPF_URL', plugin_dir_url( __FILE__ ) );

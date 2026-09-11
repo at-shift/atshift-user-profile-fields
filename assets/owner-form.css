@@ -1,0 +1,8 @@
+.atshift-upf-owner-form .atshift-upf-owner-node{margin:1em 0;min-width:0}
+.atshift-upf-owner-form label{display:block;font-weight:600;margin-bottom:.4em}
+.atshift-upf-owner-form input:not([type=checkbox]):not([type=radio]),.atshift-upf-owner-form textarea,.atshift-upf-owner-form select{max-width:100%;box-sizing:border-box}
+.atshift-upf-owner-form .atshift-upf-owner-box{border:1px solid #dcdcde;padding:1em;border-radius:6px}
+.atshift-upf-owner-form .atshift-upf-owner-group>.atshift-upf-owner-children{display:flex;flex-wrap:wrap;gap:1em}
+.atshift-upf-owner-form .atshift-upf-owner-group>.atshift-upf-owner-children>div{flex:1 1 180px}
+.atshift-upf-owner-form [hidden]{display:none!important}
+.atshift-upf-owner-form summary{cursor:pointer;font-weight:600}

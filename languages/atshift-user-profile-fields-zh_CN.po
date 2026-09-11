@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: atshift User Profile Fields 1.1.2\n"
+"Project-Id-Version: atshift User Profile Fields 1.1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-24 13:00+0900\n"
-"PO-Revision-Date: 2026-08-24 13:00+0900\n"
+"POT-Creation-Date: 2026-09-11 16:24+0900\n"
+"PO-Revision-Date: 2026-09-11 16:00+0900\n"
 "Last-Translator: atshift\n"
 "Language-Team: Chinese (Simplified)\n"
 "Language: zh_CN\n"
@@ -34,6 +34,7 @@ msgstr ""
 "目。"
 
 #: includes/class-atshift-upf-plugin.php
+#: includes/class-atshift-upf-plugin.php:134
 msgid "View details"
 msgstr "查看详情"
 
@@ -42,9 +43,12 @@ msgid "Usage guide"
 msgstr "使用指南"
 
 #: includes/class-atshift-upf-plugin.php
+#: includes/class-atshift-upf-plugin.php:57
 msgid "Settings"
 msgstr "设置"
 
+#: includes/class-atshift-upf-plugin.php:70
+#: includes/class-atshift-upf-plugin.php:142
 msgid "Purchase Pro Add-on"
 msgstr "购买 Pro 附加组件"
 
@@ -1461,3 +1465,100 @@ msgstr "仅在创建新用户时应用。现有用户保留其已保存的设置
 #: includes/class-atshift-upf-profile.php:910
 msgid "You are not allowed to assign this role."
 msgstr "您无权分配此角色。"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:324
+msgid "Passkey registration and management"
+msgstr "通行密钥注册与管理"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:328
+msgid "After registration, you can add a passkey from the account edit screen."
+msgstr "注册后，您可以在账户编辑页面添加通行密钥。"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:330
+msgid "You can add and manage passkeys from the account edit screen."
+msgstr "您可以在账户编辑页面添加和管理通行密钥。"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:349
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:246
+msgid "(required)"
+msgstr "（必填）"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:385
+msgid "Name type"
+msgstr "姓名类型"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:420
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:266
+msgid "The submitted profile contains fields that are not allowed."
+msgstr "提交的个人资料中包含不允许的字段。"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:443
+msgid "The name format is invalid."
+msgstr "姓名格式无效。"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:454
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:274
+msgid "A profile field has an invalid format or length."
+msgstr "个人资料字段的格式或长度无效。"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:458
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:503
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:279
+msgid "A selected value is invalid."
+msgstr "所选值无效。"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:462
+msgid "Enter a valid HTTP or HTTPS URL."
+msgstr "请输入有效的 HTTP 或 HTTPS URL。"
+
+#. translators: %s: Profile field label.
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:480
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:496
+#, php-format
+msgid "%s is required."
+msgstr "%s 为必填项。"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:541
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:308
+msgid "The requested user could not be found."
+msgstr "找不到指定的用户。"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:585
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:592
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:319
+msgid "The profile could not be saved."
+msgstr "无法保存个人资料。"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:63
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:75
+msgid "Excluded"
+msgstr "已排除"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:66
+msgid "Managed by Members"
+msgstr "由 Members 管理"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:69
+msgid "Configure after registration"
+msgstr "注册后配置"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:69
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:72
+msgid "Integration unavailable"
+msgstr "集成不可用"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:75
+msgid "Integration not implemented"
+msgstr "集成尚未实现"
+
+#. translators: %s: Plugin version.
+#: includes/class-atshift-upf-plugin.php:123
+#, php-format
+msgid "Version %s"
+msgstr "版本 %s"
+
+#. translators: %s: Plugin author.
+#: includes/class-atshift-upf-plugin.php:128
+#, php-format
+msgid "By %s"
+msgstr "作者：%s"

@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: atshift User Profile Fields 1.1.2\n"
+"Project-Id-Version: atshift User Profile Fields 1.1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-24 13:00+0900\n"
-"PO-Revision-Date: 2026-08-24 13:00+0900\n"
+"POT-Creation-Date: 2026-09-11 16:24+0900\n"
+"PO-Revision-Date: 2026-09-11 16:00+0900\n"
 "Last-Translator: atshift\n"
 "Language-Team: Spanish (Spain)\n"
 "Language: es_ES\n"
@@ -35,6 +35,7 @@ msgstr ""
 "predeterminados."
 
 #: includes/class-atshift-upf-plugin.php
+#: includes/class-atshift-upf-plugin.php:134
 msgid "View details"
 msgstr "Ver detalles"
 
@@ -43,9 +44,12 @@ msgid "Usage guide"
 msgstr "Guía de uso"
 
 #: includes/class-atshift-upf-plugin.php
+#: includes/class-atshift-upf-plugin.php:57
 msgid "Settings"
 msgstr "Ajustes"
 
+#: includes/class-atshift-upf-plugin.php:70
+#: includes/class-atshift-upf-plugin.php:142
 msgid "Purchase Pro Add-on"
 msgstr "Comprar el complemento Pro"
 
@@ -1539,3 +1543,104 @@ msgstr ""
 #: includes/class-atshift-upf-profile.php:910
 msgid "You are not allowed to assign this role."
 msgstr "No tienes permisos para asignar este perfil."
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:324
+msgid "Passkey registration and management"
+msgstr "Registro y gestión de llaves de acceso"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:328
+msgid "After registration, you can add a passkey from the account edit screen."
+msgstr ""
+"Después de registrarte, puedes añadir una llave de acceso desde la pantalla "
+"de edición de la cuenta."
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:330
+msgid "You can add and manage passkeys from the account edit screen."
+msgstr ""
+"Puedes añadir y gestionar llaves de acceso desde la pantalla de edición de "
+"la cuenta."
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:349
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:246
+msgid "(required)"
+msgstr "(obligatorio)"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:385
+msgid "Name type"
+msgstr "Tipo de nombre"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:420
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:266
+msgid "The submitted profile contains fields that are not allowed."
+msgstr "El perfil enviado contiene campos no permitidos."
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:443
+msgid "The name format is invalid."
+msgstr "El formato del nombre no es válido."
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:454
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:274
+msgid "A profile field has an invalid format or length."
+msgstr "Un campo del perfil tiene un formato o una longitud no válidos."
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:458
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:503
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:279
+msgid "A selected value is invalid."
+msgstr "Uno de los valores seleccionados no es válido."
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:462
+msgid "Enter a valid HTTP or HTTPS URL."
+msgstr "Introduce una URL HTTP o HTTPS válida."
+
+#. translators: %s: Profile field label.
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:480
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:496
+#, php-format
+msgid "%s is required."
+msgstr "%s es obligatorio."
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:541
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:308
+msgid "The requested user could not be found."
+msgstr "No se ha encontrado el usuario solicitado."
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:585
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-owner-form.php:592
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:319
+msgid "The profile could not be saved."
+msgstr "No se ha podido guardar el perfil."
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:63
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:75
+msgid "Excluded"
+msgstr "Excluido"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:66
+msgid "Managed by Members"
+msgstr "Gestionado por Members"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:69
+msgid "Configure after registration"
+msgstr "Configurar después del registro"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:69
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:72
+msgid "Integration unavailable"
+msgstr "Integración no disponible"
+
+#: atshift-products/user-profile-fields/includes/trait-atshift-upf-public-profile.php:75
+msgid "Integration not implemented"
+msgstr "Integración no implementada"
+
+#. translators: %s: Plugin version.
+#: includes/class-atshift-upf-plugin.php:123
+#, php-format
+msgid "Version %s"
+msgstr "Versión %s"
+
+#. translators: %s: Plugin author.
+#: includes/class-atshift-upf-plugin.php:128
+#, php-format
+msgid "By %s"
+msgstr "Por %s"

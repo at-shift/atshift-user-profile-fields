@@ -120,18 +120,18 @@ final class Atshift_UPF_Plugin {
 		$links       = array(
 			sprintf(
 				/* translators: %s: Plugin version. */
-				esc_html__( 'Version %s' ),
+				esc_html__( 'Version %s', 'atshift-user-profile-fields' ),
 				esc_html( isset( $plugin_data['Version'] ) ? $plugin_data['Version'] : ATSHIFT_UPF_VERSION )
 			),
 			sprintf(
 				/* translators: %s: Plugin author. */
-				__( 'By %s' ),
+				__( 'By %s', 'atshift-user-profile-fields' ),
 				'<a href="' . esc_url( 'https://plugins.at-shift.net/' ) . '" target="_blank" rel="noopener noreferrer">@shift</a>'
 			),
 			sprintf(
 				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
 				esc_url( $details_url ),
-				esc_html__( 'View details' )
+				esc_html__( 'View details', 'atshift-user-profile-fields' )
 			),
 		);
 
@@ -180,6 +180,9 @@ final class Atshift_UPF_Plugin {
 	 * @return void
 	 */
 	public function boot() {
+		if ( ! is_admin() && ! self::is_safe_mode() ) {
+			new Atshift_UPF_Profile( false );
+		}
 		if ( is_admin() ) {
 			new Atshift_UPF_Admin();
 			new Atshift_UPF_Tools();
