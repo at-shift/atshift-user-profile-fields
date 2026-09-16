@@ -6,7 +6,7 @@
     <a href="https://plugins.at-shift.net/en/user-profile-fields/">Official Website</a> ·
     <a href="https://plugins.at-shift.net/en/guide/">Setup Guide</a> ·
     <a href="https://plugins.at-shift.net/en/output/">Reference</a> ·
-    <a href="https://plugins.at-shift.net/en/trial/">7-Day Pro Trial</a> ·
+    <a href="https://plugins.at-shift.net/en/pro/">7-Day Pro Trial</a> ·
     <a href="https://wordpress.org/plugins/atshift-user-profile-fields/">WordPress.org</a> ·
     <a href="https://plugins.at-shift.net/user-profile-fields/">日本語</a>
   </p>
@@ -91,7 +91,7 @@ Pro adds user classifications, visibility and editing permissions, public profil
 | Official website | [plugins.at-shift.net/en/user-profile-fields](https://plugins.at-shift.net/en/user-profile-fields/) | [plugins.at-shift.net/user-profile-fields](https://plugins.at-shift.net/user-profile-fields/) |
 | Adding and arranging fields | [Setup guide](https://plugins.at-shift.net/en/guide/) | [導入ガイド](https://plugins.at-shift.net/guide/) |
 | Retrieving and displaying values | [Display and output](https://plugins.at-shift.net/en/output/) | [表示・出力](https://plugins.at-shift.net/output/) |
-| Pro Add-on | [Try for 7 days or purchase](https://plugins.at-shift.net/en/trial/) | [7日間試す・購入](https://plugins.at-shift.net/trial/) |
+| Pro Add-on | [Try for 7 days or purchase](https://plugins.at-shift.net/en/pro/) | [7日間試す・購入](https://plugins.at-shift.net/pro/) |
 | Pro shortcodes | [Shortcode reference](https://plugins.at-shift.net/en/shortcodes/) | [リファレンス](https://plugins.at-shift.net/shortcodes/) |
 
 ## Related Projects

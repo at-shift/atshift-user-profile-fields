@@ -64,7 +64,7 @@ final class Atshift_UPF_Plugin {
 			return $links;
 		}
 
-		$trial_url = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/trial/' : 'https://plugins.at-shift.net/en/trial/';
+		$trial_url = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/pro/' : 'https://plugins.at-shift.net/en/pro/';
 		$trial_url = add_query_arg( 'site_url', home_url(), $trial_url );
 		$pro_link  = sprintf(
 			'<a href="%1$s" target="_blank" rel="noopener noreferrer"><strong>%2$s</strong></a>',
@@ -118,7 +118,7 @@ final class Atshift_UPF_Plugin {
 		}
 
 		$details_url = 'https://wordpress.org/plugins/atshift-user-profile-fields/';
-		$trial_url   = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/trial/' : 'https://plugins.at-shift.net/en/trial/';
+		$trial_url   = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/pro/' : 'https://plugins.at-shift.net/en/pro/';
 		$trial_url   = add_query_arg( 'site_url', home_url(), $trial_url );
 		$links       = array(
 			sprintf(

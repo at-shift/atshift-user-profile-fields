@@ -124,7 +124,7 @@ class Atshift_UPF_Admin {
 		);
 
 		if ( ! Atshift_UPF_Plugin::instance()->is_pro_installed() ) {
-			$trial_url = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/trial/' : 'https://plugins.at-shift.net/en/trial/';
+			$trial_url = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/pro/' : 'https://plugins.at-shift.net/en/pro/';
 			$trial_url = add_query_arg( 'site_url', home_url(), $trial_url );
 
 			add_submenu_page(

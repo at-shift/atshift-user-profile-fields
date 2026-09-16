@@ -2,7 +2,7 @@
 /** Standalone contract checks for the Members preset integration. */
 
 define( 'ABSPATH', __DIR__ . '/' );
-define( 'ATSHIFT_UPF_VERSION', '1.2' );
+define( 'ATSHIFT_UPF_VERSION', '1.2.1' );
 define( 'ATSHIFT_UPF_PRO_VERSION', '1.2' );
 
 $filters = array();
