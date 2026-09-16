@@ -13,3 +13,6 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 delete_option( 'atshift_upf_fields' );
 delete_option( 'atshift_upf_settings' );
+delete_option( 'atshift_upf_access_roles' );
+delete_option( 'atshift_upf_preset_applications' );
+delete_option( 'atshift_upf_preset_apply_lock' );

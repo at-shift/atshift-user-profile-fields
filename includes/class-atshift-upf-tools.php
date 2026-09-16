@@ -27,6 +27,37 @@ class Atshift_UPF_Tools {
 	}
 
 	/**
+	 * Normalize fields supplied by a trusted preset provider.
+	 *
+	 * @param mixed $fields Provider fields.
+	 * @return array<int, array<string, mixed>>|WP_Error
+	 */
+	public function normalize_preset_fields( $fields ) {
+		return $this->sanitize_import_fields( $fields );
+	}
+
+	/**
+	 * Normalize settings assembled while applying a preset.
+	 *
+	 * @param mixed $settings Settings to normalize.
+	 * @return array<string, mixed>|WP_Error
+	 */
+	public function normalize_preset_settings( $settings ) {
+		return $this->sanitize_import_settings( $settings );
+	}
+
+	/**
+	 * Synchronize native WordPress field visibility after a preset merge.
+	 *
+	 * @param array<string, mixed>              $settings Settings.
+	 * @param array<int, array<string, mixed>> $fields Fields.
+	 * @return array<string, mixed>
+	 */
+	public function synchronize_preset_settings( $settings, $fields ) {
+		return $this->synchronize_managed_core_fields( $settings, $fields );
+	}
+
+	/**
 	 * Add the tools submenu.
 	 *
 	 * @return void
@@ -482,6 +513,9 @@ class Atshift_UPF_Tools {
 
 		delete_option( 'atshift_upf_fields' );
 		delete_option( 'atshift_upf_settings' );
+		delete_option( 'atshift_upf_access_roles' );
+		delete_option( 'atshift_upf_preset_applications' );
+		delete_option( 'atshift_upf_preset_apply_lock' );
 
 		foreach ( $meta_keys as $meta_key ) {
 			delete_metadata( 'user', 0, $meta_key, '', true );
@@ -1011,6 +1045,6 @@ class Atshift_UPF_Tools {
 	 * @return string
 	 */
 	private function get_capability() {
-		return (string) apply_filters( 'atshift_upf_manage_capability', 'manage_options' );
+		return atshift_upf_admin_capability( 'tools' );
 	}
 }

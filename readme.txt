@@ -4,7 +4,7 @@ Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.3
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,7 +34,7 @@ The basic version includes:
 
 The optional Pro add-on extends the field sets created with the free plugin. It is installed alongside this free base plugin.
 
-[Purchase the Pro add-on](https://plugins.at-shift.net/en/pro/)
+[Try the Pro add-on for 7 days or purchase](https://plugins.at-shift.net/en/trial/)
 
 Pro adds user classifications, visibility and editing permissions, public profiles, user directories, shortcodes, and CSV workflows for sites that need to publish or manage profile data beyond the WordPress admin screens.
 
@@ -87,6 +87,13 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 * [atshift Feed Builder](https://wordpress.org/plugins/atshift-feed-builder/) - create purpose-specific RSS 2.0 and JSON Feed 1.1 feeds from structured WordPress content, including atshift User Profile Fields values.
 
 == Changelog ==
+
+= 1.2 =
+* Added role-based access controls for each plugin administration screen and hide unavailable plugin entry points.
+* Added a versioned preset-provider API for opt-in integrations such as atshift Members.
+* Added a 7-day Pro trial path to the Plugins screen and plugin menu, hidden while Pro is installed.
+* Added multilingual trial and purchase guidance across all bundled locales.
+* Improved owner-facing profile integrations, field validation, and preservation of hidden profile data.
 
 = 1.1.3 =
 * Added a versioned owner-profile integration for atshift Members registration, account display, and editing forms.

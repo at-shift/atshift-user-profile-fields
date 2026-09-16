@@ -37,6 +37,7 @@ final class Atshift_UPF_Plugin {
 	 * Constructor.
 	 */
 	private function __construct() {
+		new Atshift_UPF_Access();
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_action( 'plugins_loaded', array( $this, 'announce_loaded' ), 20 );
 		add_action( 'init', array( $this, 'boot' ) );
@@ -63,11 +64,12 @@ final class Atshift_UPF_Plugin {
 			return $links;
 		}
 
-		$price_url = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/price/' : 'https://plugins.at-shift.net/en/price/';
+		$trial_url = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/trial/' : 'https://plugins.at-shift.net/en/trial/';
+		$trial_url = add_query_arg( 'site_url', home_url(), $trial_url );
 		$pro_link  = sprintf(
 			'<a href="%1$s" target="_blank" rel="noopener noreferrer"><strong>%2$s</strong></a>',
-			esc_url( $price_url ),
-			esc_html__( 'Purchase Pro Add-on', 'atshift-user-profile-fields' )
+			esc_url( $trial_url ),
+			esc_html__( 'Try Pro Add-on for 7 Days / Purchase', 'atshift-user-profile-fields' )
 		);
 
 		array_splice( $links, 1, 0, array( $pro_link ) );
@@ -116,7 +118,8 @@ final class Atshift_UPF_Plugin {
 		}
 
 		$details_url = 'https://wordpress.org/plugins/atshift-user-profile-fields/';
-		$price_url   = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/price/' : 'https://plugins.at-shift.net/en/price/';
+		$trial_url   = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/trial/' : 'https://plugins.at-shift.net/en/trial/';
+		$trial_url   = add_query_arg( 'site_url', home_url(), $trial_url );
 		$links       = array(
 			sprintf(
 				/* translators: %s: Plugin version. */
@@ -138,8 +141,8 @@ final class Atshift_UPF_Plugin {
 		if ( ! $this->is_pro_installed() ) {
 			$links[] = sprintf(
 				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
-				esc_url( $price_url ),
-				esc_html__( 'Purchase Pro Add-on', 'atshift-user-profile-fields' )
+				esc_url( $trial_url ),
+				esc_html__( 'Try Pro Add-on for 7 Days / Purchase', 'atshift-user-profile-fields' )
 			);
 		}
 
@@ -185,7 +188,8 @@ final class Atshift_UPF_Plugin {
 		}
 		if ( is_admin() ) {
 			new Atshift_UPF_Admin();
-			new Atshift_UPF_Tools();
+			$tools = new Atshift_UPF_Tools();
+			new Atshift_UPF_Presets( $tools );
 
 			if ( ! self::is_safe_mode() ) {
 				new Atshift_UPF_Profile();

@@ -97,39 +97,42 @@ class Atshift_UPF_Admin {
 		add_menu_page(
 			__( 'atshift User Profile Fields', 'atshift-user-profile-fields' ),
 			__( 'atshift User Profile Fields', 'atshift-user-profile-fields' ),
-			$this->get_capability(),
+			$this->get_capability( 'menu' ),
 			self::PAGE_SLUG,
 			array( $this, 'render_page' ),
 			'dashicons-id'
 		);
 
-		add_submenu_page(
-			self::PAGE_SLUG,
-			__( 'Field Management', 'atshift-user-profile-fields' ),
-			__( 'Field Management', 'atshift-user-profile-fields' ),
-			$this->get_capability(),
-			self::PAGE_SLUG,
-			array( $this, 'render_page' )
-		);
+		if ( current_user_can( $this->get_capability( 'fields' ) ) ) {
+			add_submenu_page(
+				self::PAGE_SLUG,
+				__( 'Field Management', 'atshift-user-profile-fields' ),
+				__( 'Field Management', 'atshift-user-profile-fields' ),
+				$this->get_capability( 'fields' ),
+				self::PAGE_SLUG,
+				array( $this, 'render_page' )
+			);
+		}
 
 		add_submenu_page(
 			self::PAGE_SLUG,
 			__( 'Display Settings', 'atshift-user-profile-fields' ),
 			__( 'Display Settings', 'atshift-user-profile-fields' ),
-			$this->get_capability(),
+			$this->get_capability( 'display' ),
 			self::EXTRAS_PAGE_SLUG,
 			array( $this, 'render_extras_page' )
 		);
 
 		if ( ! Atshift_UPF_Plugin::instance()->is_pro_installed() ) {
-			$pro_url = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/pro/' : 'https://plugins.at-shift.net/en/pro/';
+			$trial_url = 0 === strpos( determine_locale(), 'ja' ) ? 'https://plugins.at-shift.net/trial/' : 'https://plugins.at-shift.net/en/trial/';
+			$trial_url = add_query_arg( 'site_url', home_url(), $trial_url );
 
 			add_submenu_page(
 				self::PAGE_SLUG,
-				__( 'Purchase Pro Add-on / View Features', 'atshift-user-profile-fields' ),
-				__( 'Purchase Pro Add-on / View Features', 'atshift-user-profile-fields' ),
-				$this->get_capability(),
-				$pro_url
+				__( 'Try Pro Add-on for 7 Days / Purchase', 'atshift-user-profile-fields' ),
+				__( 'Try Pro Add-on for 7 Days / Purchase', 'atshift-user-profile-fields' ),
+				'manage_options',
+				$trial_url
 			);
 		}
 	}
@@ -139,8 +142,8 @@ class Atshift_UPF_Admin {
 	 *
 	 * @return string
 	 */
-	private function get_capability() {
-		return (string) apply_filters( 'atshift_upf_manage_capability', 'manage_options' );
+	private function get_capability( $area = 'fields' ) {
+		return atshift_upf_admin_capability( $area );
 	}
 
 	/**
@@ -155,7 +158,7 @@ class Atshift_UPF_Admin {
 			return;
 		}
 
-		if ( ! current_user_can( $this->get_capability() ) ) {
+		if ( ! current_user_can( $this->get_capability( 'fields' ) ) ) {
 			return;
 		}
 
@@ -334,11 +337,15 @@ class Atshift_UPF_Admin {
 	 * @return void
 	 */
 	public function handle_posts() {
-		if ( empty( $_POST['atshift_upf_action'] ) || ! current_user_can( $this->get_capability() ) ) {
+		if ( empty( $_POST['atshift_upf_action'] ) ) {
 			return;
 		}
 
 		$action = sanitize_key( wp_unslash( $_POST['atshift_upf_action'] ) );
+		$area   = in_array( $action, array( 'save_visibility', 'save_display_options' ), true ) ? 'display' : 'fields';
+		if ( ! current_user_can( $this->get_capability( $area ) ) ) {
+			return;
+		}
 
 		if ( 'save_field' === $action ) {
 			$this->save_field();
@@ -371,6 +378,10 @@ class Atshift_UPF_Admin {
 	 * @return void
 	 */
 	public function render_page() {
+		if ( ! current_user_can( $this->get_capability( 'fields' ) ) ) {
+			Atshift_UPF_Access::render_landing();
+			return;
+		}
 		?>
 		<div class="wrap atshift-upf">
 			<div class="atshift-upf-page-head">
@@ -392,6 +403,9 @@ class Atshift_UPF_Admin {
 	 * @return void
 	 */
 	public function render_extras_page() {
+		if ( ! current_user_can( $this->get_capability( 'display' ) ) ) {
+			wp_die( esc_html__( 'You do not have permission to save these settings.', 'atshift-user-profile-fields' ) );
+		}
 		?>
 		<div class="wrap atshift-upf">
 			<div class="atshift-upf-page-head">
@@ -2390,7 +2404,7 @@ class Atshift_UPF_Admin {
 	 * @return void
 	 */
 	public function ajax_save_screen_options() {
-		if ( ! current_user_can( $this->get_capability() ) ) {
+		if ( ! current_user_can( $this->get_capability( 'fields' ) ) ) {
 			wp_send_json_error( array( 'message' => __( 'You do not have permission to save these settings.', 'atshift-user-profile-fields' ) ), 403 );
 		}
 

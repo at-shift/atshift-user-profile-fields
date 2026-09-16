@@ -53,6 +53,11 @@ trait Atshift_UPF_Public_Profile {
 		$excluded = array( 'core_username', 'core_notification', 'core_role', 'core_admin_color', 'core_language', 'core_visual_editor', 'core_syntax_highlighting', 'core_keyboard_shortcuts', 'core_toolbar', 'core_sessions', 'core_application_passwords' );
 
 		foreach ( Atshift_UPF_Plugin::get_enabled_fields() as $field ) {
+			// Layout containers organize forms but are not profile data fields.
+			if ( $this->owner_structure( $field ) ) {
+				continue;
+			}
+
 			$type   = isset( $field['type'] ) ? $field['type'] : '';
 			$key    = isset( $field['key'] ) ? $field['key'] : '';
 			$status = '';

@@ -633,7 +633,7 @@ class Atshift_UPF_Profile {
 		$fields = $this->filter_fields_for_screen( Atshift_UPF_Plugin::get_enabled_fields(), $update ? 'edit' : 'new' );
 		$this->validate_submitted_role( $errors, $update, $user, $fields );
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Profile values are sanitized field-by-field by sanitize_submitted_profile_values().
-		$values = isset( $_POST['atshift_upf_fields'] ) ? $this->sanitize_submitted_profile_values( (array) wp_unslash( $_POST['atshift_upf_fields'] ), $fields ) : array();
+		$values = isset( $_POST['atshift_upf_fields'] ) ? $this->sanitize_submitted_profile_values( (array) wp_unslash( $_POST['atshift_upf_fields'] ), $fields, isset( $user->ID ) ? absint( $user->ID ) : 0 ) : array();
 		$screen = $update ? 'edit' : 'new';
 
 		foreach ( $fields as $field ) {
@@ -786,7 +786,7 @@ class Atshift_UPF_Profile {
 
 		$fields = $this->filter_fields_for_screen( $all_fields, $screen );
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Profile values are sanitized field-by-field by sanitize_submitted_profile_values().
-		$values = isset( $_POST['atshift_upf_fields'] ) ? $this->sanitize_submitted_profile_values( (array) wp_unslash( $_POST['atshift_upf_fields'] ), $fields ) : array();
+		$values = isset( $_POST['atshift_upf_fields'] ) ? $this->sanitize_submitted_profile_values( (array) wp_unslash( $_POST['atshift_upf_fields'] ), $fields, $user_id ) : array();
 
 		foreach ( $fields as $field ) {
 			if ( $this->is_horizontal_group( $field ) || $this->is_box_group( $field ) || $this->is_accordion_group( $field ) ) {
@@ -810,7 +810,7 @@ class Atshift_UPF_Profile {
 			}
 
 			$value = $this->get_submitted_value( $field, $values );
-			$value = $this->sanitize_value( $value, $field );
+			$value = $this->sanitize_value( $value, $field, $user_id );
 
 			if ( $this->is_core_field( $field ) ) {
 				/**
@@ -2059,9 +2059,10 @@ class Atshift_UPF_Profile {
 	 *
 	 * @param mixed               $value Raw value.
 	 * @param array<string, mixed> $field Field definition.
+	 * @param int                 $user_id User being saved, when available.
 	 * @return string
 	 */
-	private function sanitize_value( $value, $field ) {
+	private function sanitize_value( $value, $field, $user_id = 0 ) {
 		$type = isset( $field['type'] ) ? $field['type'] : 'text';
 		if ( is_array( $value ) ) {
 			$value = $this->sanitize_profile_input_array( $value );
@@ -2076,8 +2077,9 @@ class Atshift_UPF_Profile {
 		 * @param mixed|null            $sanitized Sanitized value, or null to continue.
 		 * @param mixed                 $value Raw submitted value.
 		 * @param array<string, mixed>  $field Field definition.
+		 * @param int                   $user_id User being saved, or zero outside a save context.
 		 */
-		$custom_sanitized = apply_filters( 'atshift_upf_sanitize_profile_value', null, $value, $field );
+		$custom_sanitized = apply_filters( 'atshift_upf_sanitize_profile_value', null, $value, $field, absint( $user_id ) );
 		if ( null !== $custom_sanitized ) {
 			return $custom_sanitized;
 		}
@@ -2178,9 +2180,10 @@ class Atshift_UPF_Profile {
 	 *
 	 * @param array<string, mixed>                  $values Submitted plugin values.
 	 * @param array<int, array<string, mixed>>      $fields Field definitions.
+	 * @param int                                   $user_id User being validated or saved.
 	 * @return array<string, mixed>
 	 */
-	private function sanitize_submitted_profile_values( $values, $fields ) {
+	private function sanitize_submitted_profile_values( $values, $fields, $user_id = 0 ) {
 		$fields_by_key = array();
 
 		foreach ( $fields as $field ) {
@@ -2203,7 +2206,7 @@ class Atshift_UPF_Profile {
 				'type' => 'text',
 			);
 
-			$sanitized[ $key ] = $this->sanitize_value( $value, $field );
+			$sanitized[ $key ] = $this->sanitize_value( $value, $field, $user_id );
 		}
 
 		return $sanitized;
