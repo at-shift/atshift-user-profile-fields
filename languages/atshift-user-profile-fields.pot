@@ -2075,3 +2075,12 @@ msgstr ""
 #: includes/class-atshift-upf-profile.php:2020
 msgid "name@example.com"
 msgstr ""
+
+msgid "Member Forms"
+msgstr ""
+
+msgid "Keeps this field out of the registration and account forms provided by atshift Members. Fields inside a hidden group are also hidden. Administrators can still edit the field on the user edit screen."
+msgstr ""
+
+msgid "Hide from member registration and account forms"
+msgstr ""

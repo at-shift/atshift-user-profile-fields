@@ -4,7 +4,7 @@ Tags: user profile, profile fields, custom fields, users, admin
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.2.1
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,10 @@ Checkbox fields save `1` when checked and `0` when unchecked. Standard WordPress
 * [atshift Feed Builder](https://wordpress.org/plugins/atshift-feed-builder/) - create purpose-specific RSS 2.0 and JSON Feed 1.1 feeds from structured WordPress content, including atshift User Profile Fields values.
 
 == Changelog ==
+
+= 1.3 =
+* Added a Member Forms setting, shown while atshift Members is active, to keep individual fields or groups out of member registration and account forms.
+* Kept the Member Forms setting through field-set export and import, and when fields are saved while the integration is inactive.
 
 = 1.2.1 =
 * Updated Pro trial and purchase links to open the Pro add-on overview page.

@@ -242,6 +242,57 @@ final class Atshift_UPF_Plugin {
 	}
 
 	/**
+	 * Return field types that owner-facing registration and account forms can render.
+	 *
+	 * Add-on types registered through atshift_upf_owner_field_adapters are not included.
+	 *
+	 * @return array<int, string>
+	 */
+	public static function owner_form_field_types() {
+		return array(
+			'core_first_name',
+			'core_last_name',
+			'core_nickname',
+			'core_display_name',
+			'core_website',
+			'core_bio',
+			'text',
+			'textarea',
+			'email',
+			'url',
+			'phone',
+			'number',
+			'checkbox',
+			'radio',
+			'select',
+			'image',
+			'additional_name',
+			'passkeys',
+			'group',
+			'box',
+			'accordion',
+			'conditional',
+		);
+	}
+
+	/**
+	 * Check whether a plugin that renders owner-facing profile forms is active.
+	 *
+	 * Only controls whether related settings are shown. Saved exclusions are
+	 * always enforced so they still apply after the plugin is reactivated.
+	 *
+	 * @return bool
+	 */
+	public static function has_owner_form_consumer() {
+		/**
+		 * Filters whether an owner-facing form integration, such as atshift Members, is active.
+		 *
+		 * @param bool $active Whether an integration is active.
+		 */
+		return (bool) apply_filters( 'atshift_upf_owner_form_consumer_active', function_exists( 'atshift_members' ) );
+	}
+
+	/**
 	 * Return enabled field definitions.
 	 *
 	 * @return array<int, array<string, mixed>>

@@ -770,6 +770,7 @@ class Atshift_UPF_Admin {
 			'required'    => false,
 			'validation_enabled' => null,
 			'initial_enabled' => null,
+			'admin_only'  => false,
 			'sort_order'  => 10,
 		);
 		$field    = wp_parse_args( $field ? $field : array(), $defaults );
@@ -940,6 +941,21 @@ class Atshift_UPF_Admin {
 									</select>
 								</td>
 							</tr>
+							<?php if ( Atshift_UPF_Plugin::has_owner_form_consumer() ) : ?>
+								<?php $owner_form_types = $this->owner_form_setting_field_types(); ?>
+								<tr class="<?php echo in_array( $current_type, $owner_form_types, true ) ? '' : 'atshift-upf-type-option-hidden'; ?>" data-atshift-upf-types="<?php echo esc_attr( implode( ' ', $owner_form_types ) ); ?>">
+									<td class="label">
+										<label>
+											<?php esc_html_e( 'Member Forms', 'atshift-user-profile-fields' ); ?>
+											<span class="cfs_tooltip">?<span class="tooltip_inner"><?php esc_html_e( 'Keeps this field out of the registration and account forms provided by atshift Members. Fields inside a hidden group are also hidden. Administrators can still edit the field on the user edit screen.', 'atshift-user-profile-fields' ); ?></span></span>
+										</label>
+									</td>
+									<td class="atshift-upf-cfs-checks">
+										<input type="hidden" name="<?php echo esc_attr( $name_prefix . '[owner_form_setting]' ); ?>" value="1">
+										<label><input type="checkbox" name="<?php echo esc_attr( $name_prefix . '[admin_only]' ); ?>" value="1" <?php checked( ! empty( $field['admin_only'] ) ); ?>> <?php esc_html_e( 'Hide from member registration and account forms', 'atshift-user-profile-fields' ); ?></label>
+									</td>
+								</tr>
+							<?php endif; ?>
 							<?php
 							/**
 							 * Fires inside a field settings table before the action row.
@@ -1177,6 +1193,24 @@ class Atshift_UPF_Admin {
 			'core_application_passwords',
 			'core_notification',
 			'core_role',
+		);
+	}
+
+	/**
+	 * Field types that show the member-form visibility setting.
+	 *
+	 * @return array<int, string>
+	 */
+	private function owner_form_setting_field_types() {
+		$adapters = apply_filters( 'atshift_upf_owner_field_adapters', array() );
+
+		return array_values(
+			array_unique(
+				array_merge(
+					Atshift_UPF_Plugin::owner_form_field_types(),
+					is_array( $adapters ) ? array_map( 'strval', array_keys( $adapters ) ) : array()
+				)
+			)
 		);
 	}
 
@@ -1957,6 +1991,12 @@ class Atshift_UPF_Admin {
 				'sort_order'  => $prepared_field['position'] * 10,
 			);
 
+			// The member-form setting is only rendered while an integration is active.
+			// Without its marker, the stored value is kept through the extension merge below.
+			if ( ! empty( $submitted_field['owner_form_setting'] ) ) {
+				$field['admin_only'] = ! empty( $submitted_field['admin_only'] );
+			}
+
 			if ( isset( $stored_by_id[ $field_id ] ) ) {
 				$extension_data = array_diff_key( $stored_by_id[ $field_id ], array_fill_keys( array_keys( $field ), true ) );
 				$field          = array_merge( $extension_data, $field );
@@ -2102,6 +2142,12 @@ class Atshift_UPF_Admin {
 			'initial_enabled' => Atshift_UPF_Plugin::supports_initial_state( $type ) && ! empty( $_POST['initial_enabled'] ),
 			'sort_order'  => $sort_order,
 		);
+
+		if ( ! empty( $_POST['owner_form_setting'] ) ) {
+			$new_field['admin_only'] = ! empty( $_POST['admin_only'] );
+		} elseif ( is_array( $stored_field ) && ! empty( $stored_field['admin_only'] ) ) {
+			$new_field['admin_only'] = true;
+		}
 		/**
 		 * Filters one field definition before it is saved from the single-field route.
 		 *

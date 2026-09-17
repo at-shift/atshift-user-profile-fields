@@ -28,6 +28,9 @@ trait Atshift_UPF_Owner_Form {
 			$api[ $method ] = array( $this, 'owner_form_' . $method );
 		}
 
+		// Lets integrations point administrators to the per-field Member Forms setting.
+		$api['member_form_exclusion'] = true;
+
 		return $api;
 	}
 
@@ -95,11 +98,7 @@ trait Atshift_UPF_Owner_Form {
 		}
 
 		$all   = Atshift_UPF_Plugin::get_enabled_fields();
-		$map   = $this->owner_core_map();
-		$types = array_merge(
-			array_keys( $map ),
-			array( 'text', 'textarea', 'email', 'url', 'phone', 'number', 'checkbox', 'radio', 'select', 'image', 'additional_name', 'passkeys', 'group', 'box', 'accordion', 'conditional' )
-		);
+		$types = Atshift_UPF_Plugin::owner_form_field_types();
 		$plan  = array();
 
 		foreach ( $all as $field ) {
@@ -115,7 +114,8 @@ trait Atshift_UPF_Owner_Form {
 			}
 
 			// Membership forms use the administrator's field layout directly.
-			// Shortcode visibility rules and admin-screen role controls do not apply.
+			// Shortcode visibility rules and admin-screen role controls do not apply;
+			// administrators exclude fields with the admin_only setting instead.
 			$plan[ $key ] = $field;
 		}
 

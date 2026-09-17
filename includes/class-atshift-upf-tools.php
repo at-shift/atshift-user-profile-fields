@@ -641,6 +641,8 @@ class Atshift_UPF_Tools {
 				'initial_enabled'     => Atshift_UPF_Plugin::supports_initial_state( $type )
 					? ( array_key_exists( 'initial_enabled', $raw_field ) ? $this->import_bool( $raw_field['initial_enabled'] ) : Atshift_UPF_Plugin::get_field_initial_enabled( array( 'type' => $type ) ) )
 					: false,
+				// Kept even when no member-form integration is active on this site.
+				'admin_only'          => $this->import_bool( $raw_field['admin_only'] ?? false ),
 				'sort_order'          => ( count( $fields ) + 1 ) * 10,
 			);
 			/**

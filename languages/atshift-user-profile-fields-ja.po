@@ -1955,3 +1955,12 @@ msgstr "name@example.com"
 
 #~ msgid "8+ characters, not letters-only or numbers-only"
 #~ msgstr "8文字以上 (英字のみ・数字のみは不可)"
+
+msgid "Member Forms"
+msgstr "会員フォーム"
+
+msgid "Keeps this field out of the registration and account forms provided by atshift Members. Fields inside a hidden group are also hidden. Administrators can still edit the field on the user edit screen."
+msgstr "atshift Members の会員登録フォームとアカウント編集フォームに、この項目を表示しません。非表示にしたグループ内の項目も表示されません。管理者はユーザー編集画面で引き続き編集できます。"
+
+msgid "Hide from member registration and account forms"
+msgstr "会員登録・アカウント編集フォームに表示しない"
