@@ -3,7 +3,7 @@
 
 define( 'ABSPATH', __DIR__ . '/' );
 define( 'ATSHIFT_UPF_FILE', dirname( __DIR__ ) . '/atshift-user-profile-fields.php' );
-define( 'ATSHIFT_UPF_VERSION', '1.3' );
+define( 'ATSHIFT_UPF_VERSION', '1.3.1' );
 
 function add_action() {}
 function add_filter() {}
